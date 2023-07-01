@@ -1,3 +1,5 @@
+import { api } from "./api";
+
 const CUSTOM_GPT_API_KEY = process.env.REACT_APP_CUSTOM_GPT_API_KEY as string;
 
 if (!CUSTOM_GPT_API_KEY) {
@@ -28,7 +30,7 @@ interface IMessage extends ITimestamped {
     user_id: number;
     user_query: string;
     openai_response: string;
-    citations: string[];
+    citations: string[] | null;
 }
 
 interface ICreateConversation {
@@ -73,14 +75,9 @@ const deleteChat = async ({
     projectId: number;
     sessionId: string;
 }): Promise<boolean> => {
-    const url = `https://app.customgpt.ai/api/v1/projects/${projectId}/conversations/${sessionId}`;
-    const response = await fetch(url, {
-        headers: {
-            Authorization: `Bearer ${CUSTOM_GPT_API_KEY}`,
-        },
-        method: "DELETE",
-    });
-    const data: IDeleteChatResponse = await response.json();
+    const url = `/api/v1/projects/${projectId}/chats/${sessionId}`;
+    const response = await api.delete(url);
+    const data: IDeleteChatResponse = response.body;
     return data.status === "success";
 };
 
@@ -89,14 +86,12 @@ const listChats = async ({
 }: {
     projectId: number;
 }): Promise<IConversation[]> => {
-    const url = `https://app.customgpt.ai/api/v1/projects/${projectId}/conversations`;
-    const response = await fetch(url, {
-        headers: {
-            Authorization: `Bearer ${CUSTOM_GPT_API_KEY}`,
-        },
-        method: "GET",
-    });
-    const data: IListConversationsResponse = await response.json();
+    const url = `/api/v1/projects/${projectId}/chats`;
+    const response = await api.get(url);
+    if (!response.ok) {
+        throw new Error(response.body.message);
+    }
+    const data: IListConversationsResponse = response.body;
     return data.data.data;
 };
 
@@ -109,16 +104,16 @@ const sendMessage = async ({
     sessionId: string;
     projectId: number;
 }): Promise<IMessage> => {
-    const url = `https://app.customgpt.ai/api/v1/projects/${projectId}/conversations/${sessionId}/messages?stream=false&lang=pt`;
-    const response = await fetch(url, {
-        body: JSON.stringify({ prompt }),
-        headers: {
-            Authorization: `Bearer ${CUSTOM_GPT_API_KEY}`,
-            "Content-Type": "application/json",
-        },
-        method: "POST",
-    });
-    const data: ISendMessageResponse = await response.json();
+    const url = `/api/v1/projects/${projectId}/chats/${sessionId}`;
+    const response = await api.post(
+        url,
+        { prompt }
+        // { headers: { "Access-Control-Allow-Origin": "http://localhost:3000" } }
+    );
+    if (!response.ok) {
+        throw new Error(response.body.message);
+    }
+    const data: ISendMessageResponse = response.body;
     return data.data;
 };
 
@@ -127,17 +122,9 @@ const createNewChat = async ({
 }: {
     projectId: number;
 }): Promise<IConversation> => {
-    const url = `https://app.customgpt.ai/api/v1/projects/${projectId}/conversations`;
-    const response = await fetch(url, {
-        body: JSON.stringify({ name: "Timenow AI" }),
-        headers: {
-            Authorization: `Bearer ${CUSTOM_GPT_API_KEY}`,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-        },
-        method: "POST",
-    });
-    const data: ICreateConversation = await response.json();
+    const url = `/api/v1/projects/${projectId}/chats`;
+    const response = await api.post(url, { name: "Timenow AI" });
+    const data: ICreateConversation = response.body;
     return data.data;
 };
 
@@ -148,16 +135,9 @@ const retrieveChat = async ({
     projectId: number;
     sessionId: string;
 }): Promise<IMessage[]> => {
-    const url = `https://app.customgpt.ai/api/v1/projects/${projectId}/conversations/${sessionId}/messages?page=1&order=desc`;
-    const response = await fetch(url, {
-        headers: {
-            Authorization: `Bearer ${CUSTOM_GPT_API_KEY}`,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-        },
-        method: "GET",
-    });
-    const data: IRetrieveConversationResponse = await response.json();
+    const url = `/api/v1/projects/${projectId}/chats/${sessionId}`;
+    const response = await api.get(url);
+    const data: IRetrieveConversationResponse = response.body;
     return data.data.messages.data;
 };
 
