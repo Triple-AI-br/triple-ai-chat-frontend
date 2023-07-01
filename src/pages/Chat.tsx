@@ -22,7 +22,7 @@ const BOT_NAME = "Timenow AI";
 const PROJECT_ID = 4328;
 const GRAY_COLOR = "#f5f5f5";
 const INITIAL_TEXT =
-    "Olá, sou uma inteligência artificial treinada pela Timenow. Você pode me perguntar a respeito de assuntos como: Guia Time Knowledge, Agenda do Líder e muito mais.";
+    "Olá, sou a Inteligência Artificial da Timenow. Você pode me perguntar algo do tipo: Como eu solicito um reembolso?";
 const DEFAULT_MESSAGE: MessageType = messageManager.createAiMessage({
     id: uuidv4(),
     date: Date.now(),
