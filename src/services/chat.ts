@@ -1,11 +1,5 @@
 import { api } from "./api";
 
-const CUSTOM_GPT_API_KEY = process.env.REACT_APP_CUSTOM_GPT_API_KEY as string;
-
-if (!CUSTOM_GPT_API_KEY) {
-    console.error("Missing API Key");
-}
-
 interface ITimestamped {
     id: number;
     created_at: string;
