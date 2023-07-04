@@ -4,7 +4,7 @@ import { chatService } from "../services";
 import { v4 as uuidv4 } from "uuid";
 import { messageManager } from "../utils";
 import { Spinner } from "../components/loaders";
-import { ChatBar, ChatItem, TextArea } from "../components/Chat";
+import { ChatBar, ChatItem, TextArea } from "../components/chat";
 import {
     Box,
     Button as MuiButton,
