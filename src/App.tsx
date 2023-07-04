@@ -3,13 +3,17 @@ import { AppRoutes } from "./routes";
 import "react-chat-elements/dist/main.css";
 import { ThemeProvider } from "@mui/material";
 import { DefaultTheme } from "./themes";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
 
 function App() {
     return (
         <BrowserRouter>
-            <ThemeProvider theme={DefaultTheme}>
-                <AppRoutes />
-            </ThemeProvider>
+            <Provider store={store}>
+                <ThemeProvider theme={DefaultTheme}>
+                    <AppRoutes />
+                </ThemeProvider>
+            </Provider>
         </BrowserRouter>
     );
 }

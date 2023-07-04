@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { MessageList, MessageType } from "react-chat-elements";
-import { chatManager } from "../services";
+import { chatService } from "../services";
 import { v4 as uuidv4 } from "uuid";
 import { messageManager } from "../utils";
 import { Spinner } from "../components/loaders";
-import { ChatBar, ChatItem, TextArea } from "../components/chat";
+import { ChatBar, ChatItem, TextArea } from "../components/Chat";
 import {
     Box,
     Button as MuiButton,
@@ -16,6 +16,8 @@ import {
     LibraryAdd as AddIcon,
     Forward as SendIcon,
 } from "@mui/icons-material";
+import { useAppSelector } from "../redux/hooks";
+import { selectAccessToken } from "../redux/authenticationSlice";
 
 const COMPANY_COLOR = "#376458";
 const BOT_NAME = "Timenow AI";
@@ -37,6 +39,7 @@ interface IChat {
     isSelected: boolean;
 }
 const ChatPage = () => {
+    const accessToken = useAppSelector(selectAccessToken);
     const messageListReferance = useRef();
     const bottomRef = useRef<HTMLInputElement>(null);
     const [isLoadingMessages, setIsLoadingMessages] = useState(false);
@@ -59,9 +62,10 @@ const ChatPage = () => {
         setChatList(prevChatList =>
             prevChatList.filter(item => item.id !== sessionId)
         );
-        const success = await chatManager.deleteChat({
+        const success = await chatService.deleteChat({
             projectId: PROJECT_ID,
             sessionId,
+            accessToken,
         });
         if (success) {
             if (selectedChat == sessionId) {
@@ -73,8 +77,9 @@ const ChatPage = () => {
 
     const handleNewChat = async () => {
         setIsLoadingMessages(true);
-        const newChat = await chatManager.createNewChat({
+        const newChat = await chatService.createNewChat({
             projectId: PROJECT_ID,
+            accessToken,
         });
         setChatList(prevChatList => [
             {
@@ -92,8 +97,11 @@ const ChatPage = () => {
     // Initial load of chats
     useEffect(() => {
         (async () => {
-            const conversations = await chatManager.listChats({
+            if (!accessToken) return;
+
+            const conversations = await chatService.listChats({
                 projectId: PROJECT_ID,
+                accessToken,
             });
             setChatList(
                 conversations.map(item => ({
@@ -107,17 +115,17 @@ const ChatPage = () => {
                 }))
             );
         })();
-    }, []);
+    }, [accessToken]);
 
     // Store selected chat session id
     const handleSelectChat = ({ sessionId }: { sessionId: string }) => {
         setSelectedChat(sessionId);
     };
 
-    // Runs when a new chat is selected
+    // Runs when a new chat is selected, updates the selected chat
     useEffect(() => {
         (async () => {
-            if (!selectedChat) {
+            if (!selectedChat || !accessToken) {
                 return;
             }
             setChatList(prevList => {
@@ -130,9 +138,10 @@ const ChatPage = () => {
                 return newValue;
             });
             setIsLoadingMessages(true);
-            const conversation = await chatManager.retrieveChat({
+            const conversation = await chatService.retrieveChat({
                 projectId: PROJECT_ID,
                 sessionId: selectedChat,
+                accessToken,
             });
             const messages: MessageType[] = [DEFAULT_MESSAGE];
             conversation.reverse().forEach(item => {
@@ -154,7 +163,7 @@ const ChatPage = () => {
             setIsLoadingMessages(false);
             setMessageList(messages);
         })();
-    }, [selectedChat]);
+    }, [selectedChat, accessToken]);
 
     // Send message when Enter is pressed
     const handleEnterPressed = (event: React.KeyboardEvent<Element>) => {
@@ -189,10 +198,11 @@ const ChatPage = () => {
         });
         setMessageList(prevMessageList => [...prevMessageList, newUserMessage]);
 
-        const response = await chatManager.sendMessage({
+        const response = await chatService.sendMessage({
             prompt: currentMessage,
             projectId: PROJECT_ID,
             sessionId: selectedChat,
+            accessToken,
         });
         const newAiResponse: MessageType = messageManager.createAiMessage({
             id: response.id,

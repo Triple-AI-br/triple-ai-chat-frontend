@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { routesManager } from "./routesManager";
-import { ChatPage, LandingPage } from "../pages";
-import { PrivateRoute } from "../components/shared";
+import { ChatPage, LandingPage, LoginPage } from "../pages";
+import { PrivateRoute, PublicRoute } from "../components/shared";
 
 const AppRoutes = () => {
     return (
@@ -12,6 +12,14 @@ const AppRoutes = () => {
                     <PrivateRoute>
                         <ChatPage />
                     </PrivateRoute>
+                }
+            />
+            <Route
+                path={routesManager.getLoginRoute()}
+                element={
+                    <PublicRoute>
+                        <LoginPage />
+                    </PublicRoute>
                 }
             />
 

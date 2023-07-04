@@ -7,12 +7,15 @@ interface IResponse {
     body: any;
 }
 
-interface IOptionsProps {
-    url: string;
-    method: string;
+interface IOptions {
     query?: Record<string, string>;
     headers?: { [key: string]: string };
     body?: { [key: string]: unknown };
+}
+
+interface IOptionsProps extends IOptions {
+    url: string;
+    method: string;
 }
 
 class Api {
@@ -23,13 +26,13 @@ class Api {
     }
 
     async request(options: IOptionsProps): Promise<IResponse> {
-        let response = await this._request(options);
-        if (response.status === 401 && options.url !== "/auth/refreshToken") {
-            const refreshResponse = await this.get("/auth/refreshToken");
-            if (refreshResponse.ok) {
-                response = await this._request(options);
-            }
-        }
+        const response = await this._request(options);
+        // if (response.status === 401 && options.url !== "/auth/refreshToken") {
+        //     const refreshResponse = await this.get("/auth/refreshToken");
+        //     if (refreshResponse.ok) {
+        //         response = await this._request(options);
+        //     }
+        // }
         return response;
     }
 
@@ -75,19 +78,11 @@ class Api {
         };
     }
 
-    async get(
-        url: string,
-        query?: Record<string, string>,
-        options?: { [key: string]: string }
-    ) {
+    async get(url: string, query?: Record<string, string>, options?: IOptions) {
         return this.request({ method: "GET", url, query, ...options });
     }
 
-    async post(
-        url: string,
-        body: Record<string, any>,
-        options?: { [key: string]: string }
-    ) {
+    async post(url: string, body: Record<string, any>, options?: IOptions) {
         return this.request({ method: "POST", url, body, ...options });
     }
 
@@ -99,7 +94,7 @@ class Api {
         return this.request({ method: "PUT", url, body, ...options });
     }
 
-    async delete(url: string, options?: { [key: string]: string }) {
+    async delete(url: string, options?: IOptions) {
         return this.request({ method: "DELETE", url, ...options });
     }
 }

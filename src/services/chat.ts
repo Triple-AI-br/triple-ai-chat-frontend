@@ -62,26 +62,38 @@ interface IDeleteChatResponse {
     status: string;
 }
 
+const getAuthHeader = (accessToken: string) => ({
+    Authorization: `Bearer ${accessToken}`,
+});
+
 const deleteChat = async ({
     projectId,
     sessionId,
+    accessToken,
 }: {
     projectId: number;
     sessionId: string;
+    accessToken: string;
 }): Promise<boolean> => {
     const url = `/api/v1/projects/${projectId}/chats/${sessionId}`;
-    const response = await api.delete(url);
+    const response = await api.delete(url, {
+        headers: getAuthHeader(accessToken),
+    });
     const data: IDeleteChatResponse = response.body;
     return data.status === "success";
 };
 
 const listChats = async ({
     projectId,
+    accessToken,
 }: {
     projectId: number;
+    accessToken: string;
 }): Promise<IConversation[]> => {
     const url = `/api/v1/projects/${projectId}/chats`;
-    const response = await api.get(url);
+    const response = await api.get(url, undefined, {
+        headers: getAuthHeader(accessToken),
+    });
     if (!response.ok) {
         throw new Error(response.body.message);
     }
@@ -93,16 +105,18 @@ const sendMessage = async ({
     prompt,
     sessionId,
     projectId,
+    accessToken,
 }: {
     prompt: string;
     sessionId: string;
     projectId: number;
+    accessToken: string;
 }): Promise<IMessage> => {
     const url = `/api/v1/projects/${projectId}/chats/${sessionId}`;
     const response = await api.post(
         url,
-        { prompt }
-        // { headers: { "Access-Control-Allow-Origin": "http://localhost:3000" } }
+        { prompt },
+        { headers: getAuthHeader(accessToken) }
     );
     if (!response.ok) {
         throw new Error(response.body.message);
@@ -113,11 +127,17 @@ const sendMessage = async ({
 
 const createNewChat = async ({
     projectId,
+    accessToken,
 }: {
     projectId: number;
+    accessToken: string;
 }): Promise<IConversation> => {
     const url = `/api/v1/projects/${projectId}/chats`;
-    const response = await api.post(url, { name: "Timenow AI" });
+    const response = await api.post(
+        url,
+        { name: "Timenow AI" },
+        { headers: getAuthHeader(accessToken) }
+    );
     const data: ICreateConversation = response.body;
     return data.data;
 };
@@ -125,17 +145,21 @@ const createNewChat = async ({
 const retrieveChat = async ({
     projectId,
     sessionId,
+    accessToken,
 }: {
     projectId: number;
     sessionId: string;
+    accessToken: string | null;
 }): Promise<IMessage[]> => {
     const url = `/api/v1/projects/${projectId}/chats/${sessionId}`;
-    const response = await api.get(url);
+    const response = await api.get(url, undefined, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+    });
     const data: IRetrieveConversationResponse = response.body;
     return data.data.messages.data;
 };
 
-export const chatManager = {
+export const chatService = {
     listChats,
     sendMessage,
     createNewChat,
