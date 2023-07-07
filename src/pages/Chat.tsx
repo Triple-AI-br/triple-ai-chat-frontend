@@ -1,53 +1,41 @@
 import { useEffect, useRef, useState } from "react";
-import { MessageList, MessageType } from "react-chat-elements";
 import { chatService } from "../services";
 import { v4 as uuidv4 } from "uuid";
-import { messageManager } from "../utils";
 import { Spinner } from "../components/loaders";
-import { ChatBar, ChatItem, TextArea } from "../components/chat";
 import {
-    Box,
-    Button as MuiButton,
-    Typography,
-    Avatar as MuiAvatar,
-    Skeleton,
-} from "@mui/material";
-import {
-    LibraryAdd as AddIcon,
-    Forward as SendIcon,
-} from "@mui/icons-material";
+    ChatBar,
+    ChatList,
+    LeftTopBar,
+    MessageList,
+    IChat,
+    IMessage,
+    TextChat,
+} from "../components/chat";
+import { Box, Typography, Skeleton } from "@mui/material";
 import { useAppSelector } from "../redux/hooks";
 import { selectAccessToken } from "../redux/authenticationSlice";
 
-const COMPANY_COLOR = "#376458";
 const BOT_NAME = "Timenow AI";
 const PROJECT_ID = 4328;
 const GRAY_COLOR = "#f5f5f5";
 const INITIAL_TEXT =
     "Olá, sou a Inteligência Artificial da Timenow. Você pode me perguntar algo do tipo: Como eu solicito um reembolso?";
-const DEFAULT_MESSAGE: MessageType = messageManager.createAiMessage({
+const DEFAULT_MESSAGE: IMessage = {
     id: uuidv4(),
-    date: Date.now(),
+    type: "bot",
+    date: new Date(),
     text: INITIAL_TEXT,
-});
+};
 
-interface IChat {
-    id: string;
-    title: string;
-    subtitle: string;
-    date: string;
-    isSelected: boolean;
-}
 const ChatPage = () => {
     const accessToken = useAppSelector(selectAccessToken);
-    const messageListReferance = useRef();
     const bottomRef = useRef<HTMLInputElement>(null);
     const [isLoadingMessages, setIsLoadingMessages] = useState(false);
     const [isLoadingAiResponse, setIsLoadingAiResponse] = useState(false);
     const [currentMessage, setCurrentMessage] = useState("");
     const [selectedChat, setSelectedChat] = useState<string>();
-    const [chatList, setChatList] = useState<IChat[]>([]);
-    const [messageList, setMessageList] = useState<MessageType[]>([
+    const [chats, setChats] = useState<IChat[]>([]);
+    const [messageList, setMessageList] = useState<IMessage[]>([
         DEFAULT_MESSAGE,
     ]);
 
@@ -59,7 +47,7 @@ const ChatPage = () => {
     // Delete chat
     const handleDelete = async ({ sessionId }: { sessionId: string }) => {
         if (!confirm("Are you sure you'd like to delete this chat?")) return;
-        setChatList(prevChatList =>
+        setChats(prevChatList =>
             prevChatList.filter(item => item.id !== sessionId)
         );
         const success = await chatService.deleteChat({
@@ -81,7 +69,7 @@ const ChatPage = () => {
             projectId: PROJECT_ID,
             accessToken,
         });
-        setChatList(prevChatList => [
+        setChats(prevChatList => [
             {
                 id: newChat.session_id,
                 date: newChat.updated_at,
@@ -103,7 +91,7 @@ const ChatPage = () => {
                 projectId: PROJECT_ID,
                 accessToken,
             });
-            setChatList(
+            setChats(
                 conversations.map(item => ({
                     id: item.session_id,
                     title: BOT_NAME,
@@ -128,7 +116,7 @@ const ChatPage = () => {
             if (!selectedChat || !accessToken) {
                 return;
             }
-            setChatList(prevList => {
+            setChats(prevList => {
                 const newValue = prevList.map(item => {
                     return {
                         ...item,
@@ -143,22 +131,20 @@ const ChatPage = () => {
                 sessionId: selectedChat,
                 accessToken,
             });
-            const messages: MessageType[] = [DEFAULT_MESSAGE];
+            const messages: IMessage[] = [DEFAULT_MESSAGE];
             conversation.reverse().forEach(item => {
-                messages.push(
-                    messageManager.createUserMessage({
-                        id: item.id,
-                        date: new Date(item.updated_at),
-                        text: item.user_query,
-                    })
-                );
-                messages.push(
-                    messageManager.createAiMessage({
-                        id: item.id,
-                        date: new Date(item.updated_at),
-                        text: item.openai_response,
-                    })
-                );
+                messages.push({
+                    id: item.id,
+                    type: "user",
+                    date: new Date(item.updated_at),
+                    text: item.user_query,
+                });
+                messages.push({
+                    id: item.id,
+                    type: "bot",
+                    date: new Date(item.updated_at),
+                    text: item.openai_response,
+                });
             });
             setIsLoadingMessages(false);
             setMessageList(messages);
@@ -191,11 +177,12 @@ const ChatPage = () => {
             return;
         setCurrentMessage("");
         setIsLoadingAiResponse(true);
-        const newUserMessage: MessageType = messageManager.createUserMessage({
+        const newUserMessage: IMessage = {
             id: uuidv4(),
-            date: Date.now(),
+            type: "user",
+            date: new Date(),
             text: currentMessage,
-        });
+        };
         setMessageList(prevMessageList => [...prevMessageList, newUserMessage]);
 
         const response = await chatService.sendMessage({
@@ -204,11 +191,12 @@ const ChatPage = () => {
             sessionId: selectedChat,
             accessToken,
         });
-        const newAiResponse: MessageType = messageManager.createAiMessage({
+        const newAiResponse: IMessage = {
             id: response.id,
+            type: "bot",
             date: new Date(response.updated_at),
             text: response.openai_response,
-        });
+        };
 
         setIsLoadingAiResponse(false);
         setMessageList(prevMessageList => [...prevMessageList, newAiResponse]);
@@ -225,51 +213,14 @@ const ChatPage = () => {
                 maxWidth="40%"
                 borderRight="1px solid #ccc"
             >
-                <Box
-                    display="flex"
-                    gap={2}
-                    py={1}
-                    px="auto"
-                    alignItems="center"
-                    justifyContent="space-evenly"
-                    sx={{ backgroundColor: COMPANY_COLOR }}
-                >
-                    <MuiAvatar
-                        src="https://timenow.com.br/wp-content/uploads/2023/03/timenow-destaque-1.png"
-                        alt="Timenow logo"
-                        sx={{ width: 80, height: 80, mr: -3 }}
-                    />
-                    <Typography color="#fff" fontWeight={600} fontSize={18}>
-                        Timenow AI Chatbot
-                    </Typography>
-                    <MuiButton
-                        onClick={handleNewChat}
-                        size="small"
-                        variant="outlined"
-                        startIcon={<AddIcon />}
-                        sx={{
-                            mr: 2,
-                            color: "#fff",
-                            borderColor: "#fff",
-                            ":hover": { borderColor: "#ccc", color: "#ccc" },
-                        }}
-                    >
-                        New chat
-                    </MuiButton>
-                </Box>
+                <LeftTopBar handleNewChat={handleNewChat} />
                 <Box overflow="scroll">
-                    {chatList.map(item => (
-                        <ChatItem
-                            key={item.id}
-                            id={item.id}
-                            title={BOT_NAME}
-                            subtitle={item.subtitle}
-                            date={item.date}
-                            isSelected={item.isSelected}
-                            onClick={handleSelectChat}
-                            onDelete={handleDelete}
-                        />
-                    ))}
+                    <ChatList
+                        chats={chats}
+                        handleDelete={handleDelete}
+                        handleSelectChat={handleSelectChat}
+                        title={BOT_NAME}
+                    />
                 </Box>
             </Box>
 
@@ -305,13 +256,7 @@ const ChatPage = () => {
                             height="100%"
                             sx={{ overflow: "scroll" }}
                         >
-                            <MessageList
-                                referance={messageListReferance}
-                                className="message-list"
-                                lockable={true}
-                                toBottomHeight={"100%"}
-                                dataSource={messageList}
-                            />
+                            <MessageList messages={messageList} />
 
                             {isLoadingAiResponse && (
                                 <Box paddingLeft={3} paddingBottom={2}>
@@ -338,42 +283,12 @@ const ChatPage = () => {
                         </Box>
                     )}
                     {selectedChat && !isLoadingMessages && (
-                        <Box
-                            width="100%"
-                            display="flex"
-                            justifyContent="space-between"
-                            alignItems="center"
-                            gap={1}
-                            sx={{
-                                backgroundColor: "white",
-                                borderTop: "1px solid #ccc",
-                            }}
-                        >
-                            <TextArea
-                                autoFocus
-                                value={currentMessage}
-                                onChange={handleChange}
-                                onKeyDown={handleEnterPressed}
-                            />
-                            <Box
-                                onClick={handleSendMessage}
-                                sx={{
-                                    borderRadius: 1,
-                                    backgroundColor: COMPANY_COLOR,
-                                    cursor: "pointer",
-                                    p: 1.5,
-                                    my: 1,
-                                    mr: 1,
-                                }}
-                            >
-                                <SendIcon
-                                    sx={{
-                                        transform: "rotate(-90deg)",
-                                        color: "#fff",
-                                    }}
-                                />
-                            </Box>
-                        </Box>
+                        <TextChat
+                            currentMessage={currentMessage}
+                            handleChange={handleChange}
+                            handleEnterPressed={handleEnterPressed}
+                            handleSendMessage={handleSendMessage}
+                        />
                     )}
                 </div>
             </div>

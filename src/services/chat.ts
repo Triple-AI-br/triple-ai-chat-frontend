@@ -1,4 +1,5 @@
-import { api } from "./api";
+import axios from "axios";
+const BASE_API_URL = process.env.REACT_APP_BASE_API_URL as string;
 
 interface ITimestamped {
     id: number;
@@ -75,11 +76,11 @@ const deleteChat = async ({
     sessionId: string;
     accessToken: string;
 }): Promise<boolean> => {
-    const url = `/api/v1/projects/${projectId}/chats/${sessionId}`;
-    const response = await api.delete(url, {
+    const url = `${BASE_API_URL}/api/v1/projects/${projectId}/chats/${sessionId}`;
+    const response = await axios.delete(url, {
         headers: getAuthHeader(accessToken),
     });
-    const data: IDeleteChatResponse = response.body;
+    const data: IDeleteChatResponse = response.data;
     return data.status === "success";
 };
 
@@ -90,14 +91,11 @@ const listChats = async ({
     projectId: number;
     accessToken: string;
 }): Promise<IConversation[]> => {
-    const url = `/api/v1/projects/${projectId}/chats`;
-    const response = await api.get(url, undefined, {
+    const url = `${BASE_API_URL}/api/v1/projects/${projectId}/chats`;
+    const response = await axios.get(url, {
         headers: getAuthHeader(accessToken),
     });
-    if (!response.ok) {
-        throw new Error(response.body.message);
-    }
-    const data: IListConversationsResponse = response.body;
+    const data: IListConversationsResponse = response.data;
     return data.data.data;
 };
 
@@ -112,16 +110,13 @@ const sendMessage = async ({
     projectId: number;
     accessToken: string;
 }): Promise<IMessage> => {
-    const url = `/api/v1/projects/${projectId}/chats/${sessionId}`;
-    const response = await api.post(
+    const url = `${BASE_API_URL}/api/v1/projects/${projectId}/chats/${sessionId}`;
+    const response = await axios.post(
         url,
         { prompt },
         { headers: getAuthHeader(accessToken) }
     );
-    if (!response.ok) {
-        throw new Error(response.body.message);
-    }
-    const data: ISendMessageResponse = response.body;
+    const data: ISendMessageResponse = response.data;
     return data.data;
 };
 
@@ -132,13 +127,13 @@ const createNewChat = async ({
     projectId: number;
     accessToken: string;
 }): Promise<IConversation> => {
-    const url = `/api/v1/projects/${projectId}/chats`;
-    const response = await api.post(
+    const url = `${BASE_API_URL}/api/v1/projects/${projectId}/chats`;
+    const response = await axios.post(
         url,
         { name: "Timenow AI" },
         { headers: getAuthHeader(accessToken) }
     );
-    const data: ICreateConversation = response.body;
+    const data: ICreateConversation = response.data;
     return data.data;
 };
 
@@ -149,13 +144,13 @@ const retrieveChat = async ({
 }: {
     projectId: number;
     sessionId: string;
-    accessToken: string | null;
+    accessToken: string;
 }): Promise<IMessage[]> => {
-    const url = `/api/v1/projects/${projectId}/chats/${sessionId}`;
-    const response = await api.get(url, undefined, {
-        headers: { Authorization: `Bearer ${accessToken}` },
+    const url = `${BASE_API_URL}/api/v1/projects/${projectId}/chats/${sessionId}`;
+    const response = await axios.get(url, {
+        headers: getAuthHeader(accessToken),
     });
-    const data: IRetrieveConversationResponse = response.body;
+    const data: IRetrieveConversationResponse = response.data;
     return data.data.messages.data;
 };
 

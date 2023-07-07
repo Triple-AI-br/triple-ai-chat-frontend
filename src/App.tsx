@@ -1,6 +1,5 @@
 import { BrowserRouter } from "react-router-dom";
 import { AppRoutes } from "./routes";
-import "react-chat-elements/dist/main.css";
 import { ThemeProvider } from "@mui/material";
 import { DefaultTheme } from "./themes";
 import { Provider } from "react-redux";

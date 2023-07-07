@@ -11,7 +11,7 @@ interface IChatItemProps {
     date: string;
     isSelected: boolean;
     onClick({ sessionId }: { sessionId: string }): void;
-    onDelete({ sessionId }: { sessionId: string }): void;
+    onDelete({ sessionId }: { sessionId: string }): Promise<void>;
 }
 
 const ChatItem = ({
