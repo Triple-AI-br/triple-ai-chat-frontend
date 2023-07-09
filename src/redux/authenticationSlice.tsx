@@ -62,7 +62,12 @@ const initialState: IState = {
 const authSlice = createSlice({
     name: "auth",
     initialState,
-    reducers: {},
+    reducers: {
+        logout(state) {
+            state.isAuthenticated = false;
+            localStorage.removeItem(ACCESS_TOKEN_KEY);
+        },
+    },
     extraReducers(builder) {
         builder
             .addCase(actionLogin.pending, state => {
@@ -82,6 +87,8 @@ const authSlice = createSlice({
 });
 
 // Actions
+export const { logout: actionLogout } = authSlice.actions;
+
 export const actionLogin = createAsyncThunk(
     "auth/login",
     async ({ email, password }: { email: string; password: string }) => {

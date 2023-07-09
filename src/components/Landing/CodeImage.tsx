@@ -1,6 +1,6 @@
 import { Box, useMediaQuery, useTheme } from "@mui/material";
 
-function CodeImage() {
+function MainImage() {
     const theme = useTheme();
     const isScreenXs = useMediaQuery(theme.breakpoints.only("xs"));
     const isScreenSm = useMediaQuery(theme.breakpoints.only("sm"));
@@ -15,7 +15,7 @@ function CodeImage() {
     return (
         <Box maxWidth={`${imageMaxWidth}px`}>
             <img
-                src={`${process.env.REACT_APP_BASE_FRONT_URL}/logo.png`}
+                src={`${process.env.REACT_APP_BASE_FRONT_URL}/landing.jpg`}
                 style={{
                     maxWidth: "100%",
                 }}
@@ -24,4 +24,4 @@ function CodeImage() {
     );
 }
 
-export { CodeImage };
+export { MainImage };

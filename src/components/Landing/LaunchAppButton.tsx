@@ -1,21 +1,29 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-import { OpenInNewOutlined } from "@mui/icons-material";
-import { OutlinedButton } from "./OutlinedButton";
 import { routesManager } from "../../routes/routesManager";
+import { useNavigate } from "react-router-dom";
+import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
+import { Button } from "@mui/material";
 
 function LaunchAppButton() {
+    const navigate = useNavigate();
     return (
-        <OutlinedButton
-            text="Case Timenow"
-            endIcon={<OpenInNewOutlined />}
-            onClick={() => {
-                window.open(
-                    routesManager.getChatRoute(),
-                    "_blank",
-                    "noreferrer"
-                );
+        <Button
+            variant="outlined"
+            endIcon={<LoginOutlinedIcon />}
+            onClick={() => navigate(routesManager.getChatsRoute())}
+            sx={{
+                px: 6,
+                py: 3,
+                borderRadius: 10,
+                borderColor: "#EF8019",
+                color: "#EF8019",
+                ":hover": {
+                    borderColor: "#EF8019",
+                    backgroundColor: "#EF801919",
+                },
             }}
-        />
+        >
+            Entrar
+        </Button>
     );
 }
 

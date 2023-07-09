@@ -13,7 +13,7 @@ function Title() {
             fontWeight={500}
             sx={{
                 background:
-                    "linear-gradient(45deg, rgba(255,255,255,0.412) 0%, #FFFFFF 67%)",
+                    "linear-gradient(45deg, rgba(10,10,10,0.7) 0%, #777 67%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
             }}

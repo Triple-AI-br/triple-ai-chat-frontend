@@ -34,7 +34,7 @@ const LoginForm = () => {
             const next =
                 location.state && location.state.next
                     ? location.state.next
-                    : routesManager.getChatRoute();
+                    : routesManager.getChatsRoute();
             navigate(next);
         }
     }, [isAuthenticated]);
@@ -73,7 +73,6 @@ const LoginForm = () => {
             }}
             onSubmit={async (values, { setSubmitting }) => {
                 await dispatch(actionLogin(values));
-
                 setSubmitting(false);
             }}
         >

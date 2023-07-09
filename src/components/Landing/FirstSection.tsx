@@ -1,5 +1,5 @@
 import { Box, useMediaQuery, useTheme } from "@mui/material";
-import { Body, CodeImage, LaunchAppButton, Title } from "./";
+import { Body, MainImage, LaunchAppButton, Title } from "./";
 
 function FirstSection() {
     const theme = useTheme();
@@ -44,13 +44,7 @@ function FirstSection() {
                 gap={2}
                 alignItems="center"
             >
-                <CodeImage />
-                <img
-                    src={`${process.env.REACT_APP_BASE_FRONT_URL}/triple.png`}
-                    style={{
-                        maxWidth: "200px",
-                    }}
-                />
+                <MainImage />
             </Box>
         </Box>
     );
