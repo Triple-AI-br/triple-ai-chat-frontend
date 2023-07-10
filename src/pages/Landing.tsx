@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { FirstSection } from "../components/Landing";
 import { CustomAppBar } from "../components/Landing/CustomAppBar";
@@ -23,6 +22,21 @@ function LandingPage() {
                 gap={9}
             >
                 <FirstSection />
+                <a
+                    target="_blank"
+                    rel="noreferrer"
+                    href="http://api.whatsapp.com/send?phone=5527981213951&text=Olá,%20gostaria%20de%20saber%20mais%20sobre%20os%20produtos%20Triple%20AI,%20e%20como%20podem%20ajudar%20a%20minha%20empresa."
+                >
+                    <img
+                        style={{
+                            maxWidth: 70,
+                            position: "fixed",
+                            right: 10,
+                            bottom: 10,
+                        }}
+                        src={`${process.env.REACT_APP_BASE_FRONT_URL}/wpp.png`}
+                    />
+                </a>
                 <Box mt="auto" display="flex" justifyContent="center">
                     <Typography color="#777">
                         © Triple AI. Todos os direitos reservados.
