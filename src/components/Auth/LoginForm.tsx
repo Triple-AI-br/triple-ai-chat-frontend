@@ -87,6 +87,7 @@ const LoginForm = () => {
                 /* There are other functionalities available as well */
             }) => (
                 <Box
+                    width="100%"
                     display="flex"
                     flexDirection="column"
                     gap={5}

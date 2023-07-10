@@ -49,6 +49,7 @@ const Base = ({ children, title }: IBaseProps) => {
                 <Box width="100%" mt={2} mb={1}>
                     <Divider />
                 </Box>
+
                 <List>
                     <ListItem disablePadding>
                         <ListItemButton
@@ -86,11 +87,27 @@ const Base = ({ children, title }: IBaseProps) => {
                             <ListItemText primary="Admin" />
                         </ListItemButton>
                     </ListItem> */}
+                </List>
+                <Box sx={{ height: "100%" }} />
 
-                    <ListItem disablePadding onClick={handleLogout}>
+                <List>
+                    <ListItem
+                        disablePadding
+                        onClick={handleLogout}
+                        sx={{
+                            color: "rgb(247, 62, 62)",
+                            ":hover": {
+                                backgroundColor: "rgb(255, 215, 215)",
+                            },
+                        }}
+                    >
                         <ListItemButton sx={{ pl: 5, pr: 10 }}>
                             <ListItemIcon>
-                                <LogoutOutlinedIcon />
+                                <LogoutOutlinedIcon
+                                    sx={{
+                                        color: "rgb(247, 62, 62)",
+                                    }}
+                                />
                             </ListItemIcon>
                             <ListItemText primary="Logout" />
                         </ListItemButton>

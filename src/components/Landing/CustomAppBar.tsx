@@ -9,7 +9,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import { useNavigate } from "react-router-dom";
 import { routesManager } from "../../routes/routesManager";
@@ -32,23 +31,28 @@ function CustomAppBar() {
 
     return (
         <AppBar
-            position="static"
+            position="sticky"
             sx={{
                 backgroundColor: "#fff",
-                boxShadow: "0px 0px 1px 1px rgba(0,0,0,0.12)",
+                boxShadow: "0px 0px 4px 1px rgba(0,0,0,0.12)",
             }}
         >
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <img
-                        src={`${process.env.REACT_APP_BASE_FRONT_URL}/triple-ai.png`}
-                        style={{ maxHeight: "50px" }}
-                    />
+                    <Box sx={{ display: { xs: "none", md: "flex" } }}>
+                        <img
+                            src={`${process.env.REACT_APP_BASE_FRONT_URL}/triple-ai.png`}
+                            style={{ maxHeight: "50px" }}
+                        />
+                    </Box>
 
                     <Box
                         sx={{
-                            flexGrow: 1,
-                            display: { xs: "flex", md: "none" },
+                            display: {
+                                xs: "none",
+                                // xs: "flex",
+                                md: "none",
+                            },
                         }}
                     >
                         <IconButton
@@ -59,7 +63,7 @@ function CustomAppBar() {
                             onClick={handleOpenNavMenu}
                             color="inherit"
                         >
-                            <MenuIcon />
+                            <MenuIcon color="action" />
                         </IconButton>
                         <Menu
                             id="menu-appbar"
@@ -91,27 +95,16 @@ function CustomAppBar() {
                             ))}
                         </Menu>
                     </Box>
-                    <AdbIcon
-                        sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
-                    />
-                    <Typography
-                        variant="h5"
-                        noWrap
-                        component="a"
-                        href=""
-                        sx={{
-                            mr: 2,
-                            display: { xs: "flex", md: "none" },
-                            flexGrow: 1,
-                            fontFamily: "monospace",
-                            fontWeight: 700,
-                            letterSpacing: ".3rem",
-                            color: "inherit",
-                            textDecoration: "none",
-                        }}
-                    >
-                        LOGO
-                    </Typography>
+
+                    <Box mx="auto" sx={{ display: { xs: "flex", md: "none" } }}>
+                        <img
+                            src={`${process.env.REACT_APP_BASE_FRONT_URL}/triple-ai.png`}
+                            style={{
+                                maxHeight: "50px",
+                            }}
+                        />
+                    </Box>
+
                     <Box ml="auto" sx={{ display: { xs: "none", md: "flex" } }}>
                         {pages.map(page => (
                             <Button
