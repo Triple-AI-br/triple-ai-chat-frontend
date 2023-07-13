@@ -9,4 +9,11 @@ const api = axios.create({
     headers: { Authorization: `Bearer ${accessToken}` },
 });
 
+// Make sure to use latest value of access token upon every request
+api.interceptors.request.use(config => {
+    const accessToken = localStorage.getItem("jwt");
+    config.headers.Authorization = `Bearer ${accessToken}`;
+    return config;
+});
+
 export { api };

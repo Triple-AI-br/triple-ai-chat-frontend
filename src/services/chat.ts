@@ -80,7 +80,7 @@ const sendMessage = async ({
     projectId: number;
 }): Promise<IMessage> => {
     const url = `/projects/${projectId}/chats/${sessionId}`;
-    const response = await api.post(url, { prompt }, { timeout: 60_000 });
+    const response = await api.post(url, { prompt }, { timeout: 120_000 });
     const data: ISendMessageResponse = response.data;
     return data.data;
 };
