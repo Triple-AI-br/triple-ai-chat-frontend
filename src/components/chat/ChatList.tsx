@@ -4,8 +4,8 @@ import { IChat } from "./types";
 interface IChatListProps {
     chats: IChat[];
     title: string;
-    handleSelectChat(args: { sessionId: string }): void;
-    handleDelete(args: { sessionId: string }): Promise<void>;
+    handleSelectChat(args: { sessionId: number }): void;
+    handleDelete(args: { sessionId: number }): Promise<void>;
 }
 
 const ChatList = ({
@@ -21,7 +21,7 @@ const ChatList = ({
                     key={item.id}
                     id={item.id}
                     title={title}
-                    subtitle={item.subtitle}
+                    subtitle={undefined}
                     date={item.date}
                     isSelected={item.isSelected}
                     onClick={handleSelectChat}

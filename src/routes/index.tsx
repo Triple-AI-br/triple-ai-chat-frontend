@@ -6,6 +6,8 @@ import {
     LandingPage,
     LoginPage,
     SourcesPage,
+    ConfirmEmailPage,
+    AcceptInvitationPage,
 } from "../pages";
 import { PrivateRoute, PublicRoute } from "../components/shared";
 
@@ -15,6 +17,16 @@ const AppRoutes = () => {
             <Route
                 path={routesManager.getLandingRoute()}
                 element={<LandingPage />}
+            />
+
+            <Route
+                path={routesManager.getConfirmEmailRoute()}
+                element={<ConfirmEmailPage />}
+            />
+
+            <Route
+                path={routesManager.getAcceptInvitationRoute()}
+                element={<AcceptInvitationPage />}
             />
 
             <Route

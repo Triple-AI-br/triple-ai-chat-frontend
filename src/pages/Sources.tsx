@@ -29,8 +29,8 @@ const SourcesPage = () => {
                     flexDirection="column"
                     border="1px solid #aaa"
                     borderRadius={3}
-                    width="100%"
                     overflow="scroll"
+                    sx={{ backgroundColor: "white" }}
                 >
                     {data &&
                         data.uploads.pages.map(file => (

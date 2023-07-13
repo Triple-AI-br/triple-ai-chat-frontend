@@ -27,32 +27,17 @@ interface IMessage extends ITimestamped {
     citations: string[] | null;
 }
 
-interface ICreateConversation {
-    data: IConversation;
-    status: string;
+interface IChat {
+    project_id: number;
+    user_id: number;
+    title: string;
+    id: number;
+    created_at: string;
 }
 
 interface ISendMessageResponse {
     data: IMessage;
     status: string;
-}
-
-interface IListConversationsResponse {
-    data: {
-        current_page: 1;
-        data: IConversation[];
-        first_page_url: string;
-        from: number;
-        last_page: number;
-        last_page_url: string;
-        next_page_url: string;
-        path: string;
-        per_page: number;
-        prev_page_url: string;
-        to: number;
-        total: number;
-    };
-    status: "success";
 }
 
 interface IDeleteChatResponse {
@@ -67,8 +52,7 @@ const deleteChat = async ({
     sessionId,
 }: {
     projectId: number;
-    sessionId: string;
-    accessToken: string;
+    sessionId: number;
 }): Promise<boolean> => {
     const url = `/projects/${projectId}/chats/${sessionId}`;
     const response = await api.delete(url);
@@ -80,12 +64,10 @@ const listChats = async ({
     projectId,
 }: {
     projectId: number;
-    accessToken: string;
-}): Promise<IConversation[]> => {
+}): Promise<IChat[]> => {
     const url = `/projects/${projectId}/chats`;
     const response = await api.get(url);
-    const data: IListConversationsResponse = response.data;
-    return data.data.data;
+    return response.data;
 };
 
 const sendMessage = async ({
@@ -94,9 +76,8 @@ const sendMessage = async ({
     projectId,
 }: {
     prompt: string;
-    sessionId: string;
+    sessionId: number;
     projectId: number;
-    accessToken: string;
 }): Promise<IMessage> => {
     const url = `/projects/${projectId}/chats/${sessionId}`;
     const response = await api.post(url, { prompt });
@@ -108,12 +89,11 @@ const createNewChat = async ({
     projectId,
 }: {
     projectId: number;
-    accessToken: string;
-}): Promise<IConversation> => {
+}): Promise<IChat> => {
     const url = `/projects/${projectId}/chats`;
     const response = await api.post(url, { name: "Timenow AI" });
-    const data: ICreateConversation = response.data;
-    return data.data;
+    const data: IChat = response.data;
+    return data;
 };
 
 const retrieveChat = async ({
@@ -121,8 +101,7 @@ const retrieveChat = async ({
     sessionId,
 }: {
     projectId: number;
-    sessionId: string;
-    accessToken: string;
+    sessionId: number;
 }): Promise<IMessage[]> => {
     const url = `/projects/${projectId}/chats/${sessionId}`;
     const response = await api.get(url);

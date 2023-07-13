@@ -1,10 +1,22 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Base } from "../layouts/Base";
 import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
 import { ChatInfo } from "../components/Chats";
 import { routesManager } from "../routes/routesManager";
+import { useEffect, useState } from "react";
+import { IProject, projectService } from "../services";
+import { Spinner } from "../components/loaders";
 
 const ChatsPage = () => {
+    const [projects, setProjects] = useState<IProject[]>();
+
+    useEffect(() => {
+        (async () => {
+            const _projects = await projectService.listProjects();
+            setProjects(_projects);
+        })();
+    }, []);
+
     return (
         <Base title={"Your AI Chatbots"}>
             <Box
@@ -15,21 +27,38 @@ const ChatsPage = () => {
                 flexDirection="column"
                 gap={5}
             >
-                <Grid container width="100%" spacing={2}>
-                    <ChatInfo
-                        onClick={() =>
-                            window.open(
-                                `${
-                                    process.env.REACT_APP_BASE_FRONT_URL
-                                }${routesManager.getChatRoute()}`,
-                                "_blank",
-                                "noreferrer"
-                            )
-                        }
-                        title="Timenow AI"
-                        description="Base Externa e Interna de conhecimentos"
-                    />
-                </Grid>
+                {projects === undefined ? (
+                    <Spinner />
+                ) : projects === null ? (
+                    <Typography>
+                        We haf a problem finding your projects
+                    </Typography>
+                ) : projects.length === 0 ? (
+                    <Typography>
+                        You don&apos;t have any projects yet
+                    </Typography>
+                ) : (
+                    <Grid container width="100%" spacing={2}>
+                        {projects.map(project => (
+                            <ChatInfo
+                                key={project.id}
+                                onClick={() =>
+                                    window.open(
+                                        `${
+                                            process.env.REACT_APP_BASE_FRONT_URL
+                                        }${routesManager.getChatRoute(
+                                            project.id
+                                        )}`,
+                                        "_blank",
+                                        "noreferrer"
+                                    )
+                                }
+                                title="AI Chatbot"
+                                description={project.description}
+                            />
+                        ))}
+                    </Grid>
+                )}
             </Box>
         </Base>
     );

@@ -5,13 +5,13 @@ import { useState } from "react";
 import { Clear as DeleteIcon } from "@mui/icons-material";
 
 interface IChatItemProps {
-    id: string;
+    id: number;
     title: string;
-    subtitle: string;
+    subtitle?: string;
     date: string;
     isSelected: boolean;
-    onClick({ sessionId }: { sessionId: string }): void;
-    onDelete({ sessionId }: { sessionId: string }): Promise<void>;
+    onClick({ sessionId }: { sessionId: number }): void;
+    onDelete({ sessionId }: { sessionId: number }): Promise<void>;
 }
 
 const ChatItem = ({

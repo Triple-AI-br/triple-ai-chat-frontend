@@ -1,6 +1,5 @@
 import {
     Box,
-    Divider,
     List,
     ListItem,
     ListItemButton,
@@ -11,13 +10,14 @@ import {
 import {
     Inbox as InboxIcon,
     DocumentScanner as DocumentScannerIcon,
-    SupervisorAccount as SupervisorAccountIcon,
+    // SupervisorAccount as SupervisorAccountIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { routesManager } from "../routes/routesManager";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { useAppDispatch } from "../redux/hooks";
 import { actionLogout } from "../redux/authenticationSlice";
+import { CustomSnackbar } from "../components/shared";
 
 interface IBaseProps {
     children: JSX.Element;
@@ -32,22 +32,29 @@ const Base = ({ children, title }: IBaseProps) => {
 
     return (
         <Box display="flex" height="100vh" width="100%">
+            <CustomSnackbar />
             <Box
-                pt={2}
                 sx={{
-                    backgroundColor: "#fafafa",
-                    borderRight: "1px solid #bbb",
+                    backgroundColor: "#fff",
+                    borderRight: "1px solid #ccc",
                 }}
                 display="flex"
                 flexDirection="column"
                 alignItems="center"
+                overflow="hidden"
             >
-                <img
-                    src={`${process.env.REACT_APP_BASE_FRONT_URL}/triple-ai.png`}
-                    style={{ maxWidth: "120px", marginRight: 50 }}
-                />
-                <Box width="100%" mt={2} mb={1}>
-                    <Divider />
+                <Box
+                    p={2}
+                    display="flex"
+                    width="100%"
+                    justifyContent="center"
+                    sx={{ borderBottom: "1px solid #ccc" }}
+                    height="80px"
+                >
+                    <img
+                        src={`${process.env.REACT_APP_BASE_FRONT_URL}/triple-ai.png`}
+                        style={{ height: "50px", marginRight: 50 }}
+                    />
                 </Box>
 
                 <List>
@@ -115,31 +122,37 @@ const Base = ({ children, title }: IBaseProps) => {
                 </List>
             </Box>
 
-            <Box
-                flex={1}
-                display="flex"
-                flexDirection="column"
-                sx={{ backgroundColor: "rgba(111, 107, 125, .09)" }}
-                px={3}
-                py={4}
-                gap={3}
-            >
+            <Box flex={1} sx={{ backgroundColor: "rgba(111, 107, 125, .09)" }}>
                 <Box
-                    mr={20}
-                    p={3}
-                    pl={5}
+                    px={4}
                     sx={{
+                        height: "87px",
                         backgroundColor: "#fff",
-                        borderRadius: 10,
-                        // h-offset v-offset blur spread color
-                        boxShadow: "3px 3px 15px 0px #ccc",
+                        borderBottom: "1px solid #ccc",
                     }}
+                    display="flex"
                 >
-                    <Typography color="#777" component="h1" variant="h6">
+                    <Typography
+                        color="#555"
+                        component="h1"
+                        variant="h4"
+                        sx={{ my: "auto" }}
+                    >
                         {title}
                     </Typography>
                 </Box>
-                {children}
+                <Box
+                    px={3}
+                    py={4}
+                    display="flex"
+                    flexDirection="column"
+                    maxHeight="80%"
+                    sx={{
+                        overflowY: "scroll",
+                    }}
+                >
+                    {children}
+                </Box>
             </Box>
         </Box>
     );

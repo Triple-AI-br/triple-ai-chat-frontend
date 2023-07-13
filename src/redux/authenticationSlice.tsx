@@ -5,22 +5,6 @@ import axios from "axios";
 const ACCESS_TOKEN_KEY = "jwt";
 const BASE_API_URL = process.env.REACT_APP_BASE_API_URL as string;
 
-function parseJwt(token: string) {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(
-        window
-            .atob(base64)
-            .split("")
-            .map(function (c) {
-                return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-            })
-            .join("")
-    );
-
-    return JSON.parse(jsonPayload);
-}
-
 interface IIncomingTokenCredentials {
     access_token: string;
     token_type: string;
@@ -40,23 +24,10 @@ const setAccessTokenToLocalStorage = (accessToken: string) =>
 
 const _initialAccessToken = getAccessTokenFromLocalStorage() || "";
 
-let isAuthenticated: boolean;
-try {
-    const exp = 1000 * parseJwt(_initialAccessToken).exp;
-    const now = Date.now();
-    if (exp > now) {
-        isAuthenticated = true;
-    } else {
-        isAuthenticated = false;
-    }
-} catch (err) {
-    isAuthenticated = false;
-}
-
 const initialState: IState = {
     status: "idle",
     accessToken: _initialAccessToken,
-    isAuthenticated,
+    isAuthenticated: Boolean(_initialAccessToken),
 };
 
 const authSlice = createSlice({
@@ -82,6 +53,19 @@ const authSlice = createSlice({
             })
             .addCase(actionLogin.rejected, state => {
                 state.error = "Failed to authenticate user";
+            })
+            .addCase(actionAcceptInvite.pending, state => {
+                state.status = "loading";
+                state.error = undefined;
+            })
+            .addCase(actionAcceptInvite.fulfilled, (state, action) => {
+                const { access_token: accessToken } = action.payload;
+                state.accessToken = accessToken;
+                state.isAuthenticated = true;
+                setAccessTokenToLocalStorage(accessToken);
+            })
+            .addCase(actionAcceptInvite.rejected, state => {
+                state.error = "Failed to authenticate user";
             });
     },
 });
@@ -97,6 +81,27 @@ export const actionLogin = createAsyncThunk(
         formdata.append("username", email);
         formdata.append("password", password);
         const response = await axios.post(url, formdata);
+        const data: IIncomingTokenCredentials = response.data;
+        return data;
+    }
+);
+
+export const actionAcceptInvite = createAsyncThunk(
+    "auth/acceptInvite",
+    async ({
+        password,
+        confirmPassword,
+        token,
+    }: {
+        password: string;
+        confirmPassword: string;
+        token: string;
+    }) => {
+        if (password !== confirmPassword) {
+            throw Error("Passwords dont match");
+        }
+        const url = `${BASE_API_URL}/api/v1/login/invited-set-password`;
+        const response = await axios.post(url, { token, password });
         const data: IIncomingTokenCredentials = response.data;
         return data;
     }

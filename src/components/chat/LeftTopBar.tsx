@@ -10,7 +10,6 @@ const LeftTopBar = ({ handleNewChat }: ILeftTopBarProps) => {
     return (
         <Box
             display="flex"
-            gap={2}
             py={1}
             px="auto"
             alignItems="center"
@@ -20,11 +19,12 @@ const LeftTopBar = ({ handleNewChat }: ILeftTopBarProps) => {
             <Avatar
                 src="https://timenow.com.br/wp-content/uploads/2023/03/timenow-destaque-1.png"
                 alt="Timenow logo"
-                sx={{ width: 80, height: 80, mr: -3 }}
+                sx={{ width: 80, height: 80 }}
             />
             <Typography color="#fff" fontWeight={600} fontSize={18}>
                 Timenow AI Chatbot
             </Typography>
+            <Box mx={1.5} />
             <Button
                 onClick={handleNewChat}
                 size="small"

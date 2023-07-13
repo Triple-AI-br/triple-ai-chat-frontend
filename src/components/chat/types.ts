@@ -1,7 +1,7 @@
 export interface IChat {
-    id: string;
+    id: number;
     title: string;
-    subtitle: string;
+    subtitle?: string;
     date: string;
     isSelected: boolean;
 }

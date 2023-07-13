@@ -12,11 +12,9 @@ import {
     TextChat,
 } from "../components/chat";
 import { Box, Typography, Skeleton } from "@mui/material";
-import { useAppSelector } from "../redux/hooks";
-import { selectAccessToken } from "../redux/authenticationSlice";
+import { useParams } from "react-router-dom";
 
 const BOT_NAME = "Timenow AI";
-const PROJECT_ID = 4328;
 const GRAY_COLOR = "#f5f5f5";
 const INITIAL_TEXT =
     "Olá, sou a Inteligência Artificial da Timenow. Você pode me perguntar algo do tipo: Como eu solicito um reembolso?";
@@ -28,13 +26,14 @@ const DEFAULT_MESSAGE: IMessage = {
 };
 
 const ChatPage = () => {
-    const accessToken = useAppSelector(selectAccessToken);
+    const { id } = useParams() as { id: string };
+    const projectId = parseInt(id);
     const bottomRef = useRef<HTMLInputElement>(null);
     const [isLoadingMessages, setIsLoadingMessages] = useState(false);
     const [isLoadingAiResponse, setIsLoadingAiResponse] = useState(false);
     const [currentMessage, setCurrentMessage] = useState("");
-    const [selectedChat, setSelectedChat] = useState<string>();
-    const [chats, setChats] = useState<IChat[]>([]);
+    const [selectedChat, setSelectedChat] = useState<number>();
+    const [chats, setChats] = useState<IChat[]>();
     const [messageList, setMessageList] = useState<IMessage[]>([
         DEFAULT_MESSAGE,
     ]);
@@ -45,15 +44,16 @@ const ChatPage = () => {
     }, [messageList, isLoadingAiResponse]);
 
     // Delete chat
-    const handleDelete = async ({ sessionId }: { sessionId: string }) => {
+    const handleDelete = async ({ sessionId }: { sessionId: number }) => {
         if (!confirm("Are you sure you'd like to delete this chat?")) return;
-        setChats(prevChatList =>
-            prevChatList.filter(item => item.id !== sessionId)
-        );
+        if (!chats) return;
+        setChats(prevChatList => {
+            if (!prevChatList) return [];
+            return prevChatList.filter(item => item.id !== sessionId);
+        });
         const success = await chatService.deleteChat({
-            projectId: PROJECT_ID,
+            projectId,
             sessionId,
-            accessToken,
         });
         if (success) {
             if (selectedChat == sessionId) {
@@ -66,57 +66,57 @@ const ChatPage = () => {
     const handleNewChat = async () => {
         setIsLoadingMessages(true);
         const newChat = await chatService.createNewChat({
-            projectId: PROJECT_ID,
-            accessToken,
+            projectId,
         });
-        setChats(prevChatList => [
-            {
-                id: newChat.session_id,
-                date: newChat.updated_at,
-                isSelected: true,
-                subtitle: newChat.name,
-                title: newChat.name,
-            },
-            ...prevChatList,
-        ]);
-        setSelectedChat(newChat.session_id);
+        setChats(prevChatList => {
+            if (!prevChatList) return [];
+            return [
+                {
+                    id: newChat.id,
+                    date: newChat.created_at,
+                    isSelected: true,
+                    subtitle: undefined,
+                    title: newChat.title,
+                },
+                ...prevChatList,
+            ];
+        });
+        setSelectedChat(newChat.id);
     };
 
     // Initial load of chats
     useEffect(() => {
         (async () => {
-            if (!accessToken) return;
-
             const conversations = await chatService.listChats({
-                projectId: PROJECT_ID,
-                accessToken,
+                projectId,
             });
             setChats(
                 conversations.map(item => ({
-                    id: item.session_id,
+                    id: item.id,
                     title: BOT_NAME,
-                    subtitle: item.name,
-                    date: item.updated_at,
+                    subtitle: undefined,
+                    date: item.created_at,
                     isSelected: false,
                     onClick: handleSelectChat,
                     onDelete: handleDelete,
                 }))
             );
         })();
-    }, [accessToken]);
+    }, []);
 
     // Store selected chat session id
-    const handleSelectChat = ({ sessionId }: { sessionId: string }) => {
+    const handleSelectChat = ({ sessionId }: { sessionId: number }) => {
         setSelectedChat(sessionId);
     };
 
     // Runs when a new chat is selected, updates the selected chat
     useEffect(() => {
         (async () => {
-            if (!selectedChat || !accessToken) {
+            if (!selectedChat) {
                 return;
             }
             setChats(prevList => {
+                if (!prevList) return [];
                 const newValue = prevList.map(item => {
                     return {
                         ...item,
@@ -127,9 +127,8 @@ const ChatPage = () => {
             });
             setIsLoadingMessages(true);
             const conversation = await chatService.retrieveChat({
-                projectId: PROJECT_ID,
+                projectId,
                 sessionId: selectedChat,
-                accessToken,
             });
             const messages: IMessage[] = [DEFAULT_MESSAGE];
             conversation.reverse().forEach(item => {
@@ -149,7 +148,7 @@ const ChatPage = () => {
             setIsLoadingMessages(false);
             setMessageList(messages);
         })();
-    }, [selectedChat, accessToken]);
+    }, [selectedChat]);
 
     // Send message when Enter is pressed
     const handleEnterPressed = (event: React.KeyboardEvent<Element>) => {
@@ -187,9 +186,8 @@ const ChatPage = () => {
 
         const response = await chatService.sendMessage({
             prompt: currentMessage,
-            projectId: PROJECT_ID,
+            projectId,
             sessionId: selectedChat,
-            accessToken,
         });
         const newAiResponse: IMessage = {
             id: response.id,
@@ -215,12 +213,31 @@ const ChatPage = () => {
             >
                 <LeftTopBar handleNewChat={handleNewChat} />
                 <Box overflow="scroll">
-                    <ChatList
-                        chats={chats}
-                        handleDelete={handleDelete}
-                        handleSelectChat={handleSelectChat}
-                        title={BOT_NAME}
-                    />
+                    {chats === undefined ? (
+                        <Spinner />
+                    ) : chats.length === 0 ? (
+                        <Box
+                            width="100%"
+                            pt={2}
+                            display="flex"
+                            flexDirection="column"
+                            alignItems="center"
+                        >
+                            <Typography color="#555">
+                                You do not have any chats yet.
+                            </Typography>
+                            <Typography color="#555">
+                                Create a new one above 👆🏻
+                            </Typography>
+                        </Box>
+                    ) : (
+                        <ChatList
+                            chats={chats}
+                            handleDelete={handleDelete}
+                            handleSelectChat={handleSelectChat}
+                            title={BOT_NAME}
+                        />
+                    )}
                 </Box>
             </Box>
 
