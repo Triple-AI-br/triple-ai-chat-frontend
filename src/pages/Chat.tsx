@@ -11,7 +11,7 @@ import {
     IMessage,
     TextChat,
 } from "../components/chat";
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { routesManager } from "../routes/routesManager";
 
@@ -257,7 +257,9 @@ const ChatPage = () => {
                 <LeftTopBar handleNewChat={handleNewChat} />
                 <Box sx={{ overflowY: "scroll" }} height="100%">
                     {chats === undefined ? (
-                        <Spinner />
+                        <Box display="flex" justifyContent="center" pt={3}>
+                            <CircularProgress sx={{ color: "#376458" }} />
+                        </Box>
                     ) : chats.length === 0 ? (
                         <Box
                             width="100%"

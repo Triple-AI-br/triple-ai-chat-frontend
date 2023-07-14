@@ -48,13 +48,13 @@ const SourcesPage = () => {
                                 <Typography color="#656565">
                                     {file.filename}
                                 </Typography>
-                                <Button
+                                {/* <Button
                                     startIcon={<DeleteIcon />}
                                     variant="outlined"
                                     color="error"
                                 >
                                     Delete
-                                </Button>
+                                </Button> */}
                             </Box>
                         ))}
                 </Box>

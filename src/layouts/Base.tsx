@@ -86,7 +86,7 @@ const Base = ({ children, title }: IBaseProps) => {
                         </ListItemButton>
                     </ListItem>
 
-                    {/* <ListItem disablePadding>
+                    <ListItem disablePadding>
                         <ListItemButton
                             sx={{ pl: 5, pr: 10 }}
                             onClick={() =>
@@ -98,7 +98,7 @@ const Base = ({ children, title }: IBaseProps) => {
                             </ListItemIcon>
                             <ListItemText primary="Admin" />
                         </ListItemButton>
-                    </ListItem> */}
+                    </ListItem>
                 </List>
                 <Box sx={{ height: "100%" }} />
 
