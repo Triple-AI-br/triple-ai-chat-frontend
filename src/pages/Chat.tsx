@@ -13,11 +13,11 @@ import {
 } from "../components/chat";
 import { Box, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
+import { routesManager } from "../routes/routesManager";
 
 const BOT_NAME = "Timenow AI";
 const GRAY_COLOR = "#f5f5f5";
-const INITIAL_TEXT =
-    "Olá, sou a Inteligência Artificial da Timenow. Você pode me perguntar algo do tipo: Como eu solicito um reembolso?";
+const INITIAL_TEXT = `Olá, sou a Inteligência Artificial da Timenow. Fui treinada com os documentos [listados aqui](${routesManager.getSourcesRoute()} 'Knowledge base documents'). Você pode me fazer perguntas ou pedir para produzir textos com base nas informações contidas neles.`;
 const DEFAULT_MESSAGE: IMessage = {
     id: uuidv4(),
     type: "bot",
@@ -153,17 +153,33 @@ const ChatPage = () => {
 
     // Send message when Enter is pressed
     const handleEnterPressed = (event: React.KeyboardEvent<Element>) => {
-        if (event.key === "Enter") {
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey &&
+            currentMessage.trim() !== ""
+        ) {
             handleSendMessage();
+            setCurrentMessage("");
+        } else if (event.key === "Enter" && event.shiftKey) {
+            setCurrentMessage(prevMessage => prevMessage + "\n");
         }
     };
 
     // Keep track of the state
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        const text = e.target.value;
-        if (text[text.length - 1] === "\n" || text[text.length - 1] === "\r")
+        if (
+            (e.nativeEvent as unknown as { inputType: string }).inputType ===
+            "insertLineBreak"
+        )
             return;
-        setCurrentMessage(e.target.value);
+        let text = e.target.value;
+        if (
+            (e.nativeEvent as unknown as { inputType: string }).inputType ===
+            "insertFromPaste"
+        ) {
+            text = text.trim();
+        }
+        setCurrentMessage(text);
     };
 
     // Send message
@@ -239,7 +255,7 @@ const ChatPage = () => {
                 borderRight="1px solid #ccc"
             >
                 <LeftTopBar handleNewChat={handleNewChat} />
-                <Box overflow="scroll">
+                <Box sx={{ overflowY: "scroll" }} height="100%">
                     {chats === undefined ? (
                         <Spinner />
                     ) : chats.length === 0 ? (
