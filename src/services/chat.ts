@@ -116,6 +116,7 @@ const sendMessageStream = async ({
     const url = `${api.defaults.baseURL}/projects/${projectId}/chats/${sessionId}/stream`;
     // View package documentation: https://www.npmjs.com/package/@microsoft/fetch-event-source
     fetchEventSource(url, {
+        openWhenHidden: true, // Needed to keep the connection alive when the user switches tabs
         async onopen(response) {
             if (response.ok) {
                 return; // everything's good
