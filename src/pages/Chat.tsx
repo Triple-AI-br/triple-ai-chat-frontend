@@ -90,6 +90,7 @@ const ChatPage = () => {
             const conversations = await chatService.listChats({
                 projectId,
             });
+            conversations.reverse();
             setChats(
                 conversations.map(item => ({
                     id: item.id,
