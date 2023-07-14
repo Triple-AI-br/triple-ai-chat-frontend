@@ -34,7 +34,7 @@ const LoginForm = () => {
             const next =
                 location.state && location.state.next
                     ? location.state.next
-                    : routesManager.getChatsRoute();
+                    : routesManager.getProjectsRoute();
             navigate(next);
         }
     }, [isAuthenticated]);

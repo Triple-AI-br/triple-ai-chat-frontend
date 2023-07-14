@@ -122,7 +122,7 @@ function CustomAppBar() {
                         ))}
                         <Button
                             onClick={() =>
-                                navigate(routesManager.getChatsRoute())
+                                navigate(routesManager.getProjectsRoute())
                             }
                             endIcon={<LoginOutlinedIcon />}
                             variant="contained"

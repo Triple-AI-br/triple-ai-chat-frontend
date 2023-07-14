@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { IProject, projectService } from "../services";
 import { Spinner } from "../components/loaders";
 
-const ChatsPage = () => {
+const ProjectsPage = () => {
     const [projects, setProjects] = useState<IProject[]>();
 
     useEffect(() => {
@@ -64,4 +64,4 @@ const ChatsPage = () => {
     );
 };
 
-export { ChatsPage };
+export { ProjectsPage };

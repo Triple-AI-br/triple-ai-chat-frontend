@@ -12,7 +12,7 @@ const MessageList = ({ messages }: IMessageListProps) => {
             {messages.map(message =>
                 message.type === "bot" ? (
                     <BotMessageBubble
-                        key={message.id}
+                        key={`bot_${message.id}`}
                         markdownText={message.text}
                     />
                 ) : (

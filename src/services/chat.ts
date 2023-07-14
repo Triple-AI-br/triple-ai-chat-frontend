@@ -1,9 +1,24 @@
+import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { api } from "./api";
 
 interface ITimestamped {
     id: number;
     created_at: string;
     updated_at: string;
+}
+
+interface IMessageStreamStart {
+    status: "start";
+    prompt: string;
+}
+interface IMessageStreamProgress {
+    status: "progress";
+    message: string;
+}
+interface IMessageStreamFinish {
+    status: "finish";
+    id: number;
+    created_at: string;
 }
 
 interface IRetrieveConversationResponse {
@@ -85,6 +100,57 @@ const sendMessage = async ({
     return data.data;
 };
 
+const sendMessageStream = async ({
+    prompt,
+    callback,
+    sessionId,
+    projectId,
+}: {
+    prompt: string;
+    callback(
+        _: IMessageStreamStart | IMessageStreamProgress | IMessageStreamFinish
+    ): void;
+    sessionId: number;
+    projectId: number;
+}) => {
+    const url = `${api.defaults.baseURL}/projects/${projectId}/chats/${sessionId}/stream`;
+    // View package documentation: https://www.npmjs.com/package/@microsoft/fetch-event-source
+    fetchEventSource(url, {
+        async onopen(response) {
+            if (response.ok) {
+                return; // everything's good
+            } else {
+                throw new Error(
+                    `Status code: ${response.status} ${response.statusText} ${response.body}`
+                );
+            }
+        },
+        onerror(err) {
+            // By rethrowing the error we guarantee that the operation will stop
+            // Otherwise it'll keep retrying to connect by sending the same request
+            throw err;
+        },
+        onmessage(msg) {
+            if (!msg.data) {
+                return;
+            }
+            const data:
+                | IMessageStreamStart
+                | IMessageStreamProgress
+                | IMessageStreamFinish = JSON.parse(msg.data);
+            callback(data);
+        },
+        method: "POST",
+        headers: {
+            Authorization: api.defaults.headers.Authorization as string,
+            "Content-Type": "application/json", // This is required for the server to parse the body
+        },
+        body: JSON.stringify({
+            prompt,
+        }),
+    });
+};
+
 const createNewChat = async ({
     projectId,
 }: {
@@ -115,4 +181,5 @@ export const chatService = {
     createNewChat,
     retrieveChat,
     deleteChat,
+    sendMessageStream,
 };

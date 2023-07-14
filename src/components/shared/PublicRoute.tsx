@@ -12,7 +12,7 @@ export default function PublicRoute({ children }: IPublicRouteProps) {
     if (!isAuthenticated) {
         return children;
     } else {
-        return <Navigate to={routesManager.getChatsRoute()} />;
+        return <Navigate to={routesManager.getProjectsRoute()} />;
     }
 }
 export { PublicRoute };

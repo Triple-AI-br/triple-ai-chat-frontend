@@ -53,7 +53,7 @@ const AcceptInvitationPage = () => {
                                     severity: "success",
                                 })
                             );
-                            navigate(routesManager.getChatsRoute());
+                            navigate(routesManager.getProjectsRoute());
                         } else {
                             dispatch(
                                 actionDisplayNotification({

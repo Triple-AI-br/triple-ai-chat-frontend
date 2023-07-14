@@ -31,6 +31,7 @@ const MessageBubble = ({
                 borderBottomLeftRadius,
             }}
             border="1px solid #ccc"
+            display={markdownText ? undefined : "none"}
         >
             <ReactMarkdown>{markdownText}</ReactMarkdown>
         </Box>

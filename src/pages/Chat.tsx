@@ -11,7 +11,7 @@ import {
     IMessage,
     TextChat,
 } from "../components/chat";
-import { Box, Typography, Skeleton } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 
 const BOT_NAME = "Timenow AI";
@@ -174,7 +174,6 @@ const ChatPage = () => {
             isLoadingMessages
         )
             return;
-        setCurrentMessage("");
         setIsLoadingAiResponse(true);
         const newUserMessage: IMessage = {
             id: uuidv4(),
@@ -182,22 +181,49 @@ const ChatPage = () => {
             date: new Date(),
             text: currentMessage,
         };
+        setCurrentMessage("");
         setMessageList(prevMessageList => [...prevMessageList, newUserMessage]);
-
-        const response = await chatService.sendMessage({
+        await chatService.sendMessageStream({
             prompt: currentMessage,
             projectId,
             sessionId: selectedChat,
+            callback(data) {
+                if (data.status === "start") {
+                    setMessageList(prevMessageList => {
+                        const newAiResponse: IMessage = {
+                            id: uuidv4(),
+                            type: "bot",
+                            date: new Date(),
+                            text: "|",
+                        };
+                        return [...prevMessageList, newAiResponse];
+                    });
+                } else if (data.status === "progress") {
+                    setMessageList(prevMessageList => {
+                        const lastMessage =
+                            prevMessageList[prevMessageList.length - 1];
+                        if (lastMessage.type === "bot") {
+                            const text =
+                                lastMessage.text.slice(0, -1) +
+                                data.message +
+                                "|";
+                            lastMessage.text = text;
+                        }
+                        return [...prevMessageList];
+                    });
+                } else {
+                    setMessageList(prevMessageList => {
+                        const lastMessage =
+                            prevMessageList[prevMessageList.length - 1];
+                        if (lastMessage.type === "bot") {
+                            lastMessage.text = lastMessage.text.slice(0, -1);
+                        }
+                        return [...prevMessageList];
+                    });
+                }
+            },
         });
-        const newAiResponse: IMessage = {
-            id: response.id,
-            type: "bot",
-            date: new Date(response.updated_at),
-            text: response.openai_response,
-        };
-
         setIsLoadingAiResponse(false);
-        setMessageList(prevMessageList => [...prevMessageList, newAiResponse]);
     };
 
     return (
@@ -275,15 +301,6 @@ const ChatPage = () => {
                         >
                             <MessageList messages={messageList} />
 
-                            {isLoadingAiResponse && (
-                                <Box paddingLeft={3} paddingBottom={2}>
-                                    <Skeleton
-                                        variant="rounded"
-                                        width="50%"
-                                        height={50}
-                                    />
-                                </Box>
-                            )}
                             <div ref={bottomRef} />
                         </Box>
                     ) : (

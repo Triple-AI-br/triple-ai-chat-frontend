@@ -9,7 +9,7 @@ function LaunchAppButton() {
         <Button
             variant="outlined"
             endIcon={<LoginOutlinedIcon />}
-            onClick={() => navigate(routesManager.getChatsRoute())}
+            onClick={() => navigate(routesManager.getProjectsRoute())}
             sx={{
                 px: 6,
                 py: 3,

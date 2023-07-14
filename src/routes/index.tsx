@@ -2,12 +2,13 @@ import { Route, Routes } from "react-router-dom";
 import { routesManager } from "./routesManager";
 import {
     ChatPage,
-    ChatsPage,
+    ProjectsPage,
     LandingPage,
     LoginPage,
     SourcesPage,
     ConfirmEmailPage,
     AcceptInvitationPage,
+    AdminPage,
 } from "../pages";
 import { PrivateRoute, PublicRoute } from "../components/shared";
 
@@ -48,12 +49,17 @@ const AppRoutes = () => {
                                 element={<ChatPage />}
                             />
                             <Route
-                                path={routesManager.getChatsRoute()}
-                                element={<ChatsPage />}
+                                path={routesManager.getProjectsRoute()}
+                                element={<ProjectsPage />}
                             />
                             <Route
                                 path={routesManager.getSourcesRoute()}
                                 element={<SourcesPage />}
+                            />
+
+                            <Route
+                                path={routesManager.getAdminRoute()}
+                                element={<AdminPage />}
                             />
                         </Routes>
                     </PrivateRoute>

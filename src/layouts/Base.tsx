@@ -10,7 +10,7 @@ import {
 import {
     Inbox as InboxIcon,
     DocumentScanner as DocumentScannerIcon,
-    // SupervisorAccount as SupervisorAccountIcon,
+    SupervisorAccount as SupervisorAccountIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { routesManager } from "../routes/routesManager";
@@ -62,7 +62,7 @@ const Base = ({ children, title }: IBaseProps) => {
                         <ListItemButton
                             sx={{ pl: 5, pr: 10 }}
                             onClick={() =>
-                                navigate(routesManager.getChatsRoute())
+                                navigate(routesManager.getProjectsRoute())
                             }
                         >
                             <ListItemIcon>
@@ -87,7 +87,12 @@ const Base = ({ children, title }: IBaseProps) => {
                     </ListItem>
 
                     {/* <ListItem disablePadding>
-                        <ListItemButton sx={{ pl: 5, pr: 10 }}>
+                        <ListItemButton
+                            sx={{ pl: 5, pr: 10 }}
+                            onClick={() =>
+                                navigate(routesManager.getAdminRoute())
+                            }
+                        >
                             <ListItemIcon>
                                 <SupervisorAccountIcon />
                             </ListItemIcon>
@@ -126,7 +131,7 @@ const Base = ({ children, title }: IBaseProps) => {
                 <Box
                     px={4}
                     sx={{
-                        height: "87px",
+                        height: "83px",
                         backgroundColor: "#fff",
                         borderBottom: "1px solid #ccc",
                     }}
