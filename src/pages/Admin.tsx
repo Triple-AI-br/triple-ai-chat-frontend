@@ -50,10 +50,10 @@ const AdminPage = () => {
                     columns={columns}
                     initialState={{
                         pagination: {
-                            paginationModel: { page: 0, pageSize: 25 },
+                            paginationModel: { page: 0, pageSize: 10 },
                         },
                     }}
-                    pageSizeOptions={[25, 50]}
+                    pageSizeOptions={[10, 20]}
                     rowSelection={false}
                     disableColumnSelector
                     disableDensitySelector
