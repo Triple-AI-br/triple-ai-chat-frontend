@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ISources, sourcesService } from "../services";
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
-import { Delete as DeleteIcon } from "@mui/icons-material";
+import { Box, CircularProgress, Typography } from "@mui/material";
+// import { Delete as DeleteIcon } from "@mui/icons-material";
 import { Base } from "../layouts/Base";
 
 const SourcesPage = () => {
@@ -11,7 +11,7 @@ const SourcesPage = () => {
     useEffect(() => {
         (async () => {
             setIsLoading(true);
-            const data = await sourcesService.listSources({ projectId: 4328 });
+            const data = await sourcesService.listSources({ projectId: 1 });
             setDate(data);
             setIsLoading(false);
         })();

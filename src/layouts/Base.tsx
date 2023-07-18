@@ -15,8 +15,11 @@ import {
 import { useNavigate } from "react-router-dom";
 import { routesManager } from "../routes/routesManager";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import { useAppDispatch } from "../redux/hooks";
-import { actionLogout } from "../redux/authenticationSlice";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import {
+    actionLogout,
+    selectIsAdminOrSuperUser,
+} from "../redux/authenticationSlice";
 import { CustomSnackbar } from "../components/shared";
 
 interface IBaseProps {
@@ -27,6 +30,7 @@ interface IBaseProps {
 const Base = ({ children, title }: IBaseProps) => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const isAdminOrSuperUser = useAppSelector(selectIsAdminOrSuperUser);
 
     const handleLogout = () => dispatch(actionLogout());
 
@@ -86,19 +90,21 @@ const Base = ({ children, title }: IBaseProps) => {
                         </ListItemButton>
                     </ListItem>
 
-                    <ListItem disablePadding>
-                        <ListItemButton
-                            sx={{ pl: 5, pr: 10 }}
-                            onClick={() =>
-                                navigate(routesManager.getAdminRoute())
-                            }
-                        >
-                            <ListItemIcon>
-                                <SupervisorAccountIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Admin" />
-                        </ListItemButton>
-                    </ListItem>
+                    {isAdminOrSuperUser && (
+                        <ListItem disablePadding>
+                            <ListItemButton
+                                sx={{ pl: 5, pr: 10 }}
+                                onClick={() =>
+                                    navigate(routesManager.getAdminRoute())
+                                }
+                            >
+                                <ListItemIcon>
+                                    <SupervisorAccountIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Admin" />
+                            </ListItemButton>
+                        </ListItem>
+                    )}
                 </List>
                 <Box sx={{ height: "100%" }} />
 

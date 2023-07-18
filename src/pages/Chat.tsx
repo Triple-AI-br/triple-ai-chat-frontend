@@ -94,6 +94,7 @@ const ChatPage = () => {
             setChats(
                 conversations.map(item => ({
                     id: item.id,
+                    email: item.email,
                     title: BOT_NAME,
                     subtitle: undefined,
                     date: item.created_at,

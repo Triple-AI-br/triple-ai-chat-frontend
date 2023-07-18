@@ -1,117 +1,71 @@
 import { Base } from "../layouts/Base";
-import { ReactMultiEmail } from "react-multi-email";
 import "react-multi-email/dist/style.css";
-import { useState } from "react";
-import { Alert, Box, Button } from "@mui/material";
-import { authService } from "../services";
+import { useEffect, useState } from "react";
+import { Box, Divider, Typography } from "@mui/material";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { IUserDataResponse, usersService } from "../services/users";
+import { UserInvite } from "../components/Admin";
+
+const columns: GridColDef[] = [
+    { field: "id", headerName: "ID", width: 70, type: "number" },
+    { field: "email", headerName: "Email", width: 350 },
+    {
+        field: "is_admin",
+        headerName: "Admin",
+        type: "boolean",
+        width: 100,
+    },
+    {
+        field: "is_active",
+        headerName: "Active",
+        type: "boolean",
+        width: 100,
+    },
+    {
+        field: "confirmed_email",
+        headerName: "Email confirmed",
+        type: "boolean",
+        width: 150,
+    },
+];
 
 const AdminPage = () => {
-    const [emails, setEmails] = useState<string[]>([]);
-    const [result, setResult] = useState<{
-        failed: Record<string, string>;
-        invited: string[];
-    }>();
+    const [users, setUsers] = useState<IUserDataResponse[]>([]);
 
-    const handleClick = async () => {
-        const res = await authService.inviteUsers(emails);
-        setEmails([]);
-        setResult(res);
-    };
+    useEffect(() => {
+        (async () => {
+            const data = await usersService.listUsers();
+            setUsers(data);
+        })();
+    }, []);
 
     return (
         <Base title="Invite your coworkers">
-            <Box display="flex" flexDirection="column" gap={2}>
-                <Box display="flex" gap={2}>
-                    <ReactMultiEmail
-                        placeholder={
-                            <span
-                                style={{
-                                    display: "flex",
-                                    fontSize: "18px",
-                                    paddingLeft: "5px",
-                                    marginTop: "5px",
-                                    color: "#aaa",
-                                }}
-                            >
-                                Input emails
-                            </span>
-                        }
-                        style={{
-                            border: "1px solid #bbb",
-                            minHeight: "50px",
-                            maxWidth: "800px",
-                            width: "70%",
-                            borderRadius: "15px",
-                            padding: "15px",
-                        }}
-                        emails={emails}
-                        onChange={(_emails: string[]) => {
-                            setEmails(_emails);
-                        }}
-                        autoFocus={true}
-                        getLabel={(email, index, removeEmail) => {
-                            return (
-                                <div data-tag key={index}>
-                                    <div
-                                        data-tag-item
-                                        style={{ fontSize: "15px" }}
-                                    >
-                                        {email}
-                                    </div>
-                                    <span
-                                        data-tag-handle
-                                        onClick={() => removeEmail(index)}
-                                    >
-                                        ×
-                                    </span>
-                                </div>
-                            );
-                        }}
-                    />
-                    <Button
-                        variant="outlined"
-                        sx={{ borderRadius: "15px" }}
-                        onClick={handleClick}
-                    >
-                        Invite
-                    </Button>
-                </Box>
-
-                {result &&
-                    Object.entries(result.failed).map(([email, reason]) => (
-                        <Alert
-                            key={email}
-                            severity="error"
-                            variant="standard"
-                            sx={{ border: "1px solid red", width: "74%" }}
-                            onClose={() => {
-                                delete result.failed[email];
-                                setResult({ ...result });
-                            }}
-                        >
-                            Failed to invite {email}: {reason}
-                        </Alert>
-                    ))}
-
-                {result &&
-                    result.invited.map(email => (
-                        <Alert
-                            key={email}
-                            severity="success"
-                            variant="standard"
-                            sx={{ border: "1px solid green", width: "74%" }}
-                            onClose={() => {
-                                setResult({
-                                    ...result,
-                                    invited: result.invited.filter(
-                                        item => item !== email
-                                    ),
-                                });
-                            }}
-                        >
-                            Successfully invited {email}
-                        </Alert>
-                    ))}
+            <Box display="flex" flexDirection="column" gap={3}>
+                <Typography variant="h5" component="h2" color="#555">
+                    Current Users
+                </Typography>
+                <DataGrid
+                    rows={users}
+                    columns={columns}
+                    initialState={{
+                        pagination: {
+                            paginationModel: { page: 0, pageSize: 25 },
+                        },
+                    }}
+                    pageSizeOptions={[25, 50]}
+                    rowSelection={false}
+                    disableColumnSelector
+                    disableDensitySelector
+                    disableRowSelectionOnClick
+                    showCellVerticalBorder
+                    sx={{ backgroundColor: "#fff", border: "1px solid #aaa" }}
+                />
+                <Divider />
+                <Typography variant="h5" component="h2" color="#555">
+                    Invite new Users
+                </Typography>
+                <UserInvite />
             </Box>
         </Base>
     );

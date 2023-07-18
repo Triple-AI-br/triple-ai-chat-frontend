@@ -1,5 +1,6 @@
 export interface IChat {
     id: number;
+    email?: string;
     title: string;
     subtitle?: string;
     date: string;

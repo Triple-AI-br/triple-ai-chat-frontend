@@ -4,8 +4,11 @@ import { TextareaAutosize, TextareaAutosizeProps } from "@mui/base";
 const TextArea = ({ ...props }: TextareaAutosizeProps) => {
     return (
         <TextareaAutosize
+            autoCapitalize="off"
+            autoCorrect="off"
+            autoComplete="off"
+            autoFocus
             className="text-area-auto-size"
-            {...props}
             maxRows={5}
             minRows={2}
             aria-label="Input field"
@@ -23,6 +26,7 @@ const TextArea = ({ ...props }: TextareaAutosizeProps) => {
                 color: "#24292f",
                 background: "#fff",
             }}
+            {...props}
         />
     );
 };

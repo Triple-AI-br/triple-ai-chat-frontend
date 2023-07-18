@@ -1,9 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import axios from "axios";
+import { parseJwt } from "../utils/parseJwt";
 
 const ACCESS_TOKEN_KEY = "jwt";
 const BASE_API_URL = process.env.REACT_APP_BASE_API_URL as string;
+
+interface IUserData {
+    sub: string;
+    email: string;
+    is_superuser: boolean;
+    is_admin: boolean;
+    permissions: string[];
+}
 
 interface IIncomingTokenCredentials {
     access_token: string;
@@ -15,6 +24,7 @@ interface IState {
     accessToken: string;
     isAuthenticated: boolean;
     error?: string;
+    userData?: IUserData;
 }
 const getAccessTokenFromLocalStorage = () =>
     localStorage.getItem(ACCESS_TOKEN_KEY);
@@ -24,10 +34,15 @@ const setAccessTokenToLocalStorage = (accessToken: string) =>
 
 const _initialAccessToken = getAccessTokenFromLocalStorage() || "";
 
+const userData = _initialAccessToken
+    ? parseJwt(_initialAccessToken)
+    : undefined;
+
 const initialState: IState = {
     status: "idle",
     accessToken: _initialAccessToken,
     isAuthenticated: Boolean(_initialAccessToken),
+    userData,
 };
 
 const authSlice = createSlice({
@@ -112,6 +127,12 @@ export const selectIsAuthenticated = (state: RootState) =>
     state.auth.isAuthenticated;
 export const selectAccessToken = (state: RootState) => state.auth.accessToken;
 export const selectError = (state: RootState) => state.auth.error;
+export const selectIsSuperUser = (state: RootState) =>
+    state.auth.userData?.is_superuser;
+export const selectIsAdminOrSuperUser = (state: RootState) =>
+    state.auth.userData?.is_admin || state.auth.userData?.is_superuser;
+export const selectHasPermission = (permission: string) => (state: RootState) =>
+    state.auth.userData?.permissions.includes(permission);
 
 // Reducer
 export const authSliceReducer = authSlice.reducer;

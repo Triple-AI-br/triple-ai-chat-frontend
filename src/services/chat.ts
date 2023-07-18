@@ -42,8 +42,9 @@ interface IMessage extends ITimestamped {
     citations: string[] | null;
 }
 
-interface IChat {
+interface IChatApiResponse {
     project_id: number;
+    email?: string;
     user_id: number;
     title: string;
     id: number;
@@ -79,7 +80,7 @@ const listChats = async ({
     projectId,
 }: {
     projectId: number;
-}): Promise<IChat[]> => {
+}): Promise<IChatApiResponse[]> => {
     const url = `/projects/${projectId}/chats`;
     const response = await api.get(url);
     return response.data;
@@ -156,10 +157,10 @@ const createNewChat = async ({
     projectId,
 }: {
     projectId: number;
-}): Promise<IChat> => {
+}): Promise<IChatApiResponse> => {
     const url = `/projects/${projectId}/chats`;
     const response = await api.post(url, { name: "Timenow AI" });
-    const data: IChat = response.data;
+    const data: IChatApiResponse = response.data;
     return data;
 };
 

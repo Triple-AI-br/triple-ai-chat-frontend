@@ -19,6 +19,7 @@ const ChatList = ({
             {chats.map(item => (
                 <ChatItem
                     key={item.id}
+                    email={item.email}
                     id={item.id}
                     title={title}
                     subtitle={undefined}

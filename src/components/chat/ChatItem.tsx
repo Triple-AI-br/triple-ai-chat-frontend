@@ -3,10 +3,13 @@ import { Avatar, Box, Typography } from "@mui/material";
 import moment from "moment";
 import { useState } from "react";
 import { Clear as DeleteIcon } from "@mui/icons-material";
+import { useAppSelector } from "../../redux/hooks";
+import { selectIsSuperUser } from "../../redux/authenticationSlice";
 
 interface IChatItemProps {
     id: number;
     title: string;
+    email?: string;
     subtitle?: string;
     date: string;
     isSelected: boolean;
@@ -17,6 +20,7 @@ interface IChatItemProps {
 const ChatItem = ({
     id,
     title,
+    email,
     subtitle,
     date,
     isSelected,
@@ -25,6 +29,7 @@ const ChatItem = ({
 }: IChatItemProps) => {
     const [isHovered, setIsHovered] = useState(false);
     const timeAgo = moment(date).fromNow();
+    const isSuperUser = useAppSelector(selectIsSuperUser);
     let backgroundColor: string;
 
     if (isSelected) backgroundColor = "#eee";
@@ -62,9 +67,16 @@ const ChatItem = ({
                     </Typography>
                 </Box>
                 <Box display="flex" justifyContent="space-between">
-                    <Typography fontSize={14} color="#888">
-                        {subtitle}
-                    </Typography>
+                    {isSuperUser && email && (
+                        <Typography fontSize={14} color="#888">
+                            {email}
+                        </Typography>
+                    )}
+                    {subtitle && (
+                        <Typography fontSize={14} color="#888">
+                            {subtitle}
+                        </Typography>
+                    )}
                     <DeleteIcon
                         onClick={
                             isHovered
