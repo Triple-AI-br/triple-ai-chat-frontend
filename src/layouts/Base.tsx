@@ -76,20 +76,6 @@ const Base = ({ children, title }: IBaseProps) => {
                         </ListItemButton>
                     </ListItem>
 
-                    <ListItem disablePadding>
-                        <ListItemButton
-                            sx={{ pl: 5, pr: 10 }}
-                            onClick={() =>
-                                navigate(routesManager.getSourcesRoute())
-                            }
-                        >
-                            <ListItemIcon>
-                                <DocumentScannerIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Sources" />
-                        </ListItemButton>
-                    </ListItem>
-
                     {isAdminOrSuperUser && (
                         <ListItem disablePadding>
                             <ListItemButton

@@ -17,13 +17,6 @@ import { routesManager } from "../routes/routesManager";
 
 const BOT_NAME = "Timenow AI";
 const GRAY_COLOR = "#f5f5f5";
-const INITIAL_TEXT = `Olá, sou a Inteligência Artificial da Timenow. Fui treinada com os documentos [listados aqui](${routesManager.getSourcesRoute()} 'Knowledge base documents'). Você pode me fazer perguntas ou pedir para produzir textos com base nas informações contidas neles.`;
-const DEFAULT_MESSAGE: IMessage = {
-    id: uuidv4(),
-    type: "bot",
-    date: new Date(),
-    text: INITIAL_TEXT,
-};
 
 const ChatPage = () => {
     const { id } = useParams() as { id: string };
@@ -34,6 +27,15 @@ const ChatPage = () => {
     const [currentMessage, setCurrentMessage] = useState("");
     const [selectedChat, setSelectedChat] = useState<number>();
     const [chats, setChats] = useState<IChat[]>();
+    const INITIAL_TEXT = `Olá, sou a Inteligência Artificial da Timenow. Fui treinada com os documentos [listados aqui](${routesManager.getSourcesRoute(
+        id
+    )} 'Knowledge base documents'). Você pode me fazer perguntas ou pedir para produzir textos com base nas informações contidas neles.`;
+    const DEFAULT_MESSAGE: IMessage = {
+        id: uuidv4(),
+        type: "bot",
+        date: new Date(),
+        text: INITIAL_TEXT,
+    };
     const [messageList, setMessageList] = useState<IMessage[]>([
         DEFAULT_MESSAGE,
     ]);

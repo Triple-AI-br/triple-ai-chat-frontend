@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { Base } from "../layouts/Base";
 import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
-import { ChatInfo } from "../components/Chats";
+import { ProjectsItem } from "../components/Projects";
 import { routesManager } from "../routes/routesManager";
 import { useEffect, useState } from "react";
 import { IProject, projectService } from "../services";
@@ -40,7 +40,7 @@ const ProjectsPage = () => {
                 ) : (
                     <Grid container width="100%" spacing={2}>
                         {projects.map(project => (
-                            <ChatInfo
+                            <ProjectsItem
                                 key={project.id}
                                 onClick={() =>
                                     window.open(
@@ -55,6 +55,7 @@ const ProjectsPage = () => {
                                 }
                                 title="AI Chatbot"
                                 description={project.description}
+                                id={project.id}
                             />
                         ))}
                     </Grid>

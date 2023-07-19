@@ -127,6 +127,8 @@ export const selectIsAuthenticated = (state: RootState) =>
     state.auth.isAuthenticated;
 export const selectAccessToken = (state: RootState) => state.auth.accessToken;
 export const selectError = (state: RootState) => state.auth.error;
+export const selectIsAdmin = (state: RootState) =>
+    state.auth.userData?.is_admin;
 export const selectIsSuperUser = (state: RootState) =>
     state.auth.userData?.is_superuser;
 export const selectIsAdminOrSuperUser = (state: RootState) =>

@@ -56,4 +56,17 @@ const listSources = async ({
     return data.data;
 };
 
-export const sourcesService = { listSources };
+const deleteSource = async ({
+    projectId,
+    sourceId,
+}: {
+    projectId: number | string;
+    sourceId: number;
+}): Promise<{ success: boolean }> => {
+    const url = `/projects/${projectId}/sources/${sourceId}`;
+    const response = await api.delete(url);
+    const data = response.data;
+    return data;
+};
+
+export const sourcesService = { listSources, deleteSource };

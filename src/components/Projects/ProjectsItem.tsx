@@ -1,18 +1,25 @@
-import { Box, Typography } from "@mui/material";
-import { QuestionAnswerOutlined as QuestionAnswerOutlinedIcon } from "@mui/icons-material";
+import { Box, IconButton, Tooltip, Typography } from "@mui/material";
+import {
+    QuestionAnswerOutlined as QuestionAnswerOutlinedIcon,
+    SettingsOutlined as SettingsOutlinedIcon,
+} from "@mui/icons-material";
 import Grid from "@mui/material/Unstable_Grid2";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { routesManager } from "../../routes/routesManager";
 
-interface IChatItemProps {
+interface IProjectProps {
+    id: number;
     title: string;
     description: string;
     onClick(): void;
 }
 
-const ChatInfo = ({ title, description, onClick }: IChatItemProps) => {
+const ProjectsItem = ({ id, title, description, onClick }: IProjectProps) => {
     const defaultShadow = "5px 5px 15px 2px rgba(0, 0, 0, 0.12)";
     const hoverShadow = "5px 5px 15px 8px rgba(0, 0, 0, 0.12)";
     const [shadow, setShadow] = useState(defaultShadow);
+    const navigate = useNavigate();
 
     const onMouseOver = () => setShadow(hoverShadow);
     const onMouseOut = () => setShadow(defaultShadow);
@@ -33,6 +40,7 @@ const ChatInfo = ({ title, description, onClick }: IChatItemProps) => {
                     backgroundColor: "#fafafa",
                     borderRadius: 3,
                     cursor: "pointer",
+                    position: "relative",
                 }}
             >
                 <QuestionAnswerOutlinedIcon
@@ -51,8 +59,24 @@ const ChatInfo = ({ title, description, onClick }: IChatItemProps) => {
                         {description}
                     </Typography>
                 </Box>
+                <Tooltip arrow title="Project settings" placement="top">
+                    <IconButton
+                        onClick={e => {
+                            e.stopPropagation();
+                            navigate(routesManager.getSourcesRoute(id));
+                        }}
+                        sx={{
+                            color: "#777",
+                            position: "absolute",
+                            top: 10,
+                            right: 10,
+                        }}
+                    >
+                        <SettingsOutlinedIcon />
+                    </IconButton>
+                </Tooltip>
             </Box>
         </Grid>
     );
 };
-export { ChatInfo };
+export { ProjectsItem };
