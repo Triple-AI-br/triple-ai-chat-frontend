@@ -69,17 +69,20 @@ const authSlice = createSlice({
             .addCase(actionLogin.rejected, state => {
                 state.error = "Failed to authenticate user";
             })
-            .addCase(actionAcceptInvite.pending, state => {
+            .addCase(actionAcceptInviteOrResetPassword.pending, state => {
                 state.status = "loading";
                 state.error = undefined;
             })
-            .addCase(actionAcceptInvite.fulfilled, (state, action) => {
-                const { access_token: accessToken } = action.payload;
-                state.accessToken = accessToken;
-                state.isAuthenticated = true;
-                setAccessTokenToLocalStorage(accessToken);
-            })
-            .addCase(actionAcceptInvite.rejected, state => {
+            .addCase(
+                actionAcceptInviteOrResetPassword.fulfilled,
+                (state, action) => {
+                    const { access_token: accessToken } = action.payload;
+                    state.accessToken = accessToken;
+                    state.isAuthenticated = true;
+                    setAccessTokenToLocalStorage(accessToken);
+                }
+            )
+            .addCase(actionAcceptInviteOrResetPassword.rejected, state => {
                 state.error = "Failed to authenticate user";
             });
     },
@@ -101,13 +104,15 @@ export const actionLogin = createAsyncThunk(
     }
 );
 
-export const actionAcceptInvite = createAsyncThunk(
+export const actionAcceptInviteOrResetPassword = createAsyncThunk(
     "auth/acceptInvite",
     async ({
         password,
         confirmPassword,
         token,
+        type,
     }: {
+        type: "reset" | "invite";
         password: string;
         confirmPassword: string;
         token: string;
@@ -115,7 +120,10 @@ export const actionAcceptInvite = createAsyncThunk(
         if (password !== confirmPassword) {
             throw Error("Passwords dont match");
         }
-        const url = `${BASE_API_URL}/api/v1/login/invited-set-password`;
+        const url =
+            type === "invite"
+                ? `${BASE_API_URL}/api/v1/login/invited-set-password`
+                : `${BASE_API_URL}/api/v1/login/reset-password`;
         const response = await axios.post(url, { token, password });
         const data: IIncomingTokenCredentials = response.data;
         return data;

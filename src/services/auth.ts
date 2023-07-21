@@ -11,6 +11,15 @@ interface IInviteUsersResponse {
     invited: string[];
 }
 
+const requestPasswordReset = async (
+    email: string
+): Promise<{ detail: string }> => {
+    const url = "/login/password-recovery";
+    const response = await api.post(url, { email });
+    const data = response.data;
+    return data;
+};
+
 const confirmEmail = async (token: string): Promise<IConfirmEmailResponse> => {
     const url = "/login/confirm-email";
     const response = await api.post(url, token);
@@ -28,4 +37,5 @@ const inviteUsers = async (emails: string[]): Promise<IInviteUsersResponse> => {
 export const authService = {
     confirmEmail,
     inviteUsers,
+    requestPasswordReset,
 };

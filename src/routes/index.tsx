@@ -7,7 +7,7 @@ import {
     LoginPage,
     SourcesPage,
     ConfirmEmailPage,
-    AcceptInvitationPage,
+    AcceptInvitationOrResetPasswordPage,
     AdminPage,
 } from "../pages";
 import { PrivateRoute, PublicRoute } from "../components/shared";
@@ -27,7 +27,12 @@ const AppRoutes = () => {
 
             <Route
                 path={routesManager.getAcceptInvitationRoute()}
-                element={<AcceptInvitationPage />}
+                element={<AcceptInvitationOrResetPasswordPage />}
+            />
+
+            <Route
+                path={routesManager.getResetPasswordRoute()}
+                element={<AcceptInvitationOrResetPasswordPage />}
             />
 
             <Route

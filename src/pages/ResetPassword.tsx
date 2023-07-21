@@ -2,7 +2,7 @@ import { Box, Button, TextField } from "@mui/material";
 import { Base } from "../layouts/Base";
 import { Formik } from "formik";
 import { useAppDispatch } from "../redux/hooks";
-import { actionAcceptInvite } from "../redux/authenticationSlice";
+import { actionAcceptInviteOrResetPassword } from "../redux/authenticationSlice";
 import * as yup from "yup";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { routesManager } from "../routes/routesManager";
@@ -13,7 +13,7 @@ interface IFormData {
     confirmPassword: string;
 }
 
-const AcceptInvitationPage = () => {
+const ResetPasswordPage = () => {
     const dispatch = useAppDispatch();
     const [searchParams] = useSearchParams();
     const token = searchParams.get("token") as string;
@@ -28,13 +28,17 @@ const AcceptInvitationPage = () => {
     });
 
     return (
-        <Base title="Set new password">
+        <Base title="Reset your password">
             <Box mx="auto" width="50%">
                 <Formik
                     initialValues={{ password: "", confirmPassword: "" }}
                     onSubmit={async (values, { setSubmitting }) => {
                         const bearerToken = await dispatch(
-                            actionAcceptInvite({ ...values, token })
+                            actionAcceptInviteOrResetPassword({
+                                ...values,
+                                token,
+                                type: "reset",
+                            })
                         );
                         setSubmitting(false);
                         if (
@@ -44,7 +48,7 @@ const AcceptInvitationPage = () => {
                         ) {
                             dispatch(
                                 actionDisplayNotification({
-                                    messages: ["User successfuly registered"],
+                                    messages: ["Password successfuly reset"],
                                     severity: "success",
                                 })
                             );
@@ -142,4 +146,4 @@ const AcceptInvitationPage = () => {
         </Base>
     );
 };
-export { AcceptInvitationPage };
+export { ResetPasswordPage };
