@@ -45,11 +45,6 @@ const AcceptInvitationPage = () => {
                             dispatch(
                                 actionDisplayNotification({
                                     messages: ["User successfuly registered"],
-                                    anchorOrigin: {
-                                        horizontal: "center",
-                                        vertical: "top",
-                                    },
-                                    variant: "filled",
                                     severity: "success",
                                 })
                             );
@@ -58,12 +53,6 @@ const AcceptInvitationPage = () => {
                             dispatch(
                                 actionDisplayNotification({
                                     messages: ["Unable to register user"],
-                                    anchorOrigin: {
-                                        horizontal: "center",
-                                        vertical: "top",
-                                    },
-                                    variant: "filled",
-                                    severity: "error",
                                 })
                             );
                         }

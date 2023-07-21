@@ -23,11 +23,11 @@ const notificationSlice = createSlice({
     reducers: {
         displayNotification(state, action: PayloadAction<INotification>) {
             const notification = action.payload;
-            notification.variant ||= "standard";
+            notification.variant ||= "filled";
             notification.severity ||= "error";
             notification.autoHideDuration ||= 4000;
             notification.anchorOrigin ||= {
-                vertical: "bottom",
+                vertical: "top",
                 horizontal: "center",
             };
             state.notification = notification;

@@ -44,11 +44,6 @@ const LoginForm = () => {
             dispatch(
                 actionDisplayNotification({
                     messages: [error],
-                    anchorOrigin: {
-                        horizontal: "center",
-                        vertical: "top",
-                    },
-                    variant: "filled",
                 })
             );
         }

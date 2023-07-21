@@ -30,8 +30,9 @@ interface IFile {
     filesize: number;
 }
 
-interface ISourcesResponse {
-    data: ISources;
+interface ISourceUpload {
+    data: ISource[];
+    success: boolean;
 }
 
 export interface ISources {
@@ -45,15 +46,42 @@ export interface ISources {
     };
 }
 
+export interface ISource {
+    id: number;
+    project_id: number;
+    file_name: string;
+    file_path: string;
+    etag: string;
+    media_type: string;
+}
+
 const listSources = async ({
     projectId,
 }: {
     projectId: number;
-}): Promise<ISources> => {
+}): Promise<ISource[]> => {
     const url = `/projects/${projectId}/sources`;
     const response = await api.get(url);
-    const data: ISourcesResponse = response.data;
-    return data.data;
+    return response.data;
+};
+
+const uploadSources = async ({
+    projectId,
+    files,
+}: {
+    files: File[];
+    projectId: number | string;
+}): Promise<ISourceUpload> => {
+    const formData = new FormData();
+    files.forEach(file => formData.append("files", file, file.name));
+    const url = `/projects/${projectId}/sources`;
+    const response = await api.post(url, formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
+    const data = response.data;
+    return data;
 };
 
 const deleteSource = async ({
@@ -69,4 +97,4 @@ const deleteSource = async ({
     return data;
 };
 
-export const sourcesService = { listSources, deleteSource };
+export const sourcesService = { listSources, deleteSource, uploadSources };
