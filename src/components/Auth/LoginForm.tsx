@@ -10,7 +10,7 @@ import {
     selectError,
     selectIsAuthenticated,
 } from "../../redux/authenticationSlice";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 interface IFormData {
     email: string;
@@ -28,6 +28,24 @@ const LoginForm = () => {
     const location = useLocation();
     const error = useAppSelector(selectError);
     const isAuthenticated = useAppSelector(selectIsAuthenticated);
+    const handleSubmitRef = useRef<
+        ((e?: React.FormEvent<HTMLFormElement> | undefined) => void) | undefined
+    >();
+
+    useEffect(() => {
+        const handleKeyPress = (event: KeyboardEvent) => {
+            if (event.key === "Enter" && handleSubmitRef.current) {
+                handleSubmitRef.current();
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyPress);
+
+        // Cleanup on unmount
+        return () => {
+            window.removeEventListener("keydown", handleKeyPress);
+        };
+    }, []); // Empty dependency array ensures this runs once on mount and cleanup on unmount
 
     useEffect(() => {
         if (isAuthenticated) {
@@ -80,77 +98,88 @@ const LoginForm = () => {
                 handleSubmit,
                 isSubmitting,
                 /* There are other functionalities available as well */
-            }) => (
-                <Box
-                    width="100%"
-                    display="flex"
-                    flexDirection="column"
-                    gap={5}
-                    alignItems="center"
-                >
-                    <Box maxWidth="200px" mb={2}>
-                        <img
-                            src={`${process.env.REACT_APP_BASE_FRONT_URL}/triple-ai.png`}
-                            style={{
-                                maxWidth: "100%",
-                            }}
-                        />
-                    </Box>
-
+            }) => {
+                handleSubmitRef.current = handleSubmit;
+                return (
                     <Box
+                        width="100%"
                         display="flex"
-                        justifyContent="start"
-                        mr="auto"
-                        alignItems="end"
+                        flexDirection="column"
+                        gap={5}
+                        alignItems="center"
                     >
-                        <Typography fontSize={18} fontWeight={600} color="#444">
-                            Login&nbsp;
-                        </Typography>
-                        <Typography fontSize={15} fontWeight={500} color="#777">
-                            (invitation only)
-                        </Typography>
+                        <Box maxWidth="200px" mb={2}>
+                            <img
+                                src={`${process.env.REACT_APP_BASE_FRONT_URL}/triple-ai.png`}
+                                style={{
+                                    maxWidth: "100%",
+                                }}
+                            />
+                        </Box>
+
+                        <Box
+                            display="flex"
+                            justifyContent="start"
+                            mr="auto"
+                            alignItems="end"
+                        >
+                            <Typography
+                                fontSize={18}
+                                fontWeight={600}
+                                color="#444"
+                            >
+                                Login&nbsp;
+                            </Typography>
+                            <Typography
+                                fontSize={15}
+                                fontWeight={500}
+                                color="#777"
+                            >
+                                (invitation only)
+                            </Typography>
+                        </Box>
+                        <TextField
+                            id="email"
+                            label={
+                                errors.email && touched.email
+                                    ? errors.email
+                                    : "Email"
+                            }
+                            fullWidth
+                            variant="filled"
+                            name="email"
+                            type="email"
+                            value={values.email}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            error={Boolean(errors.email && touched.email)}
+                        />
+                        <TextField
+                            id="password"
+                            label={
+                                errors.password && touched.password
+                                    ? errors.password
+                                    : "Password"
+                            }
+                            fullWidth
+                            variant="filled"
+                            name="password"
+                            type="password"
+                            value={values.password}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            error={Boolean(errors.password && touched.password)}
+                        />
+                        <Button
+                            onClick={() => handleSubmit()}
+                            variant="contained"
+                            disabled={isSubmitting}
+                        >
+                            Log In
+                        </Button>
                     </Box>
-                    <TextField
-                        id="email"
-                        label={
-                            errors.email && touched.email
-                                ? errors.email
-                                : "Email"
-                        }
-                        fullWidth
-                        variant="filled"
-                        name="email"
-                        type="email"
-                        value={values.email}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        error={Boolean(errors.email && touched.email)}
-                    />
-                    <TextField
-                        id="password"
-                        label={
-                            errors.password && touched.password
-                                ? errors.password
-                                : "Password"
-                        }
-                        fullWidth
-                        variant="filled"
-                        name="password"
-                        type="password"
-                        value={values.password}
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        error={Boolean(errors.password && touched.password)}
-                    />
-                    <Button
-                        onClick={() => handleSubmit()}
-                        variant="contained"
-                        disabled={isSubmitting}
-                    >
-                        Log In
-                    </Button>
-                </Box>
-            )}
+                );
+            }}
         </Formik>
     );
 };
