@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { ISource, sourcesService } from "../../services";
+import { sourcesService } from "../../services";
 import { useAppDispatch } from "../../redux/hooks";
 import { Box, Button, Chip, CircularProgress } from "@mui/material";
 import { actionDisplayNotification } from "../../redux/notificationSlice";
 import { useParams } from "react-router-dom";
 
 interface IUploadProps {
-    uploadCallback(_: ISource[]): void;
+    uploadCallback(_: File[], __: string[]): void;
 }
 
 const Upload = ({ uploadCallback }: IUploadProps) => {
@@ -23,13 +23,10 @@ const Upload = ({ uploadCallback }: IUploadProps) => {
         if (!selectedFiles.length) return;
         serIsUploading(true);
         try {
-            const res = await sourcesService.uploadSources({
+            const paths = await sourcesService.uploadSources({
                 files: selectedFiles,
                 projectId: id as string,
             });
-            if (!res.success) {
-                throw new Error("Error uploading files");
-            }
             dispatch(
                 actionDisplayNotification({
                     messages: ["Uploaded file successfully!"],
@@ -37,7 +34,7 @@ const Upload = ({ uploadCallback }: IUploadProps) => {
                 })
             );
             setSelectedFiles([]);
-            uploadCallback && uploadCallback(res.data);
+            uploadCallback && uploadCallback(selectedFiles, paths);
         } catch (error) {
             console.error(error);
             dispatch(

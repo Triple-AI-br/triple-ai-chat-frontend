@@ -1,5 +1,17 @@
+import axios from "axios";
 import { api } from "./api";
 
+interface IS3SignedResponse {
+    url: string;
+    fields: {
+        key: string;
+        "x-amz-algorithm": string;
+        "x-amz-credential": string;
+        "x-amz-date": string;
+        policy: string;
+        "x-amz-signature": string;
+    };
+}
 interface ISitemapSettings {
     data_refresh: boolean;
     executive_js: boolean;
@@ -30,11 +42,6 @@ interface IFile {
     filesize: number;
 }
 
-interface ISourceUpload {
-    data: ISource[];
-    success: boolean;
-}
-
 export interface ISources {
     sitemaps: ISitemap[];
     uploads: {
@@ -47,11 +54,10 @@ export interface ISources {
 }
 
 export interface ISource {
-    id: number;
     project_id: number;
     file_name: string;
     file_path: string;
-    etag: string;
+    etag?: string;
     media_type: string;
 }
 
@@ -65,36 +71,106 @@ const listSources = async ({
     return response.data;
 };
 
+const _uploadToS3 = async ({
+    file,
+    signedPost,
+}: {
+    file: File;
+    signedPost: IS3SignedResponse;
+}) => {
+    const formData = new FormData();
+    Object.entries(signedPost.fields).forEach(([key, value]) =>
+        formData.append(key, value)
+    );
+    formData.append("file", file);
+    const response = await axios.post(signedPost.url, formData, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+        },
+    });
+    return response.data;
+};
+
+const _getUploadUrls = async ({
+    files,
+    projectId,
+}: {
+    projectId: string;
+    files: string[];
+}): Promise<IS3SignedResponse[]> => {
+    const url = `/projects/${projectId}/sources/upload-url`;
+    const response = await api.get(url, {
+        params: { files },
+
+        paramsSerializer: params => {
+            return Object.keys(params)
+                .map(
+                    key =>
+                        `${key}=${params[key]
+                            .map((value: string) => encodeURIComponent(value))
+                            .join(`&${key}=`)}`
+                )
+                .join("&");
+        },
+    });
+    return response.data;
+};
+
 const uploadSources = async ({
     projectId,
     files,
 }: {
     files: File[];
     projectId: number | string;
-}): Promise<ISourceUpload> => {
-    const formData = new FormData();
-    files.forEach(file => formData.append("files", file, file.name));
-    const url = `/projects/${projectId}/sources`;
-    const response = await api.post(url, formData, {
-        headers: {
-            "Content-Type": "multipart/form-data",
-        },
+}): Promise<string[]> => {
+    const signedPosts = await _getUploadUrls({
+        projectId: projectId.toString(),
+        files: files.map(file => file.name),
     });
-    const data = response.data;
-    return data;
+    const uploads = files.map((file, index) =>
+        _uploadToS3({
+            file,
+            signedPost: signedPosts[index],
+        })
+    );
+    await Promise.all(uploads);
+    return signedPosts.map(signedPost => signedPost.fields.key);
 };
 
 const deleteSource = async ({
     projectId,
-    sourceId,
+    sourcePath,
 }: {
     projectId: number | string;
-    sourceId: number;
+    sourcePath: string;
 }): Promise<{ success: boolean }> => {
-    const url = `/projects/${projectId}/sources/${sourceId}`;
+    const url = `/projects/${projectId}/sources/${sourcePath}`;
     const response = await api.delete(url);
     const data = response.data;
     return data;
 };
 
-export const sourcesService = { listSources, deleteSource, uploadSources };
+// const uploadSources = async ({
+//     projectId,
+//     files,
+// }: {
+//     files: File[];
+//     projectId: number | string;
+// }): Promise<ISourceUpload> => {
+//     const formData = new FormData();
+//     files.forEach(file => formData.append("files", file, file.name));
+//     const url = `/projects/${projectId}/sources`;
+//     const response = await api.post(url, formData, {
+//         headers: {
+//             "Content-Type": "multipart/form-data",
+//         },
+//     });
+//     const data = response.data;
+//     return data;
+// };
+
+export const sourcesService = {
+    listSources,
+    deleteSource,
+    uploadSources,
+};

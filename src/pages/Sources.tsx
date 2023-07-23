@@ -8,6 +8,7 @@ import { selectIsAdmin } from "../redux/authenticationSlice";
 import { useParams } from "react-router-dom";
 import { actionDisplayNotification } from "../redux/notificationSlice";
 import { Upload } from "../components/Sources";
+import { v4 as uuidv4 } from "uuid";
 
 const SourcesPage = () => {
     const isAdmin = useAppSelector(selectIsAdmin);
@@ -17,19 +18,26 @@ const SourcesPage = () => {
     const { id } = useParams<{ id: string }>();
     const dispatch = useAppDispatch();
 
-    const uploadCallback = (files: ISource[]) => {
+    const uploadCallback = (files: File[], paths: string[]) => {
         setSourcesList(prev => {
             if (!prev) return;
-            return [...prev, ...files];
+            const newSources: ISource[] = files.map((f, index) => ({
+                id: uuidv4(),
+                project_id: parseInt(id as string),
+                file_name: f.name,
+                media_type: f.type,
+                file_path: paths[index],
+            }));
+            return [...newSources, ...prev];
         });
     };
 
-    const handleDelete = async (fileId: number) => {
+    const handleDelete = async (filePath: string) => {
         if (!confirm("Are you sure you'd like to delete this source?")) return;
         setIsDeleting(true);
         const response = await sourcesService.deleteSource({
             projectId: id as string,
-            sourceId: fileId,
+            sourcePath: filePath,
         });
         if (response.success) {
             dispatch(
@@ -40,7 +48,9 @@ const SourcesPage = () => {
             );
             setSourcesList(prev => {
                 if (!prev) return;
-                const newSources = prev.filter(file => file.id !== fileId);
+                const newSources = prev.filter(
+                    file => file.file_path !== filePath
+                );
                 return [...newSources];
             });
         } else {
@@ -57,6 +67,7 @@ const SourcesPage = () => {
         (async () => {
             setIsLoading(true);
             const data = await sourcesService.listSources({ projectId: 1 });
+            data.reverse();
             setSourcesList(data);
             setIsLoading(false);
         })();
@@ -91,7 +102,7 @@ const SourcesPage = () => {
                                 sourcesList.map(file => (
                                     <Box
                                         display="flex"
-                                        key={file.id}
+                                        key={file.file_path}
                                         sx={{
                                             borderTop: "1px solid #dedede",
                                             backgroundColor: "white",
@@ -111,7 +122,9 @@ const SourcesPage = () => {
                                                 variant="outlined"
                                                 color="error"
                                                 onClick={async () => {
-                                                    await handleDelete(file.id);
+                                                    await handleDelete(
+                                                        file.file_path
+                                                    );
                                                 }}
                                             >
                                                 Delete
