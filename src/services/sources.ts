@@ -144,8 +144,10 @@ const deleteSource = async ({
     projectId: number | string;
     sourcePath: string;
 }): Promise<{ success: boolean }> => {
-    const url = `/projects/${projectId}/sources/${sourcePath}`;
-    const response = await api.delete(url);
+    const url = `/projects/${projectId}/sources`;
+    const response = await api.delete(url, {
+        data: { file_path: sourcePath },
+    });
     const data = response.data;
     return data;
 };
