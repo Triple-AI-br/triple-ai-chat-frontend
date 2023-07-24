@@ -4,6 +4,7 @@ import axios from "axios";
 import { parseJwt } from "../utils/parseJwt";
 
 const ACCESS_TOKEN_KEY = "jwt";
+const CUSTOMER_DATA_KEY = "customerData";
 const BASE_API_URL = process.env.REACT_APP_BASE_API_URL as string;
 
 interface IUserData {
@@ -15,7 +16,14 @@ interface IUserData {
     customer_id?: number;
 }
 
-interface IIncomingTokenCredentials {
+export interface ICustomerData {
+    id: number;
+    name: string;
+    main_color: string;
+    logo_url: string;
+}
+
+export interface IIncomingTokenCredentials {
     access_token: string;
     token_type: string;
 }
@@ -26,14 +34,43 @@ interface IState {
     isAuthenticated: boolean;
     error?: string;
     userData?: IUserData;
+    customerData?: ICustomerData;
 }
+
+const getCustomer = async (
+    customerId: number,
+    token: string
+): Promise<ICustomerData> => {
+    const data = localStorage.getItem(CUSTOMER_DATA_KEY);
+    if (data) {
+        return JSON.parse(data);
+    }
+    const url = `${BASE_API_URL}/api/v1/customers/${customerId}`;
+    const res = await axios.get(url, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    localStorage.setItem(CUSTOMER_DATA_KEY, JSON.stringify(res.data));
+    return res.data;
+};
+
+const getCustomerDataFromLocalStorage = () =>
+    localStorage.getItem(CUSTOMER_DATA_KEY);
+
 const getAccessTokenFromLocalStorage = () =>
     localStorage.getItem(ACCESS_TOKEN_KEY);
+
+const setCustomerDataToLocalStorage = (customerData: string) =>
+    localStorage.setItem(CUSTOMER_DATA_KEY, customerData);
 
 const setAccessTokenToLocalStorage = (accessToken: string) =>
     localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
 
 const _initialAccessToken = getAccessTokenFromLocalStorage() || "";
+const _initialCustomerData = getCustomerDataFromLocalStorage() || "";
+
+const customerData = _initialCustomerData
+    ? JSON.parse(_initialCustomerData)
+    : undefined;
 
 const userData = _initialAccessToken
     ? parseJwt(_initialAccessToken)
@@ -44,7 +81,20 @@ const initialState: IState = {
     accessToken: _initialAccessToken,
     isAuthenticated: Boolean(_initialAccessToken),
     userData,
+    customerData,
 };
+
+(() => {
+    (async () => {
+        if (!customerData && userData) {
+            const data = await getCustomer(
+                userData.customer_id ?? 1,
+                _initialAccessToken
+            );
+            setCustomerDataToLocalStorage(JSON.stringify(data));
+        }
+    })();
+})();
 
 const authSlice = createSlice({
     name: "auth",
@@ -53,6 +103,7 @@ const authSlice = createSlice({
         logout(state) {
             state.isAuthenticated = false;
             localStorage.removeItem(ACCESS_TOKEN_KEY);
+            localStorage.removeItem(CUSTOMER_DATA_KEY);
         },
     },
     extraReducers(builder) {
@@ -62,9 +113,13 @@ const authSlice = createSlice({
                 state.error = undefined;
             })
             .addCase(actionLogin.fulfilled, (state, action) => {
-                const { access_token: accessToken } = action.payload;
+                const {
+                    authData: { access_token: accessToken },
+                    customerData,
+                } = action.payload;
                 state.accessToken = accessToken;
                 state.isAuthenticated = true;
+                state.customerData = customerData;
                 setAccessTokenToLocalStorage(accessToken);
             })
             .addCase(actionLogin.rejected, state => {
@@ -77,9 +132,13 @@ const authSlice = createSlice({
             .addCase(
                 actionAcceptInviteOrResetPassword.fulfilled,
                 (state, action) => {
-                    const { access_token: accessToken } = action.payload;
+                    const {
+                        authData: { access_token: accessToken },
+                        customerData,
+                    } = action.payload;
                     state.accessToken = accessToken;
                     state.isAuthenticated = true;
+                    state.customerData = customerData;
                     setAccessTokenToLocalStorage(accessToken);
                 }
             )
@@ -99,9 +158,16 @@ export const actionLogin = createAsyncThunk(
         const formdata = new FormData();
         formdata.append("username", email);
         formdata.append("password", password);
-        const response = await axios.post(url, formdata);
-        const data: IIncomingTokenCredentials = response.data;
-        return data;
+        const authResponse = await axios.post(url, formdata);
+        const authData: IIncomingTokenCredentials = authResponse.data;
+        const { customer_id: customerId }: IUserData = parseJwt(
+            authData.access_token
+        );
+        const customerData = await getCustomer(
+            customerId as number,
+            authData.access_token
+        );
+        return { authData, customerData };
     }
 );
 
@@ -117,7 +183,10 @@ export const actionAcceptInviteOrResetPassword = createAsyncThunk(
         password: string;
         confirmPassword: string;
         token: string;
-    }) => {
+    }): Promise<{
+        authData: IIncomingTokenCredentials;
+        customerData: ICustomerData;
+    }> => {
         if (password !== confirmPassword) {
             throw Error("Passwords dont match");
         }
@@ -125,9 +194,16 @@ export const actionAcceptInviteOrResetPassword = createAsyncThunk(
             type === "invite"
                 ? `${BASE_API_URL}/api/v1/login/invited-set-password`
                 : `${BASE_API_URL}/api/v1/login/reset-password`;
-        const response = await axios.post(url, { token, password });
-        const data: IIncomingTokenCredentials = response.data;
-        return data;
+        const authResponse = await axios.post(url, { token, password });
+        const authData: IIncomingTokenCredentials = authResponse.data;
+        const { customer_id: customerId }: IUserData = parseJwt(
+            authData.access_token
+        );
+        const customerData = await getCustomer(
+            customerId as number,
+            authData.access_token
+        );
+        return { authData, customerData };
     }
 );
 
@@ -135,6 +211,7 @@ export const actionAcceptInviteOrResetPassword = createAsyncThunk(
 export const selectUserData = (state: RootState) => state.auth.userData;
 export const selectCustomerId = (state: RootState) =>
     state.auth.userData?.customer_id;
+export const selectCustomerData = (state: RootState) => state.auth.customerData;
 export const selectIsAuthenticated = (state: RootState) =>
     state.auth.isAuthenticated;
 export const selectAccessToken = (state: RootState) => state.auth.accessToken;

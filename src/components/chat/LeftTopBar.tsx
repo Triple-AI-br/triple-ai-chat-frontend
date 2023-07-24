@@ -1,25 +1,13 @@
 import { Avatar, Box, Button, Typography } from "@mui/material";
 import { LibraryAdd as AddIcon } from "@mui/icons-material";
 import { useAppSelector } from "../../redux/hooks";
-import { selectUserData } from "../../redux/authenticationSlice";
-import { useEffect, useState } from "react";
-import { ICustomer, customersService } from "../../services";
+import { selectCustomerData } from "../../redux/authenticationSlice";
 
-const DEFAULT_CUSTOMER_ID = 1;
 interface ILeftTopBarProps {
     handleNewChat(): void;
 }
 const LeftTopBar = ({ handleNewChat }: ILeftTopBarProps) => {
-    const userData = useAppSelector(selectUserData);
-    const [customerData, setCustomerData] = useState<ICustomer>();
-
-    useEffect(() => {
-        (async () => {
-            const _customerId = userData?.customer_id ?? DEFAULT_CUSTOMER_ID;
-            const data = await customersService.getCustomer(_customerId);
-            setCustomerData(data);
-        })();
-    }, []);
+    const customerData = useAppSelector(selectCustomerData);
 
     return (
         <Box

@@ -2,7 +2,11 @@ import { Box, Button, TextField } from "@mui/material";
 import { Base } from "../layouts/Base";
 import { Formik } from "formik";
 import { useAppDispatch } from "../redux/hooks";
-import { actionAcceptInviteOrResetPassword } from "../redux/authenticationSlice";
+import {
+    ICustomerData,
+    IIncomingTokenCredentials,
+    actionAcceptInviteOrResetPassword,
+} from "../redux/authenticationSlice";
 import * as yup from "yup";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { routesManager } from "../routes/routesManager";
@@ -30,24 +34,29 @@ const AcceptInvitationOrResetPasswordPage = () => {
     });
 
     return (
-        <Base title={isInvitation ? "Set new password" : "Reset your password"}>
+        <Base
+            title={isInvitation ? "Set your password" : "Reset your password"}
+        >
             <Box mx="auto" width="50%">
                 <Formik
                     initialValues={{ password: "", confirmPassword: "" }}
                     onSubmit={async (values, { setSubmitting }) => {
-                        const bearerToken = await dispatch(
+                        const {
+                            payload: { authData },
+                        } = (await dispatch(
                             actionAcceptInviteOrResetPassword({
                                 ...values,
                                 token,
                                 type: isInvitation ? "invite" : "reset",
                             })
-                        );
+                        )) as {
+                            payload: {
+                                authData: IIncomingTokenCredentials;
+                                customerData: ICustomerData;
+                            };
+                        };
                         setSubmitting(false);
-                        if (
-                            bearerToken.payload &&
-                            "access_token" in
-                                (bearerToken.payload as Record<string, string>)
-                        ) {
+                        if ("access_token" in authData) {
                             dispatch(
                                 actionDisplayNotification({
                                     messages: isInvitation
@@ -61,7 +70,7 @@ const AcceptInvitationOrResetPasswordPage = () => {
                             dispatch(
                                 actionDisplayNotification({
                                     messages: isInvitation
-                                        ? ["Unable to register user"]
+                                        ? ["Unable to register user 123"]
                                         : ["Unable to reset password"],
                                 })
                             );

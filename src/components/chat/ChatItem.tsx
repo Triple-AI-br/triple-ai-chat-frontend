@@ -1,16 +1,14 @@
 /* eslint-disable indent */
 import { Avatar, Box, Typography } from "@mui/material";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Clear as DeleteIcon } from "@mui/icons-material";
 import { useAppSelector } from "../../redux/hooks";
 import {
+    selectCustomerData,
     selectIsSuperUser,
-    selectUserData,
 } from "../../redux/authenticationSlice";
-import { ICustomer, customersService } from "../../services";
 
-const DEFAULT_CUSTOMER_ID = 1;
 interface IChatItemProps {
     id: number;
     title: string;
@@ -36,16 +34,7 @@ const ChatItem = ({
     const timeAgo = moment(date).fromNow();
     const isSuperUser = useAppSelector(selectIsSuperUser);
     let backgroundColor: string;
-    const userData = useAppSelector(selectUserData);
-    const [customerData, setCustomerData] = useState<ICustomer>();
-
-    useEffect(() => {
-        (async () => {
-            const _customerId = userData?.customer_id ?? DEFAULT_CUSTOMER_ID;
-            const data = await customersService.getCustomer(_customerId);
-            setCustomerData(data);
-        })();
-    }, []);
+    const customerData = useAppSelector(selectCustomerData);
 
     if (isSelected) backgroundColor = "#eee";
     else if (isHovered) backgroundColor = "#f6f6f6";

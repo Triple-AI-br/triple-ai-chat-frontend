@@ -17,7 +17,7 @@ const UserInvite = () => {
     };
 
     return (
-        <Box display="flex" flexDirection="column">
+        <Box display="flex" flexDirection="column" gap={2}>
             <Box display="flex" gap={2}>
                 <ReactMultiEmail
                     placeholder={
@@ -70,7 +70,6 @@ const UserInvite = () => {
                     Invite
                 </Button>
             </Box>
-
             {result &&
                 Object.entries(result.failed).map(([email, reason]) => (
                     <Alert

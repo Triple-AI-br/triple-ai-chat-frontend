@@ -6,4 +6,3 @@ export * from "./Projects";
 export * from "./ConfirmEmail";
 export * from "./AcceptInvitationOrResetPassword";
 export * from "./Admin";
-export * from "./ResetPassword";

@@ -27,6 +27,7 @@ const ProjectsItem = ({ id, title, description, onClick }: IProjectProps) => {
     return (
         <Grid xs={4}>
             <Box
+                minWidth={200}
                 onClick={onClick}
                 display="flex"
                 p={3}

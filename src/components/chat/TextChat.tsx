@@ -2,11 +2,7 @@ import { Box } from "@mui/material";
 import { TextArea } from "./TextArea";
 import { Forward as SendIcon } from "@mui/icons-material";
 import { useAppSelector } from "../../redux/hooks";
-import { selectUserData } from "../../redux/authenticationSlice";
-import { useEffect, useState } from "react";
-import { ICustomer, customersService } from "../../services";
-
-const DEFAULT_CUSTOMER_ID = 1;
+import { selectCustomerData } from "../../redux/authenticationSlice";
 
 interface ITextChatProps {
     currentMessage: string;
@@ -20,16 +16,7 @@ const TextChat = ({
     handleEnterPressed,
     handleSendMessage,
 }: ITextChatProps) => {
-    const userData = useAppSelector(selectUserData);
-    const [customerData, setCustomerData] = useState<ICustomer>();
-
-    useEffect(() => {
-        (async () => {
-            const _customerId = userData?.customer_id ?? DEFAULT_CUSTOMER_ID;
-            const data = await customersService.getCustomer(_customerId);
-            setCustomerData(data);
-        })();
-    }, []);
+    const customerData = useAppSelector(selectCustomerData);
 
     return (
         <Box
