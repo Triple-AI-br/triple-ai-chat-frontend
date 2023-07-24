@@ -1,12 +1,26 @@
 import { Avatar, Box, Button, Typography } from "@mui/material";
 import { LibraryAdd as AddIcon } from "@mui/icons-material";
+import { useAppSelector } from "../../redux/hooks";
+import { selectUserData } from "../../redux/authenticationSlice";
+import { useEffect, useState } from "react";
+import { ICustomer, customersService } from "../../services";
 
-const COMPANY_COLOR = "#376458";
-
+const DEFAULT_CUSTOMER_ID = 1;
 interface ILeftTopBarProps {
     handleNewChat(): void;
 }
 const LeftTopBar = ({ handleNewChat }: ILeftTopBarProps) => {
+    const userData = useAppSelector(selectUserData);
+    const [customerData, setCustomerData] = useState<ICustomer>();
+
+    useEffect(() => {
+        (async () => {
+            const _customerId = userData?.customer_id ?? DEFAULT_CUSTOMER_ID;
+            const data = await customersService.getCustomer(_customerId);
+            setCustomerData(data);
+        })();
+    }, []);
+
     return (
         <Box
             display="flex"
@@ -14,15 +28,14 @@ const LeftTopBar = ({ handleNewChat }: ILeftTopBarProps) => {
             px="auto"
             alignItems="center"
             justifyContent="space-evenly"
-            sx={{ backgroundColor: COMPANY_COLOR }}
+            sx={{ backgroundColor: customerData?.main_color }}
         >
             <Avatar
-                src="https://timenow.com.br/wp-content/uploads/2023/03/timenow-destaque-1.png"
-                alt="Timenow logo"
+                src={customerData?.logo_url}
                 sx={{ width: 80, height: 80 }}
             />
             <Typography color="#fff" fontWeight={600} fontSize={18}>
-                Timenow AI Chatbot
+                {customerData?.name} AI Chatbot
             </Typography>
             <Box mx={1.5} />
             <Button

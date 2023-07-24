@@ -15,7 +15,6 @@ import { Box, CircularProgress, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { routesManager } from "../routes/routesManager";
 
-const BOT_NAME = "Timenow AI";
 const GRAY_COLOR = "#f5f5f5";
 
 const ChatPage = () => {
@@ -27,7 +26,8 @@ const ChatPage = () => {
     const [currentMessage, setCurrentMessage] = useState("");
     const [selectedChat, setSelectedChat] = useState<number>();
     const [chats, setChats] = useState<IChat[]>();
-    const INITIAL_TEXT = `Olá, sou a Inteligência Artificial da Timenow. Fui treinada com os documentos [listados aqui](${routesManager.getSourcesRoute(
+
+    const INITIAL_TEXT = `Olá, sou uma Inteligência Artificial conversacional. Fui treinada com os documentos [listados aqui](${routesManager.getSourcesRoute(
         id
     )} 'Knowledge base documents'). Você pode me fazer perguntas ou pedir para produzir textos com base nas informações contidas neles.`;
     const DEFAULT_MESSAGE: IMessage = {
@@ -97,7 +97,7 @@ const ChatPage = () => {
                 conversations.map(item => ({
                     id: item.id,
                     email: item.email,
-                    title: BOT_NAME,
+                    title: "AI Bot",
                     subtitle: undefined,
                     date: item.created_at,
                     isSelected: false,
@@ -283,7 +283,7 @@ const ChatPage = () => {
                             chats={chats}
                             handleDelete={handleDelete}
                             handleSelectChat={handleSelectChat}
-                            title={BOT_NAME}
+                            title="AI Bot"
                         />
                     )}
                 </Box>

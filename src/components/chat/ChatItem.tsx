@@ -1,11 +1,16 @@
 /* eslint-disable indent */
 import { Avatar, Box, Typography } from "@mui/material";
 import moment from "moment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Clear as DeleteIcon } from "@mui/icons-material";
 import { useAppSelector } from "../../redux/hooks";
-import { selectIsSuperUser } from "../../redux/authenticationSlice";
+import {
+    selectIsSuperUser,
+    selectUserData,
+} from "../../redux/authenticationSlice";
+import { ICustomer, customersService } from "../../services";
 
+const DEFAULT_CUSTOMER_ID = 1;
 interface IChatItemProps {
     id: number;
     title: string;
@@ -31,6 +36,16 @@ const ChatItem = ({
     const timeAgo = moment(date).fromNow();
     const isSuperUser = useAppSelector(selectIsSuperUser);
     let backgroundColor: string;
+    const userData = useAppSelector(selectUserData);
+    const [customerData, setCustomerData] = useState<ICustomer>();
+
+    useEffect(() => {
+        (async () => {
+            const _customerId = userData?.customer_id ?? DEFAULT_CUSTOMER_ID;
+            const data = await customersService.getCustomer(_customerId);
+            setCustomerData(data);
+        })();
+    }, []);
 
     if (isSelected) backgroundColor = "#eee";
     else if (isHovered) backgroundColor = "#f6f6f6";
@@ -50,8 +65,7 @@ const ChatItem = ({
             sx={{ backgroundColor, cursor: "pointer" }}
         >
             <Avatar
-                src="https://timenow.com.br/wp-content/uploads/2023/03/timenow-destaque-1.png"
-                alt="Timenow logo"
+                src={customerData?.logo_url}
                 sx={{ width: 45, height: 45 }}
             />
             <Box display="flex" flexDirection="column" gap={0} width="100%">

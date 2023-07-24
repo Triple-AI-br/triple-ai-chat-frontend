@@ -1,8 +1,12 @@
 import { Box } from "@mui/material";
 import { TextArea } from "./TextArea";
 import { Forward as SendIcon } from "@mui/icons-material";
+import { useAppSelector } from "../../redux/hooks";
+import { selectUserData } from "../../redux/authenticationSlice";
+import { useEffect, useState } from "react";
+import { ICustomer, customersService } from "../../services";
 
-const COMPANY_COLOR = "#376458";
+const DEFAULT_CUSTOMER_ID = 1;
 
 interface ITextChatProps {
     currentMessage: string;
@@ -16,6 +20,17 @@ const TextChat = ({
     handleEnterPressed,
     handleSendMessage,
 }: ITextChatProps) => {
+    const userData = useAppSelector(selectUserData);
+    const [customerData, setCustomerData] = useState<ICustomer>();
+
+    useEffect(() => {
+        (async () => {
+            const _customerId = userData?.customer_id ?? DEFAULT_CUSTOMER_ID;
+            const data = await customersService.getCustomer(_customerId);
+            setCustomerData(data);
+        })();
+    }, []);
+
     return (
         <Box
             width="100%"
@@ -38,7 +53,7 @@ const TextChat = ({
                 onClick={handleSendMessage}
                 sx={{
                     borderRadius: 1,
-                    backgroundColor: COMPANY_COLOR,
+                    backgroundColor: customerData?.main_color,
                     cursor: "pointer",
                     p: 1.5,
                     my: 1,

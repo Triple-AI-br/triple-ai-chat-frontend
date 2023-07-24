@@ -159,7 +159,7 @@ const createNewChat = async ({
     projectId: number;
 }): Promise<IChatApiResponse> => {
     const url = `/projects/${projectId}/chats`;
-    const response = await api.post(url, { name: "Timenow AI" });
+    const response = await api.post(url, { name: "AI Bot" });
     const data: IChatApiResponse = response.data;
     return data;
 };

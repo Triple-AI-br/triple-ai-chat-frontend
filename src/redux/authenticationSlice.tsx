@@ -12,6 +12,7 @@ interface IUserData {
     is_superuser: boolean;
     is_admin: boolean;
     permissions: string[];
+    customer_id?: number;
 }
 
 interface IIncomingTokenCredentials {
@@ -131,6 +132,9 @@ export const actionAcceptInviteOrResetPassword = createAsyncThunk(
 );
 
 // Selectors
+export const selectUserData = (state: RootState) => state.auth.userData;
+export const selectCustomerId = (state: RootState) =>
+    state.auth.userData?.customer_id;
 export const selectIsAuthenticated = (state: RootState) =>
     state.auth.isAuthenticated;
 export const selectAccessToken = (state: RootState) => state.auth.accessToken;
