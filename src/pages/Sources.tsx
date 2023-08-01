@@ -67,7 +67,6 @@ const SourcesPage = () => {
         (async () => {
             setIsLoading(true);
             const data = await sourcesService.listSources({ projectId: 1 });
-            data.reverse();
             setSourcesList(data);
             setIsLoading(false);
         })();
