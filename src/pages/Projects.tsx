@@ -6,9 +6,12 @@ import { routesManager } from "../routes/routesManager";
 import { useEffect, useState } from "react";
 import { IProject, projectService } from "../services";
 import { Spinner } from "../components/loaders";
+import { useAppSelector } from "../redux/hooks";
+import { selectIsSuperUser } from "../redux/authenticationSlice";
 
 const ProjectsPage = () => {
     const [projects, setProjects] = useState<IProject[]>();
+    const isSuperuser = useAppSelector(selectIsSuperUser);
 
     useEffect(() => {
         (async () => {
@@ -53,7 +56,11 @@ const ProjectsPage = () => {
                                         "noreferrer"
                                     )
                                 }
-                                title="AI Chatbot"
+                                title={
+                                    isSuperuser
+                                        ? `AI Chatbot - ${project.customer_name}`
+                                        : "AI Chatbot"
+                                }
                                 description={project.description}
                                 id={project.id}
                             />
