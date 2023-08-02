@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import {
     Inbox as InboxIcon,
-    DocumentScanner as DocumentScannerIcon,
     SupervisorAccount as SupervisorAccountIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";

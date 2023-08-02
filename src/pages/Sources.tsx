@@ -66,7 +66,9 @@ const SourcesPage = () => {
     useEffect(() => {
         (async () => {
             setIsLoading(true);
-            const data = await sourcesService.listSources({ projectId: 1 });
+            const data = await sourcesService.listSources({
+                projectId: parseInt(id as string),
+            });
             setSourcesList(data);
             setIsLoading(false);
         })();
