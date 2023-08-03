@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { chatService } from "../services";
+import { chatService, customerService } from "../services";
 import { v4 as uuidv4 } from "uuid";
 import { Spinner } from "../components/loaders";
 import {
@@ -14,6 +14,11 @@ import {
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { routesManager } from "../routes/routesManager";
+import {
+    ICustomerData,
+    selectCustomerData,
+} from "../redux/authenticationSlice";
+import { useAppSelector } from "../redux/hooks";
 
 const GRAY_COLOR = "#f5f5f5";
 
@@ -26,6 +31,20 @@ const ChatPage = () => {
     const [currentMessage, setCurrentMessage] = useState("");
     const [selectedChat, setSelectedChat] = useState<number>();
     const [chats, setChats] = useState<IChat[]>();
+    const _customerData: ICustomerData | undefined =
+        useAppSelector(selectCustomerData);
+    const [customerData, setCustomerData] = useState<ICustomerData | undefined>(
+        _customerData
+    );
+
+    useEffect(() => {
+        (async () => {
+            const newCustomerData = await customerService.getCustomer(
+                id as string
+            );
+            setCustomerData(newCustomerData);
+        })();
+    }, []);
 
     const INITIAL_TEXT = `Olá, sou uma Inteligência Artificial conversacional. Fui treinada com os documentos [listados aqui](${routesManager.getSourcesRoute(
         id
@@ -242,11 +261,16 @@ const ChatPage = () => {
                 maxWidth="40%"
                 borderRight="1px solid #ccc"
             >
-                <LeftTopBar handleNewChat={handleNewChat} />
+                <LeftTopBar
+                    customerData={customerData}
+                    handleNewChat={handleNewChat}
+                />
                 <Box sx={{ overflowY: "scroll" }} height="100%">
                     {chats === undefined ? (
                         <Box display="flex" justifyContent="center" pt={3}>
-                            <CircularProgress sx={{ color: "#376458" }} />
+                            <CircularProgress
+                                sx={{ color: customerData?.main_color }}
+                            />
                         </Box>
                     ) : chats.length === 0 ? (
                         <Box
@@ -265,6 +289,7 @@ const ChatPage = () => {
                         </Box>
                     ) : (
                         <ChatList
+                            customerData={customerData}
                             chats={chats}
                             handleDelete={handleDelete}
                             handleSelectChat={handleSelectChat}

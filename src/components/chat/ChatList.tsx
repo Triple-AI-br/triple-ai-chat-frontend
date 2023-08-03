@@ -1,4 +1,5 @@
 import { ChatItem } from ".";
+import { ICustomerData } from "../../redux/authenticationSlice";
 import { IChat } from "./types";
 
 interface IChatListProps {
@@ -6,6 +7,7 @@ interface IChatListProps {
     title: string;
     handleSelectChat(args: { sessionId: number }): void;
     handleDelete(args: { sessionId: number }): Promise<void>;
+    customerData?: ICustomerData;
 }
 
 const ChatList = ({
@@ -13,11 +15,13 @@ const ChatList = ({
     title,
     handleSelectChat,
     handleDelete,
+    customerData,
 }: IChatListProps) => {
     return (
         <>
             {chats.map(item => (
                 <ChatItem
+                    customerData={customerData}
                     key={item.id}
                     email={item.email}
                     id={item.id}

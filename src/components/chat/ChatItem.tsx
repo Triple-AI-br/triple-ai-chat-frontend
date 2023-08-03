@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Clear as DeleteIcon } from "@mui/icons-material";
 import { useAppSelector } from "../../redux/hooks";
 import {
-    selectCustomerData,
+    ICustomerData,
     selectIsSuperUser,
 } from "../../redux/authenticationSlice";
 
@@ -18,6 +18,7 @@ interface IChatItemProps {
     isSelected: boolean;
     onClick({ sessionId }: { sessionId: number }): void;
     onDelete({ sessionId }: { sessionId: number }): Promise<void>;
+    customerData?: ICustomerData;
 }
 
 const ChatItem = ({
@@ -29,12 +30,12 @@ const ChatItem = ({
     isSelected,
     onClick: handleClick,
     onDelete: handleDelete,
+    customerData,
 }: IChatItemProps) => {
     const [isHovered, setIsHovered] = useState(false);
     const timeAgo = moment(date).fromNow();
     const isSuperUser = useAppSelector(selectIsSuperUser);
     let backgroundColor: string;
-    const customerData = useAppSelector(selectCustomerData);
 
     if (isSelected) backgroundColor = "#eee";
     else if (isHovered) backgroundColor = "#f6f6f6";

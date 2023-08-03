@@ -1,14 +1,12 @@
 import { Avatar, Box, Button, Typography } from "@mui/material";
 import { LibraryAdd as AddIcon } from "@mui/icons-material";
-import { useAppSelector } from "../../redux/hooks";
-import { selectCustomerData } from "../../redux/authenticationSlice";
+import { ICustomerData } from "../../redux/authenticationSlice";
 
 interface ILeftTopBarProps {
     handleNewChat(): void;
+    customerData?: ICustomerData;
 }
-const LeftTopBar = ({ handleNewChat }: ILeftTopBarProps) => {
-    const customerData = useAppSelector(selectCustomerData);
-
+const LeftTopBar = ({ handleNewChat, customerData }: ILeftTopBarProps) => {
     return (
         <Box
             display="flex"
