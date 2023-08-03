@@ -350,6 +350,7 @@ const ChatPage = () => {
                     )}
                     {selectedChat && !isLoadingMessages && (
                         <TextChat
+                            customerData={customerData}
                             currentMessage={currentMessage}
                             handleChange={handleChange}
                             handleEnterPressed={handleEnterPressed}

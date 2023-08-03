@@ -1,23 +1,22 @@
 import { Box } from "@mui/material";
 import { TextArea } from "./TextArea";
 import { Forward as SendIcon } from "@mui/icons-material";
-import { useAppSelector } from "../../redux/hooks";
-import { selectCustomerData } from "../../redux/authenticationSlice";
+import { ICustomerData } from "../../redux/authenticationSlice";
 
 interface ITextChatProps {
     currentMessage: string;
     handleChange(e: React.ChangeEvent<HTMLTextAreaElement>): void;
     handleEnterPressed(e: React.KeyboardEvent<Element>): void;
     handleSendMessage(): Promise<void>;
+    customerData?: ICustomerData;
 }
 const TextChat = ({
     currentMessage,
     handleChange,
     handleEnterPressed,
     handleSendMessage,
+    customerData,
 }: ITextChatProps) => {
-    const customerData = useAppSelector(selectCustomerData);
-
     return (
         <Box
             width="100%"
