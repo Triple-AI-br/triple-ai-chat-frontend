@@ -1,10 +1,7 @@
+import { ICustomerData } from "../redux/authenticationSlice";
 import { api } from "./api";
 
-interface ICustomer {
-    name: string;
-}
-
-const getCustomer = async (id: string): Promise<ICustomer> => {
+const getCustomer = async (id: string): Promise<ICustomerData> => {
     const url = `/customers/${id}`;
     const res = await api.get(url);
     return res.data;
