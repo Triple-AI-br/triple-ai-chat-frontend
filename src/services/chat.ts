@@ -7,27 +7,6 @@ interface ITimestamped {
     updated_at: string;
 }
 
-interface IMessageStreamStart {
-    status: "start";
-    prompt: string;
-}
-interface IMessageStreamProgress {
-    status: "progress";
-    message: string;
-}
-interface IMessageStreamFinish {
-    status: "finish";
-    id: number;
-    created_at: string;
-}
-
-interface IRetrieveConversationResponse {
-    data: {
-        conversation: IConversation;
-        messages: { data: IMessage[] };
-    };
-}
-
 export interface IConversation extends ITimestamped {
     session_id: string;
     project_id: number;
@@ -35,14 +14,14 @@ export interface IConversation extends ITimestamped {
     name: string;
 }
 
-interface IMessage extends ITimestamped {
-    user_id: number;
+interface IMessage {
     user_query: string;
-    openai_response: string;
-    citations: string[] | null;
+    ai_response: string;
+    date_time: string;
+    references: string[];
 }
 
-interface IChatApiResponse {
+interface IChatList {
     project_id: number;
     email?: string;
     user_id: number;
@@ -50,17 +29,12 @@ interface IChatApiResponse {
     id: number;
     created_at: string;
 }
-
-interface ISendMessageResponse {
-    data: IMessage;
-    status: string;
+interface IChatDetail extends IChatList {
+    conversation: IMessage[];
 }
 
 interface IDeleteChatResponse {
-    data: {
-        deleted: boolean;
-    };
-    status: string;
+    success: boolean;
 }
 
 const deleteChat = async ({
@@ -73,14 +47,14 @@ const deleteChat = async ({
     const url = `/projects/${projectId}/chats/${sessionId}`;
     const response = await api.delete(url);
     const data: IDeleteChatResponse = response.data;
-    return data.status === "success";
+    return data.success || false;
 };
 
 const listChats = async ({
     projectId,
 }: {
     projectId: number;
-}): Promise<IChatApiResponse[]> => {
+}): Promise<IChatList[]> => {
     const url = `/projects/${projectId}/chats`;
     const response = await api.get(url);
     return response.data;
@@ -94,11 +68,10 @@ const sendMessage = async ({
     prompt: string;
     sessionId: number;
     projectId: number;
-}): Promise<IMessage> => {
+}): Promise<IChatDetail> => {
     const url = `/projects/${projectId}/chats/${sessionId}`;
     const response = await api.post(url, { prompt }, { timeout: 120_000 });
-    const data: ISendMessageResponse = response.data;
-    return data.data;
+    return response.data;
 };
 
 const sendMessageStream = async ({
@@ -108,9 +81,7 @@ const sendMessageStream = async ({
     projectId,
 }: {
     prompt: string;
-    callback(
-        _: IMessageStreamStart | IMessageStreamProgress | IMessageStreamFinish
-    ): void;
+    callback(_: string): void;
     sessionId: number;
     projectId: number;
 }) => {
@@ -136,10 +107,7 @@ const sendMessageStream = async ({
             if (!msg.data) {
                 return;
             }
-            const data:
-                | IMessageStreamStart
-                | IMessageStreamProgress
-                | IMessageStreamFinish = JSON.parse(msg.data);
+            const data = msg.data as string;
             callback(data);
         },
         method: "POST",
@@ -157,10 +125,10 @@ const createNewChat = async ({
     projectId,
 }: {
     projectId: number;
-}): Promise<IChatApiResponse> => {
+}): Promise<IChatList> => {
     const url = `/projects/${projectId}/chats`;
     const response = await api.post(url, { name: "AI Bot" });
-    const data: IChatApiResponse = response.data;
+    const data: IChatList = response.data;
     return data;
 };
 
@@ -170,11 +138,10 @@ const retrieveChat = async ({
 }: {
     projectId: number;
     sessionId: number;
-}): Promise<IMessage[]> => {
+}): Promise<IChatDetail> => {
     const url = `/projects/${projectId}/chats/${sessionId}`;
     const response = await api.get(url);
-    const data: IRetrieveConversationResponse = response.data;
-    return data.data.messages.data;
+    return response.data;
 };
 
 export const chatService = {

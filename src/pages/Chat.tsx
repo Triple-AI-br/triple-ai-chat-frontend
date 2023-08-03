@@ -130,23 +130,23 @@ const ChatPage = () => {
                 return newValue;
             });
             setIsLoadingMessages(true);
-            const conversation = await chatService.retrieveChat({
+            const chat = await chatService.retrieveChat({
                 projectId,
                 sessionId: selectedChat,
             });
             const messages: IMessage[] = [DEFAULT_MESSAGE];
-            conversation.reverse().forEach(item => {
+            chat.conversation.forEach(item => {
                 messages.push({
-                    id: item.id,
+                    id: item.date_time,
                     type: "user",
-                    date: new Date(item.updated_at),
+                    date: new Date(item.date_time),
                     text: item.user_query,
                 });
                 messages.push({
-                    id: item.id,
+                    id: item.date_time,
                     type: "bot",
-                    date: new Date(item.updated_at),
-                    text: item.openai_response,
+                    date: new Date(item.date_time),
+                    text: item.ai_response,
                 });
             });
             setIsLoadingMessages(false);
@@ -201,46 +201,31 @@ const ChatPage = () => {
             date: new Date(),
             text: currentMessage,
         };
+        const newAiResponse: IMessage = {
+            id: uuidv4(),
+            type: "bot",
+            date: new Date(),
+            text: "",
+        };
         setCurrentMessage("");
-        setMessageList(prevMessageList => [...prevMessageList, newUserMessage]);
+        setMessageList(prevMessageList => [
+            ...prevMessageList,
+            newUserMessage,
+            newAiResponse,
+        ]);
         await chatService.sendMessageStream({
             prompt: currentMessage,
             projectId,
             sessionId: selectedChat,
             callback(data) {
-                if (data.status === "start") {
-                    setMessageList(prevMessageList => {
-                        const newAiResponse: IMessage = {
-                            id: uuidv4(),
-                            type: "bot",
-                            date: new Date(),
-                            text: "|",
-                        };
-                        return [...prevMessageList, newAiResponse];
-                    });
-                } else if (data.status === "progress") {
-                    setMessageList(prevMessageList => {
-                        const lastMessage =
-                            prevMessageList[prevMessageList.length - 1];
-                        if (lastMessage.type === "bot") {
-                            const text =
-                                lastMessage.text.slice(0, -1) +
-                                data.message +
-                                "|";
-                            lastMessage.text = text;
-                        }
-                        return [...prevMessageList];
-                    });
-                } else {
-                    setMessageList(prevMessageList => {
-                        const lastMessage =
-                            prevMessageList[prevMessageList.length - 1];
-                        if (lastMessage.type === "bot") {
-                            lastMessage.text = lastMessage.text.slice(0, -1);
-                        }
-                        return [...prevMessageList];
-                    });
-                }
+                setMessageList(prevMessageList => {
+                    const lastMessage =
+                        prevMessageList[prevMessageList.length - 1];
+                    if (lastMessage.type === "bot") {
+                        lastMessage.text += data;
+                    }
+                    return [...prevMessageList];
+                });
             },
         });
         setIsLoadingAiResponse(false);
