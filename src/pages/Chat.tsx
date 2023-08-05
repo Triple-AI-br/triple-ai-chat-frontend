@@ -18,7 +18,9 @@ import {
     ICustomerData,
     selectCustomerData,
 } from "../redux/authenticationSlice";
-import { useAppSelector } from "../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { actionDisplayNotification } from "../redux/notificationSlice";
+import { CustomSnackbar } from "../components/shared";
 
 const GRAY_COLOR = "#f5f5f5";
 
@@ -36,6 +38,7 @@ const ChatPage = () => {
     const [customerData, setCustomerData] = useState<ICustomerData | undefined>(
         _customerData
     );
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         (async () => {
@@ -129,6 +132,17 @@ const ChatPage = () => {
 
     // Store selected chat session id
     const handleSelectChat = ({ sessionId }: { sessionId: number }) => {
+        if (isLoadingAiResponse) {
+            dispatch(
+                actionDisplayNotification({
+                    messages: [
+                        "Please wait for the AI to respond before switching into another chat.",
+                    ],
+                })
+            );
+            return;
+        }
+
         setSelectedChat(sessionId);
     };
 
@@ -211,6 +225,13 @@ const ChatPage = () => {
             isLoadingAiResponse ||
             isLoadingMessages
         ) {
+            dispatch(
+                actionDisplayNotification({
+                    messages: [
+                        "Please wait for the AI to respond before sending another message.",
+                    ],
+                })
+            );
             return;
         }
         setIsLoadingAiResponse(true);
@@ -224,7 +245,7 @@ const ChatPage = () => {
             id: uuidv4(),
             type: "bot",
             date: new Date(),
-            text: "",
+            text: "|",
         };
         setCurrentMessage("");
         setMessageList(prevMessageList => [
@@ -232,27 +253,39 @@ const ChatPage = () => {
             newUserMessage,
             newAiResponse,
         ]);
-        await chatService.sendMessageStream({
-            prompt: currentMessage,
-            projectId,
-            sessionId: selectedChat,
-            callback(data) {
-                setMessageList(prevMessageList => {
-                    const lastMessage =
-                        prevMessageList[prevMessageList.length - 1];
-                    if (lastMessage.type === "bot") {
-                        lastMessage.text += data;
-                    }
-                    return [...prevMessageList];
-                });
-            },
+        await new Promise<void>(resolve => {
+            chatService.sendMessageStream({
+                prompt: currentMessage,
+                projectId,
+                sessionId: selectedChat,
+                callback(data) {
+                    setMessageList(prevMessageList => {
+                        const lastMessage =
+                            prevMessageList[prevMessageList.length - 1];
+
+                        if (data.finish_reason) {
+                            lastMessage.text = lastMessage.text.slice(0, -1);
+                            resolve();
+                            return [...prevMessageList];
+                        } else {
+                            lastMessage.text =
+                                lastMessage.text.slice(0, -1) +
+                                data.delta +
+                                "|";
+                            return [...prevMessageList];
+                        }
+                    });
+                },
+            });
         });
+
         setIsLoadingAiResponse(false);
     };
 
     return (
         // Main container
         <Box sx={{ display: "flex", height: "100vh" }}>
+            <CustomSnackbar />
             {/* Left column container */}
             <Box
                 display="flex"

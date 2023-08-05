@@ -7,6 +7,11 @@ interface ITimestamped {
     updated_at: string;
 }
 
+interface IMessageStream {
+    delta: string;
+    finish_reason: string | null;
+}
+
 export interface IConversation extends ITimestamped {
     session_id: string;
     project_id: number;
@@ -81,7 +86,7 @@ const sendMessageStream = async ({
     projectId,
 }: {
     prompt: string;
-    callback(_: string): void;
+    callback(_: IMessageStream): void;
     sessionId: number;
     projectId: number;
 }) => {
@@ -107,7 +112,7 @@ const sendMessageStream = async ({
             if (!msg.data) {
                 return;
             }
-            const data = msg.data as string;
+            const data: IMessageStream = JSON.parse(msg.data);
             callback(data);
         },
         method: "POST",
