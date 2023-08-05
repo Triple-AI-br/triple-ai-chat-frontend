@@ -181,7 +181,6 @@ const ChatPage = () => {
             currentMessage.trim() !== ""
         ) {
             handleSendMessage();
-            setCurrentMessage("");
         } else if (event.key === "Enter" && event.shiftKey) {
             setCurrentMessage(prevMessage => prevMessage + "\n");
         }
@@ -211,8 +210,9 @@ const ChatPage = () => {
             currentMessage === "" ||
             isLoadingAiResponse ||
             isLoadingMessages
-        )
+        ) {
             return;
+        }
         setIsLoadingAiResponse(true);
         const newUserMessage: IMessage = {
             id: uuidv4(),

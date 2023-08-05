@@ -4,7 +4,10 @@ import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import { Base } from "../layouts/Base";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { selectIsAdmin } from "../redux/authenticationSlice";
+import {
+    selectHasPermission,
+    selectIsAdmin,
+} from "../redux/authenticationSlice";
 import { useParams } from "react-router-dom";
 import { actionDisplayNotification } from "../redux/notificationSlice";
 import { Upload } from "../components/Sources";
@@ -17,6 +20,9 @@ const SourcesPage = () => {
     const [isDeleting, setIsDeleting] = useState<boolean>(false);
     const { id } = useParams<{ id: string }>();
     const dispatch = useAppDispatch();
+    const hasFileUploadPermission = useAppSelector(
+        selectHasPermission("files:upload")
+    );
 
     const uploadCallback = (files: File[], paths: string[]) => {
         setSourcesList(prev => {
@@ -82,13 +88,22 @@ const SourcesPage = () => {
                 </Box>
             ) : (
                 <Box display="flex" flexDirection="column" gap={2}>
-                    <Upload uploadCallback={uploadCallback} />
+                    {hasFileUploadPermission && (
+                        <Upload uploadCallback={uploadCallback} />
+                    )}
 
                     {sourcesList && !sourcesList.length ? (
-                        <Typography>
-                            👆🏻 You don&apos;t have any files yet. Go ahead and
-                            upload some.
-                        </Typography>
+                        hasFileUploadPermission ? (
+                            <Typography>
+                                👆🏻 You don&apos;t have any files yet. Go ahead
+                                and upload some.
+                            </Typography>
+                        ) : (
+                            <Typography>
+                                No files uplaoded yet. Ask yout admin to upload
+                                the relevant documents.
+                            </Typography>
+                        )
                     ) : (
                         <Box
                             display="flex"
