@@ -12,4 +12,5 @@ export interface IMessage {
     date: Date;
     type: "user" | "bot";
     text: string;
+    references?: string[];
 }

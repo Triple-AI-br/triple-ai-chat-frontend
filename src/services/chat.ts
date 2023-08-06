@@ -10,6 +10,7 @@ interface ITimestamped {
 interface IMessageStream {
     delta: string;
     finish_reason: string | null;
+    references?: string[];
 }
 
 export interface IConversation extends ITimestamped {
@@ -33,6 +34,7 @@ interface IChatList {
     title: string;
     id: number;
     created_at: string;
+    references: string[];
 }
 interface IChatDetail extends IChatList {
     conversation: IMessage[];
@@ -79,7 +81,7 @@ const sendMessage = async ({
     return response.data;
 };
 
-const sendMessageStream = async ({
+const sendMessageStream = ({
     prompt,
     callback,
     sessionId,
@@ -89,40 +91,43 @@ const sendMessageStream = async ({
     callback(_: IMessageStream): void;
     sessionId: number;
     projectId: number;
-}) => {
+}): Promise<void> => {
     const url = `${api.defaults.baseURL}/projects/${projectId}/chats/${sessionId}/stream`;
     // View package documentation: https://www.npmjs.com/package/@microsoft/fetch-event-source
-    fetchEventSource(url, {
-        openWhenHidden: true, // Needed to keep the connection alive when the user switches tabs
-        async onopen(response) {
-            if (response.ok) {
-                return; // everything's good
-            } else {
-                throw new Error(
-                    `Status code: ${response.status} ${response.statusText} ${response.body}`
-                );
-            }
-        },
-        onerror(err) {
-            // By rethrowing the error we guarantee that the operation will stop
-            // Otherwise it'll keep retrying to connect by sending the same request
-            throw err;
-        },
-        onmessage(msg) {
-            if (!msg.data) {
-                return;
-            }
-            const data: IMessageStream = JSON.parse(msg.data);
-            callback(data);
-        },
-        method: "POST",
-        headers: {
-            Authorization: api.defaults.headers.Authorization as string,
-            "Content-Type": "application/json", // This is required for the server to parse the body
-        },
-        body: JSON.stringify({
-            prompt,
-        }),
+    return new Promise<void>((resolve, reject) => {
+        const ctrl = new AbortController();
+        fetchEventSource(url, {
+            openWhenHidden: true, // Needed to keep the connection alive when the user switches tabs
+            signal: ctrl.signal,
+            async onopen(response) {
+                if (response.ok) {
+                    return; // everything's good
+                } else {
+                    const data = await response.json();
+                    const errMsg = data.detail || "Unknown error";
+                    reject(new Error(errMsg));
+                    ctrl.abort();
+                }
+            },
+            onclose() {
+                resolve();
+            },
+            onmessage(msg) {
+                if (!msg.data) {
+                    return;
+                }
+                const data: IMessageStream = JSON.parse(msg.data);
+                callback(data);
+            },
+            method: "POST",
+            headers: {
+                Authorization: api.defaults.headers.Authorization as string,
+                "Content-Type": "application/json", // This is required for the server to parse the body
+            },
+            body: JSON.stringify({
+                prompt,
+            }),
+        });
     });
 };
 

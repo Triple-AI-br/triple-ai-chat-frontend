@@ -180,6 +180,7 @@ const ChatPage = () => {
                     type: "bot",
                     date: new Date(item.date_time),
                     text: item.ai_response,
+                    references: item.references,
                 });
             });
             setIsLoadingMessages(false);
@@ -253,8 +254,8 @@ const ChatPage = () => {
             newUserMessage,
             newAiResponse,
         ]);
-        await new Promise<void>(resolve => {
-            chatService.sendMessageStream({
+        try {
+            await chatService.sendMessageStream({
                 prompt: currentMessage,
                 projectId,
                 sessionId: selectedChat,
@@ -262,10 +263,11 @@ const ChatPage = () => {
                     setMessageList(prevMessageList => {
                         const lastMessage =
                             prevMessageList[prevMessageList.length - 1];
-
+                        if (data.references) {
+                            lastMessage.references = data.references;
+                        }
                         if (data.finish_reason) {
                             lastMessage.text = lastMessage.text.slice(0, -1);
-                            resolve();
                             return [...prevMessageList];
                         } else {
                             lastMessage.text =
@@ -277,8 +279,14 @@ const ChatPage = () => {
                     });
                 },
             });
-        });
-
+        } catch (error) {
+            setMessageList(prevMessageList => prevMessageList.slice(0, -2));
+            dispatch(
+                actionDisplayNotification({
+                    messages: [(error as { message: string }).message],
+                })
+            );
+        }
         setIsLoadingAiResponse(false);
     };
 

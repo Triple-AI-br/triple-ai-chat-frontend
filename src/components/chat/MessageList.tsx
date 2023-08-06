@@ -14,6 +14,7 @@ const MessageList = ({ messages }: IMessageListProps) => {
                     <BotMessageBubble
                         key={`bot_${message.id}`}
                         markdownText={message.text}
+                        references={message.references}
                     />
                 ) : (
                     <UserMessageBubble
