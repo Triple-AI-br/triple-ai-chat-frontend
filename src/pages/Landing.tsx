@@ -1,5 +1,5 @@
 import { Box, Chip, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { FirstSection } from "../components/Landing";
+import { FirstSection, PrivacyTerms } from "../components/Landing";
 import { CustomAppBar } from "../components/Landing/CustomAppBar";
 
 function LandingPage() {
@@ -45,6 +45,7 @@ function LandingPage() {
                             window.open(WPP_URL, "_blank", "noreferrer")
                         }
                     />
+                    <PrivacyTerms />
                 </Box>
             </Box>
 

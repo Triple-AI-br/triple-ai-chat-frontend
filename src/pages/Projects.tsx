@@ -52,8 +52,7 @@ const ProjectsPage = () => {
                                         }${routesManager.getChatRoute(
                                             project.id
                                         )}`,
-                                        "_blank",
-                                        "noreferrer"
+                                        "_blank"
                                     )
                                 }
                                 title={
