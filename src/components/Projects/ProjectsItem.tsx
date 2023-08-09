@@ -25,7 +25,7 @@ const ProjectsItem = ({ id, title, description, onClick }: IProjectProps) => {
     const onMouseOut = () => setShadow(defaultShadow);
 
     return (
-        <Grid xs={4}>
+        <Grid xs={12} md={6} lg={4}>
             <Box
                 minWidth={200}
                 onClick={onClick}
@@ -69,8 +69,8 @@ const ProjectsItem = ({ id, title, description, onClick }: IProjectProps) => {
                         sx={{
                             color: "#777",
                             position: "absolute",
-                            top: 10,
-                            right: 10,
+                            top: 3,
+                            right: 3,
                         }}
                     >
                         <SettingsOutlinedIcon />
