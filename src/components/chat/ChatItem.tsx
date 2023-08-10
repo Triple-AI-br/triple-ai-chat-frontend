@@ -11,9 +11,8 @@ import {
 
 interface IChatItemProps {
     id: number;
-    title: string;
     email?: string;
-    subtitle?: string;
+    subtitle: string;
     date: string;
     isSelected: boolean;
     onClick({ sessionId }: { sessionId: number }): void;
@@ -23,7 +22,6 @@ interface IChatItemProps {
 
 const ChatItem = ({
     id,
-    title,
     email,
     subtitle,
     date,
@@ -59,28 +57,35 @@ const ChatItem = ({
                 sx={{ width: 45, height: 45 }}
             />
             <Box display="flex" flexDirection="column" gap={0} width="100%">
-                <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    width="100%"
-                    gap={10}
-                >
-                    <Typography color="#555">{title}</Typography>
+                <Box display="flex" justifyContent="space-between" width="100%">
+                    <Typography color="#555">AI Chatbot</Typography>
                     <Typography fontSize={12} color="#999">
                         {timeAgo}
                     </Typography>
                 </Box>
-                <Box display="flex" justifyContent="space-between">
-                    {isSuperUser && email && (
-                        <Typography fontSize={14} color="#888">
-                            {email}
-                        </Typography>
-                    )}
-                    {subtitle && (
-                        <Typography fontSize={14} color="#888">
-                            {subtitle}
-                        </Typography>
-                    )}
+                {isSuperUser && email ? (
+                    <Typography fontWeight={600} fontSize={14} color="#888">
+                        {email}
+                    </Typography>
+                ) : null}
+                <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                >
+                    <Typography
+                        sx={{
+                            display: "-webkit-box",
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: "vertical",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                        }}
+                        fontSize={14}
+                        color="#888"
+                    >
+                        {subtitle}
+                    </Typography>
                     <DeleteIcon
                         onClick={
                             isHovered
@@ -91,7 +96,6 @@ const ChatItem = ({
                                 : undefined
                         }
                         sx={{
-                            // display: isHovered ? undefined : "none",
                             cursor: isHovered ? "pointer" : undefined,
                             color: isHovered ? "#f88" : backgroundColor,
                             width: 20,

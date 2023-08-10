@@ -99,7 +99,7 @@ const ChatPage = () => {
                     id: newChat.id,
                     date: newChat.created_at,
                     isSelected: true,
-                    subtitle: undefined,
+                    subtitle: "New chat",
                     title: newChat.title,
                 },
                 ...prevChatList,
@@ -120,7 +120,7 @@ const ChatPage = () => {
                     id: item.id,
                     email: item.email,
                     title: "AI Bot",
-                    subtitle: undefined,
+                    subtitle: item.title,
                     date: item.created_at,
                     isSelected: false,
                     onClick: handleSelectChat,
@@ -299,7 +299,7 @@ const ChatPage = () => {
                 display="flex"
                 flexDirection="column"
                 minWidth="300px"
-                maxWidth="40%"
+                maxWidth="32%"
                 borderRight="1px solid #ccc"
             >
                 <LeftTopBar
@@ -334,7 +334,6 @@ const ChatPage = () => {
                             chats={chats}
                             handleDelete={handleDelete}
                             handleSelectChat={handleSelectChat}
-                            title="AI Bot"
                         />
                     )}
                 </Box>

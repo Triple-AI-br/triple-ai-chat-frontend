@@ -2,7 +2,7 @@ export interface IChat {
     id: number;
     email?: string;
     title: string;
-    subtitle?: string;
+    subtitle: string;
     date: string;
     isSelected: boolean;
 }
