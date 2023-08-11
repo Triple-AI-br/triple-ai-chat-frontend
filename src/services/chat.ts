@@ -29,12 +29,11 @@ interface IMessage {
 
 interface IChatList {
     project_id: number;
-    email?: string;
-    user_id: number;
     title: string;
     id: number;
     created_at: string;
     references: string[];
+    user?: { email: string };
 }
 interface IChatDetail extends IChatList {
     conversation: IMessage[];

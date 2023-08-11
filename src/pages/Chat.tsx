@@ -118,7 +118,7 @@ const ChatPage = () => {
             setChats(
                 conversations.map(item => ({
                     id: item.id,
-                    email: item.email,
+                    email: item.user?.email,
                     title: "AI Bot",
                     subtitle: item.title,
                     date: item.created_at,

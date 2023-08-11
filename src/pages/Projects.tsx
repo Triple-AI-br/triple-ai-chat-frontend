@@ -57,7 +57,7 @@ const ProjectsPage = () => {
                                 }
                                 title={
                                     isSuperuser
-                                        ? `AI Chatbot - ${project.customer_name}`
+                                        ? `AI Chatbot - ${project.customer?.name}`
                                         : "AI Chatbot"
                                 }
                                 description={project.description}

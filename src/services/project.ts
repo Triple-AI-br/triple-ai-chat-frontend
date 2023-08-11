@@ -1,10 +1,9 @@
 import { api } from "./api";
 
 export interface IProject {
-    customer_id: number;
     description: string;
     id: number;
-    customer_name?: string;
+    customer?: { name: string };
 }
 
 const listProjects = async (): Promise<IProject[]> => {
