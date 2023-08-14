@@ -11,9 +11,8 @@ const LeftTopBar = ({ handleNewChat, customerData }: ILeftTopBarProps) => {
         <Box
             display="flex"
             py={1}
-            px="auto"
             alignItems="center"
-            justifyContent="space-evenly"
+            gap={2}
             sx={{ backgroundColor: customerData?.main_color }}
         >
             <Avatar
@@ -21,7 +20,7 @@ const LeftTopBar = ({ handleNewChat, customerData }: ILeftTopBarProps) => {
                 sx={{ width: 80, height: 80 }}
             />
             <Typography color="#fff" fontWeight={600} fontSize={18}>
-                {customerData?.name} AI Chatbot
+                Your conversations
             </Typography>
             <Box mx={1.5} />
             <Button
@@ -30,13 +29,14 @@ const LeftTopBar = ({ handleNewChat, customerData }: ILeftTopBarProps) => {
                 variant="outlined"
                 startIcon={<AddIcon />}
                 sx={{
+                    ml: "auto",
                     mr: 2,
                     color: "#fff",
                     borderColor: "#fff",
                     ":hover": { borderColor: "#ccc", color: "#ccc" },
                 }}
             >
-                New chat
+                New
             </Button>
         </Box>
     );
