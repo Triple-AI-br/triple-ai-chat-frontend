@@ -5,6 +5,7 @@ const getConfirmEmailRoute = (): string => "/confirm-email";
 const getAcceptInvitationRoute = (): string => "/accept-invitation";
 const getAdminRoute = (): string => "/admin";
 const getResetPasswordRoute = (): string => "/reset-password";
+const getPromptsdRoute = (): string => "/prompts";
 const getChatRoute = (id?: number): string => {
     if (id) return `/projects/${id}/chat`;
     return "/projects/:id/chat";
@@ -16,6 +17,7 @@ const getSourcesRoute = (id?: string | number): string => {
 
 export const routesManager = {
     getProjectsRoute,
+    getPromptsdRoute,
     getChatRoute,
     getLandingRoute,
     getLoginRoute,

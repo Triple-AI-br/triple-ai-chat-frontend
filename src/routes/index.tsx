@@ -9,6 +9,7 @@ import {
     ConfirmEmailPage,
     AcceptInvitationOrResetPasswordPage,
     AdminPage,
+    PromptsPage,
 } from "../pages";
 import { PrivateRoute, PublicRoute } from "../components/shared";
 
@@ -65,6 +66,11 @@ const AppRoutes = () => {
                             <Route
                                 path={routesManager.getAdminRoute()}
                                 element={<AdminPage />}
+                            />
+
+                            <Route
+                                path={routesManager.getPromptsdRoute()}
+                                element={<PromptsPage />}
                             />
                         </Routes>
                     </PrivateRoute>

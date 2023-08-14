@@ -10,8 +10,9 @@ import {
 import {
     Inbox as InboxIcon,
     SupervisorAccount as SupervisorAccountIcon,
+    PostAdd as PostAddIcon,
 } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { routesManager } from "../routes/routesManager";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
@@ -30,6 +31,7 @@ const Base = ({ children, title }: IBaseProps) => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const isAdminOrSuperUser = useAppSelector(selectIsAdminOrSuperUser);
+    const { pathname } = useLocation();
 
     const handleLogout = () => dispatch(actionLogout());
 
@@ -61,12 +63,20 @@ const Base = ({ children, title }: IBaseProps) => {
                 </Box>
 
                 <List>
-                    <ListItem disablePadding>
+                    <ListItem
+                        disablePadding
+                        sx={{
+                            backgroundColor:
+                                pathname === routesManager.getProjectsRoute()
+                                    ? "#eee"
+                                    : undefined,
+                        }}
+                    >
                         <ListItemButton
                             sx={{ pl: 5, pr: 10 }}
-                            onClick={() =>
-                                navigate(routesManager.getProjectsRoute())
-                            }
+                            onClick={() => {
+                                navigate(routesManager.getProjectsRoute());
+                            }}
                         >
                             <ListItemIcon>
                                 <InboxIcon />
@@ -76,12 +86,20 @@ const Base = ({ children, title }: IBaseProps) => {
                     </ListItem>
 
                     {isAdminOrSuperUser && (
-                        <ListItem disablePadding>
+                        <ListItem
+                            disablePadding
+                            sx={{
+                                backgroundColor:
+                                    pathname === routesManager.getAdminRoute()
+                                        ? "#eee"
+                                        : undefined,
+                            }}
+                        >
                             <ListItemButton
                                 sx={{ pl: 5, pr: 10 }}
-                                onClick={() =>
-                                    navigate(routesManager.getAdminRoute())
-                                }
+                                onClick={() => {
+                                    navigate(routesManager.getAdminRoute());
+                                }}
                             >
                                 <ListItemIcon>
                                     <SupervisorAccountIcon />
@@ -90,6 +108,27 @@ const Base = ({ children, title }: IBaseProps) => {
                             </ListItemButton>
                         </ListItem>
                     )}
+                    <ListItem
+                        disablePadding
+                        sx={{
+                            backgroundColor:
+                                pathname === routesManager.getPromptsdRoute()
+                                    ? "#eee"
+                                    : undefined,
+                        }}
+                    >
+                        <ListItemButton
+                            sx={{ pl: 5, pr: 10 }}
+                            onClick={() => {
+                                navigate(routesManager.getPromptsdRoute());
+                            }}
+                        >
+                            <ListItemIcon>
+                                <PostAddIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Prompts" />
+                        </ListItemButton>
+                    </ListItem>
                 </List>
                 <Box sx={{ height: "100%" }} />
 
@@ -118,7 +157,13 @@ const Base = ({ children, title }: IBaseProps) => {
                 </List>
             </Box>
 
-            <Box flex={1} sx={{ backgroundColor: "rgba(111, 107, 125, .09)" }}>
+            <Box
+                flex={1}
+                sx={{
+                    backgroundColor: "rgba(111, 107, 125, .09)",
+                    overflowY: "scroll",
+                }}
+            >
                 <Box
                     px={4}
                     sx={{
@@ -137,16 +182,7 @@ const Base = ({ children, title }: IBaseProps) => {
                         {title}
                     </Typography>
                 </Box>
-                <Box
-                    px={3}
-                    py={4}
-                    display="flex"
-                    flexDirection="column"
-                    maxHeight="80%"
-                    sx={{
-                        overflowY: "scroll",
-                    }}
-                >
+                <Box px={3} py={4} display="flex" flexDirection="column">
                     {children}
                 </Box>
             </Box>
