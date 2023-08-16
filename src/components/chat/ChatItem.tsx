@@ -54,7 +54,12 @@ const ChatItem = ({
         >
             <Avatar
                 src={customerData?.logo_url}
-                sx={{ width: 45, height: 45 }}
+                sx={{
+                    backgroundColor: customerData?.main_color,
+                    width: 45,
+                    height: 45,
+                    border: "1px solid #e5e5e5",
+                }}
             />
             <Box display="flex" flexDirection="column" gap={0} width="100%">
                 <Box display="flex" justifyContent="space-between" width="100%">

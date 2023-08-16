@@ -12,17 +12,22 @@ const LeftTopBar = ({ handleNewChat, customerData }: ILeftTopBarProps) => {
             display="flex"
             py={1}
             alignItems="center"
-            gap={2}
+            gap={1}
             sx={{ backgroundColor: customerData?.main_color }}
+            px={2}
         >
             <Avatar
                 src={customerData?.logo_url}
                 sx={{ width: 80, height: 80 }}
             />
-            <Typography color="#fff" fontWeight={600} fontSize={18}>
+            <Typography
+                color="#fff"
+                fontWeight={600}
+                fontSize={18}
+                sx={{ mr: 5 }}
+            >
                 Your conversations
             </Typography>
-            <Box mx={1.5} />
             <Button
                 onClick={handleNewChat}
                 size="small"
@@ -30,7 +35,6 @@ const LeftTopBar = ({ handleNewChat, customerData }: ILeftTopBarProps) => {
                 startIcon={<AddIcon />}
                 sx={{
                     ml: "auto",
-                    mr: 2,
                     color: "#fff",
                     borderColor: "#fff",
                     ":hover": { borderColor: "#ccc", color: "#ccc" },
