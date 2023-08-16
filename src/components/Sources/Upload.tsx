@@ -19,6 +19,10 @@ const Upload = ({ uploadCallback }: IUploadProps) => {
         setSelectedFiles(Array.from(event.target.files || []));
     };
 
+    const handleDelete = (fileName: string) => {
+        setSelectedFiles(prev => prev.filter(file => file.name !== fileName));
+    };
+
     const onFileUpload = async () => {
         if (!selectedFiles.length) return;
         serIsUploading(true);
@@ -39,7 +43,8 @@ const Upload = ({ uploadCallback }: IUploadProps) => {
             console.error(error);
             dispatch(
                 actionDisplayNotification({
-                    messages: ["There was an error uploading the file!"],
+                    messages: [(error as { message: string }).message],
+                    autoHideDuration: 6_000,
                 })
             );
         }
@@ -73,7 +78,13 @@ const Upload = ({ uploadCallback }: IUploadProps) => {
                         file.name.length > 20
                             ? file.name.slice(0, 20) + "..."
                             : file.name;
-                    return <Chip key={file.name} label={name} />;
+                    return (
+                        <Chip
+                            key={file.name}
+                            label={name}
+                            onDelete={() => handleDelete(file.name)}
+                        />
+                    );
                 })}
             </Box>
 

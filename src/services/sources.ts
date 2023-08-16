@@ -123,6 +123,18 @@ const uploadSources = async ({
     files: File[];
     projectId: number | string;
 }): Promise<string[]> => {
+    const allowedExtensions = ["csv", "pdf", "pptx", "docx", "txt"];
+    files.forEach(file => {
+        const extension = file.name.split(".").pop() as string;
+        if (!allowedExtensions.includes(extension.toLowerCase())) {
+            throw new Error(
+                `Invalid file type: ${extension}. Allowed types are ${allowedExtensions.join(
+                    ", "
+                )}`
+            );
+        }
+    });
+
     const signedPosts = await _getUploadUrls({
         projectId: projectId.toString(),
         files: files.map(file => file.name),
