@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import axios from "axios";
 import { parseJwt } from "../utils/parseJwt";
+import { api } from "../services/api";
 
 const ACCESS_TOKEN_KEY = "jwt";
 const CUSTOMER_DATA_KEY = "customerData";
@@ -37,6 +38,18 @@ interface IState {
     customerData?: ICustomerData;
 }
 
+const fetchCustomer = async (
+    customerId: number,
+    token: string
+): Promise<ICustomerData> => {
+    const url = `${BASE_API_URL}/api/v1/customers/${customerId}`;
+    const res = await axios.get(url, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    setCustomerDataToLocalStorage(JSON.stringify(res.data));
+    return res.data;
+};
+
 const getCustomer = async (
     customerId: number,
     token: string
@@ -45,12 +58,8 @@ const getCustomer = async (
     if (data) {
         return JSON.parse(data);
     }
-    const url = `${BASE_API_URL}/api/v1/customers/${customerId}`;
-    const res = await axios.get(url, {
-        headers: { Authorization: `Bearer ${token}` },
-    });
-    localStorage.setItem(CUSTOMER_DATA_KEY, JSON.stringify(res.data));
-    return res.data;
+    const customerData = await fetchCustomer(customerId, token);
+    return customerData;
 };
 
 const getCustomerDataFromLocalStorage = () =>
@@ -84,18 +93,6 @@ const initialState: IState = {
     customerData,
 };
 
-(() => {
-    (async () => {
-        if (!customerData && userData) {
-            const data = await getCustomer(
-                userData.customer_id ?? 1,
-                _initialAccessToken
-            );
-            setCustomerDataToLocalStorage(JSON.stringify(data));
-        }
-    })();
-})();
-
 const authSlice = createSlice({
     name: "auth",
     initialState,
@@ -124,6 +121,23 @@ const authSlice = createSlice({
             })
             .addCase(actionLogin.rejected, state => {
                 state.error = "Failed to authenticate user";
+            })
+            .addCase(actionSwitchCustomer.pending, state => {
+                state.status = "loading";
+                state.error = undefined;
+            })
+            .addCase(actionSwitchCustomer.fulfilled, (state, action) => {
+                const {
+                    authData: { access_token: accessToken },
+                    customerData,
+                } = action.payload;
+                state.accessToken = accessToken;
+                state.isAuthenticated = true;
+                state.customerData = customerData;
+                setAccessTokenToLocalStorage(accessToken);
+            })
+            .addCase(actionSwitchCustomer.rejected, state => {
+                state.error = "Failed to switch customers";
             })
             .addCase(actionAcceptInviteOrResetPassword.pending, state => {
                 state.status = "loading";
@@ -164,6 +178,23 @@ export const actionLogin = createAsyncThunk(
             authData.access_token
         );
         const customerData = await getCustomer(
+            customerId as number,
+            authData.access_token
+        );
+        return { authData, customerData };
+    }
+);
+
+export const actionSwitchCustomer = createAsyncThunk(
+    "auth/switchCustomer",
+    async (customer_id: number) => {
+        const url = "/users/superuser-switch-customer";
+        const response = await api.post(url, { customer_id });
+        const authData: IIncomingTokenCredentials = response.data;
+        const { customer_id: customerId }: IUserData = parseJwt(
+            authData.access_token
+        );
+        const customerData = await fetchCustomer(
             customerId as number,
             authData.access_token
         );

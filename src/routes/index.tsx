@@ -10,6 +10,7 @@ import {
     AcceptInvitationOrResetPasswordPage,
     AdminPage,
     PromptsPage,
+    SuperuserPage,
 } from "../pages";
 import { PrivateRoute, PublicRoute } from "../components/shared";
 
@@ -69,8 +70,12 @@ const AppRoutes = () => {
                             />
 
                             <Route
-                                path={routesManager.getPromptsdRoute()}
+                                path={routesManager.getPromptsRoute()}
                                 element={<PromptsPage />}
+                            />
+                            <Route
+                                path={routesManager.getSuperuserRoute()}
+                                element={<SuperuserPage />}
                             />
                         </Routes>
                     </PrivateRoute>

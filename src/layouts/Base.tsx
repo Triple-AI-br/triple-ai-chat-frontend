@@ -11,14 +11,18 @@ import {
     Inbox as InboxIcon,
     SupervisorAccount as SupervisorAccountIcon,
     PostAdd as PostAddIcon,
+    Engineering as EngineeringIcon,
 } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { routesManager } from "../routes/routesManager";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import {
+    ICustomerData,
     actionLogout,
+    selectCustomerData,
     selectIsAdminOrSuperUser,
+    selectIsSuperUser as selectIsSuperuser,
 } from "../redux/authenticationSlice";
 import { CustomSnackbar } from "../components/shared";
 
@@ -32,6 +36,9 @@ const Base = ({ children, title }: IBaseProps) => {
     const navigate = useNavigate();
     const isAdminOrSuperUser = useAppSelector(selectIsAdminOrSuperUser);
     const { pathname } = useLocation();
+    const customerData: ICustomerData | undefined =
+        useAppSelector(selectCustomerData);
+    const isSuperuser = useAppSelector(selectIsSuperuser);
 
     const handleLogout = () => dispatch(actionLogout());
 
@@ -112,7 +119,7 @@ const Base = ({ children, title }: IBaseProps) => {
                         disablePadding
                         sx={{
                             backgroundColor:
-                                pathname === routesManager.getPromptsdRoute()
+                                pathname === routesManager.getPromptsRoute()
                                     ? "#eee"
                                     : undefined,
                         }}
@@ -120,7 +127,7 @@ const Base = ({ children, title }: IBaseProps) => {
                         <ListItemButton
                             sx={{ pl: 5, pr: 10 }}
                             onClick={() => {
-                                navigate(routesManager.getPromptsdRoute());
+                                navigate(routesManager.getPromptsRoute());
                             }}
                         >
                             <ListItemIcon>
@@ -129,6 +136,31 @@ const Base = ({ children, title }: IBaseProps) => {
                             <ListItemText primary="Prompts" />
                         </ListItemButton>
                     </ListItem>
+
+                    {isSuperuser && (
+                        <ListItem
+                            disablePadding
+                            sx={{
+                                backgroundColor:
+                                    pathname ===
+                                    routesManager.getSuperuserRoute()
+                                        ? "#eee"
+                                        : undefined,
+                            }}
+                        >
+                            <ListItemButton
+                                sx={{ pl: 5, pr: 10 }}
+                                onClick={() => {
+                                    navigate(routesManager.getSuperuserRoute());
+                                }}
+                            >
+                                <ListItemIcon>
+                                    <EngineeringIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Super User" />
+                            </ListItemButton>
+                        </ListItem>
+                    )}
                 </List>
                 <Box sx={{ height: "100%" }} />
 
@@ -179,7 +211,9 @@ const Base = ({ children, title }: IBaseProps) => {
                         variant="h4"
                         sx={{ my: "auto" }}
                     >
-                        {title}
+                        {isSuperuser
+                            ? `${title} - ${customerData?.name}`
+                            : title}
                     </Typography>
                 </Box>
                 <Box px={3} py={4} display="flex" flexDirection="column">

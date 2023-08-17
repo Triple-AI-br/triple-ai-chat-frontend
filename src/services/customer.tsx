@@ -7,4 +7,10 @@ const getCustomer = async (id: string): Promise<ICustomerData> => {
     return res.data;
 };
 
-export const customerService = { getCustomer };
+const getAllCustomers = async (): Promise<ICustomerData[]> => {
+    const url = "/customers";
+    const res = await api.get(url);
+    return res.data;
+};
+
+export const customerService = { getCustomer, getAllCustomers };
