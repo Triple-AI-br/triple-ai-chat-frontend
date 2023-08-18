@@ -9,7 +9,7 @@ export interface IChat {
 
 export interface IMessage {
     id: number | string;
-    date: Date;
+    date_time: string;
     type: "user" | "bot";
     text: string;
     references?: string[];

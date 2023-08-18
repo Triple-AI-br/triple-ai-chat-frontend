@@ -3,6 +3,7 @@ import { Box, IconButton, Typography } from "@mui/material";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import moment from "moment";
 interface IMessageBubbleProps {
     markdownText: string;
     backgroundColor: string;
@@ -10,6 +11,7 @@ interface IMessageBubbleProps {
     borderBottomRightRadius?: number;
     borderBottomLeftRadius?: number;
     references?: string[];
+    date_time?: string;
 }
 
 const MessageBubble = ({
@@ -19,6 +21,7 @@ const MessageBubble = ({
     backgroundColor,
     borderBottomRightRadius,
     borderBottomLeftRadius,
+    date_time,
 }: IMessageBubbleProps) => {
     const [activeStep, setActiveStep] = useState(0);
     const [showReferences, setShowReferences] = useState(false);
@@ -57,9 +60,16 @@ const MessageBubble = ({
             border="1px solid #ccc"
             display={markdownText ? undefined : "none"}
         >
-            <Box px={3} py={1}>
+            <Box px={3} pt={0.5} pb={date_time ? 0 : 0.5}>
                 <ReactMarkdown>{markdownText}</ReactMarkdown>
             </Box>
+            {date_time && (
+                <Box display="flex" justifyContent="end" pl={4} pr={2} pb={1}>
+                    <Typography color="#aaa" fontSize={12}>
+                        {moment(date_time).fromNow()}
+                    </Typography>
+                </Box>
+            )}
             {references && references.length ? (
                 <Box
                     bgcolor="#f0f0f0"

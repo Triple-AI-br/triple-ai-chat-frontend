@@ -20,6 +20,7 @@ const MessageList = ({ messages }: IMessageListProps) => {
                     <UserMessageBubble
                         key={message.id}
                         markdownText={message.text}
+                        date_time={message.date_time}
                     />
                 )
             )}

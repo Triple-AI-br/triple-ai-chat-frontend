@@ -55,7 +55,7 @@ const ChatPage = () => {
     const DEFAULT_MESSAGE: IMessage = {
         id: uuidv4(),
         type: "bot",
-        date: new Date(),
+        date_time: Date(),
         text: INITIAL_TEXT,
     };
     const [messageList, setMessageList] = useState<IMessage[]>([
@@ -172,13 +172,13 @@ const ChatPage = () => {
                 messages.push({
                     id: item.date_time,
                     type: "user",
-                    date: new Date(item.date_time),
+                    date_time: item.date_time,
                     text: item.user_query,
                 });
                 messages.push({
                     id: item.date_time,
                     type: "bot",
-                    date: new Date(item.date_time),
+                    date_time: item.date_time,
                     text: item.ai_response,
                     references: item.references,
                 });
@@ -239,13 +239,13 @@ const ChatPage = () => {
         const newUserMessage: IMessage = {
             id: uuidv4(),
             type: "user",
-            date: new Date(),
+            date_time: Date(),
             text: currentMessage,
         };
         const newAiResponse: IMessage = {
             id: uuidv4(),
             type: "bot",
-            date: new Date(),
+            date_time: Date(),
             text: "|",
         };
         setCurrentMessage("");
