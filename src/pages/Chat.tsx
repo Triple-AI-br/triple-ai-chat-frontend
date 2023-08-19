@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { chatService, customerService } from "../services";
+import { chatService, customerService, projectService } from "../services";
 import { v4 as uuidv4 } from "uuid";
 import { Spinner } from "../components/loaders";
 import {
@@ -42,8 +42,9 @@ const ChatPage = () => {
 
     useEffect(() => {
         (async () => {
+            const project = await projectService.getProject(projectId);
             const newCustomerData = await customerService.getCustomer(
-                id as string
+                project.customer.id
             );
             setCustomerData(newCustomerData);
         })();

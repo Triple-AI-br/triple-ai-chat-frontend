@@ -211,7 +211,7 @@ const Base = ({ children, title }: IBaseProps) => {
                         variant="h4"
                         sx={{ my: "auto" }}
                     >
-                        {isSuperuser
+                        {customerData
                             ? `${title} - ${customerData?.name}`
                             : title}
                     </Typography>

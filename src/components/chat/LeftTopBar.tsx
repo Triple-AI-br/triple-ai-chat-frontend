@@ -7,13 +7,17 @@ interface ILeftTopBarProps {
     customerData?: ICustomerData;
 }
 const LeftTopBar = ({ handleNewChat, customerData }: ILeftTopBarProps) => {
+    const backgroundColor = customerData?.main_color;
+    const textColor =
+        backgroundColor?.toLowerCase() === "#fff" ? "#777" : "#fff";
+
     return (
         <Box
             display="flex"
-            py={1}
+            py={2}
             alignItems="center"
             gap={1}
-            sx={{ backgroundColor: customerData?.main_color }}
+            sx={{ backgroundColor, borderBottom: "1px solid #aaa" }}
             px={2}
         >
             <Avatar
@@ -21,7 +25,7 @@ const LeftTopBar = ({ handleNewChat, customerData }: ILeftTopBarProps) => {
                 sx={{ width: 80, height: 80 }}
             />
             <Typography
-                color="#fff"
+                color={textColor}
                 fontWeight={600}
                 fontSize={18}
                 sx={{ mr: 5 }}
@@ -35,8 +39,8 @@ const LeftTopBar = ({ handleNewChat, customerData }: ILeftTopBarProps) => {
                 startIcon={<AddIcon />}
                 sx={{
                     ml: "auto",
-                    color: "#fff",
-                    borderColor: "#fff",
+                    color: textColor,
+                    borderColor: textColor,
                     ":hover": { borderColor: "#ccc", color: "#ccc" },
                 }}
             >

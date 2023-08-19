@@ -55,11 +55,7 @@ const ProjectsPage = () => {
                                         "_blank"
                                     )
                                 }
-                                title={
-                                    isSuperuser
-                                        ? `AI Chatbot - ${project.customer?.name}`
-                                        : "AI Chatbot"
-                                }
+                                title={"AI Chatbot"}
                                 description={project.description}
                                 id={project.id}
                             />
