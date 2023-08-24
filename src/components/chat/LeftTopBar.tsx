@@ -2,6 +2,7 @@ import { Avatar, Box, Button, Typography } from "@mui/material";
 import { LibraryAdd as AddIcon } from "@mui/icons-material";
 import { ICustomerData } from "../../redux/authenticationSlice";
 
+// Will this trigger vercel deployment?
 interface ILeftTopBarProps {
     handleNewChat(): void;
     customerData?: ICustomerData;
