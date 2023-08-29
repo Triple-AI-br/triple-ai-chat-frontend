@@ -1,21 +1,6 @@
-import {
-    Box,
-    List,
-    ListItem,
-    ListItemButton,
-    ListItemIcon,
-    ListItemText,
-    Typography,
-} from "@mui/material";
-import {
-    Inbox as InboxIcon,
-    SupervisorAccount as SupervisorAccountIcon,
-    PostAdd as PostAddIcon,
-    Engineering as EngineeringIcon,
-} from "@mui/icons-material";
+/* eslint-disable indent */
 import { useLocation, useNavigate } from "react-router-dom";
 import { routesManager } from "../routes/routesManager";
-import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import {
     ICustomerData,
@@ -26,201 +11,236 @@ import {
 } from "../redux/authenticationSlice";
 import { CustomSnackbar } from "../components/shared";
 
+import {
+    InboxOutlined,
+    SnippetsOutlined,
+    TeamOutlined,
+    UserOutlined,
+    RightOutlined,
+    LeftOutlined,
+    LogoutOutlined,
+} from "@ant-design/icons";
+import type { MenuProps } from "antd";
+import {
+    Breadcrumb,
+    Layout,
+    Menu,
+    theme,
+    Button,
+    Tooltip,
+    Typography,
+    Grid,
+} from "antd";
+import { useEffect, useState } from "react";
+import React from "react";
+
+const { Header, Content, Footer, Sider } = Layout;
+type MenuItem = Required<MenuProps>["items"][number];
+
 interface IBaseProps {
     children: JSX.Element;
     title: string;
 }
 
 const Base = ({ children, title }: IBaseProps) => {
+    const { useBreakpoint } = Grid;
+    const screenSize = useBreakpoint();
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const isAdminOrSuperUser = useAppSelector(selectIsAdminOrSuperUser);
     const { pathname } = useLocation();
+    const isAdminOrSuperUser = useAppSelector(selectIsAdminOrSuperUser);
     const customerData: ICustomerData | undefined =
         useAppSelector(selectCustomerData);
     const isSuperuser = useAppSelector(selectIsSuperuser);
+    const {
+        token: { colorBgContainer },
+    } = theme.useToken();
 
     const handleLogout = () => dispatch(actionLogout());
+    const [collapsed, setCollapsed] = useState(screenSize.xs || screenSize.sm);
+    const toggleCollapsed = () => {
+        setCollapsed(!collapsed);
+    };
+    let initialTab: string;
+    switch (pathname) {
+        case routesManager.getProjectsRoute():
+            initialTab = "1";
+            break;
+        case routesManager.getPromptsRoute():
+            initialTab = "2";
+            break;
+        case routesManager.getAdminRoute():
+            initialTab = "3";
+            break;
+        case routesManager.getSuperuserRoute():
+            initialTab = "4";
+            break;
+        default:
+            initialTab = "0";
+    }
+
+    function getItem(
+        label: React.ReactNode,
+        key: React.Key,
+        path: string,
+        icon?: React.ReactNode,
+        children?: MenuItem[]
+    ): MenuItem {
+        return {
+            key,
+            icon,
+            children,
+            label,
+            onClick: () => {
+                navigate(path);
+            },
+        } as MenuItem;
+    }
+    const items: MenuItem[] = [
+        getItem(
+            "Projects",
+            "1",
+            routesManager.getProjectsRoute(),
+            <InboxOutlined />
+        ),
+        getItem(
+            "Prompts",
+            "2",
+            routesManager.getPromptsRoute(),
+            <SnippetsOutlined />
+        ),
+    ];
+    if (isAdminOrSuperUser)
+        items.push(
+            getItem(
+                "Admin",
+                "3",
+                routesManager.getAdminRoute(),
+                <TeamOutlined />
+            )
+        );
+
+    if (isSuperuser)
+        items.push(
+            getItem(
+                "Super User",
+                "4",
+                routesManager.getSuperuserRoute(),
+                <UserOutlined />
+            )
+        );
+
+    useEffect(() => {
+        screenSize.xs ? setCollapsed(true) : setCollapsed(false);
+    }, [screenSize]);
 
     return (
-        <Box display="flex" height="100vh" width="100%">
+        <Layout style={{ minHeight: "100vh" }}>
             <CustomSnackbar />
-            <Box
-                sx={{
-                    backgroundColor: "#fff",
-                    borderRight: "1px solid #ccc",
-                }}
-                display="flex"
-                flexDirection="column"
-                alignItems="center"
-                overflow="hidden"
-            >
-                <Box
-                    p={2}
-                    display="flex"
-                    width="100%"
-                    justifyContent="center"
-                    sx={{ borderBottom: "1px solid #ccc" }}
-                    height="80px"
-                >
-                    <img
-                        src={`${process.env.REACT_APP_BASE_FRONT_URL}/triple-ai.png`}
-                        style={{ height: "50px", marginRight: 50 }}
-                    />
-                </Box>
-
-                <List>
-                    <ListItem
-                        disablePadding
-                        sx={{
-                            backgroundColor:
-                                pathname === routesManager.getProjectsRoute()
-                                    ? "#eee"
-                                    : undefined,
-                        }}
-                    >
-                        <ListItemButton
-                            sx={{ pl: 5, pr: 10 }}
-                            onClick={() => {
-                                navigate(routesManager.getProjectsRoute());
-                            }}
-                        >
-                            <ListItemIcon>
-                                <InboxIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Chats" />
-                        </ListItemButton>
-                    </ListItem>
-
-                    {isAdminOrSuperUser && (
-                        <ListItem
-                            disablePadding
-                            sx={{
-                                backgroundColor:
-                                    pathname === routesManager.getAdminRoute()
-                                        ? "#eee"
-                                        : undefined,
-                            }}
-                        >
-                            <ListItemButton
-                                sx={{ pl: 5, pr: 10 }}
-                                onClick={() => {
-                                    navigate(routesManager.getAdminRoute());
-                                }}
-                            >
-                                <ListItemIcon>
-                                    <SupervisorAccountIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="Admin" />
-                            </ListItemButton>
-                        </ListItem>
-                    )}
-                    <ListItem
-                        disablePadding
-                        sx={{
-                            backgroundColor:
-                                pathname === routesManager.getPromptsRoute()
-                                    ? "#eee"
-                                    : undefined,
-                        }}
-                    >
-                        <ListItemButton
-                            sx={{ pl: 5, pr: 10 }}
-                            onClick={() => {
-                                navigate(routesManager.getPromptsRoute());
-                            }}
-                        >
-                            <ListItemIcon>
-                                <PostAddIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Prompts" />
-                        </ListItemButton>
-                    </ListItem>
-
-                    {isSuperuser && (
-                        <ListItem
-                            disablePadding
-                            sx={{
-                                backgroundColor:
-                                    pathname ===
-                                    routesManager.getSuperuserRoute()
-                                        ? "#eee"
-                                        : undefined,
-                            }}
-                        >
-                            <ListItemButton
-                                sx={{ pl: 5, pr: 10 }}
-                                onClick={() => {
-                                    navigate(routesManager.getSuperuserRoute());
-                                }}
-                            >
-                                <ListItemIcon>
-                                    <EngineeringIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="Super User" />
-                            </ListItemButton>
-                        </ListItem>
-                    )}
-                </List>
-                <Box sx={{ height: "100%" }} />
-
-                <List>
-                    <ListItem
-                        disablePadding
-                        onClick={handleLogout}
-                        sx={{
-                            color: "rgb(247, 62, 62)",
-                            ":hover": {
-                                backgroundColor: "rgb(255, 215, 215)",
-                            },
-                        }}
-                    >
-                        <ListItemButton sx={{ pl: 5, pr: 10 }}>
-                            <ListItemIcon>
-                                <LogoutOutlinedIcon
-                                    sx={{
-                                        color: "rgb(247, 62, 62)",
-                                    }}
-                                />
-                            </ListItemIcon>
-                            <ListItemText primary="Logout" />
-                        </ListItemButton>
-                    </ListItem>
-                </List>
-            </Box>
-
-            <Box
-                flex={1}
-                sx={{
-                    backgroundColor: "rgba(111, 107, 125, .09)",
-                    overflowY: "scroll",
+            <Sider
+                collapsible
+                collapsed={collapsed}
+                trigger={screenSize.xs ? undefined : null}
+                collapsedWidth={screenSize.xs ? "0" : undefined}
+                onCollapse={() => {
+                    toggleCollapsed();
                 }}
             >
-                <Box
-                    px={4}
-                    sx={{
-                        height: "83px",
-                        backgroundColor: "#fff",
-                        borderBottom: "1px solid #ccc",
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        marginBottom: 10,
                     }}
-                    display="flex"
                 >
-                    <Typography
-                        color="#555"
-                        component="h1"
-                        variant="h4"
-                        sx={{ my: "auto" }}
+                    <Typography.Title level={5} style={{ color: "#fff" }}>
+                        {collapsed ? "T. AI" : "Triple AI"}
+                    </Typography.Title>
+                </div>
+                <Menu
+                    theme="dark"
+                    defaultSelectedKeys={[initialTab]}
+                    mode="inline"
+                    items={items}
+                />
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                    <Button
+                        danger
+                        onClick={handleLogout}
+                        style={{
+                            position: "absolute",
+                            margin: "0 auto",
+                            bottom: 15,
+                            width: "85%",
+                            background: "transparent",
+                        }}
+                        icon={<LogoutOutlined />}
                     >
-                        {customerData
-                            ? `${title} - ${customerData?.name}`
-                            : title}
-                    </Typography>
-                </Box>
-                <Box px={3} py={4} display="flex" flexDirection="column">
-                    {children}
-                </Box>
-            </Box>
-        </Box>
+                        {collapsed ? null : "Logout"}
+                    </Button>
+                </div>
+                {screenSize.xs ? null : (
+                    <Tooltip
+                        title={collapsed ? "Expand" : "Collapse"}
+                        placement="right"
+                    >
+                        <Button
+                            type="primary"
+                            onClick={toggleCollapsed}
+                            shape="circle"
+                            style={{
+                                color: "black",
+                                border: "1px solid darkgray",
+                                background: "white",
+                                position: "absolute",
+                                top: 52,
+                                right: -12,
+                            }}
+                            icon={
+                                collapsed ? (
+                                    <RightOutlined size={1} />
+                                ) : (
+                                    <LeftOutlined size={1} />
+                                )
+                            }
+                            size="small"
+                        />
+                    </Tooltip>
+                )}
+            </Sider>
+            <Layout>
+                <Header
+                    style={{
+                        paddingLeft: 20,
+                        background: colorBgContainer,
+                        display: "flex",
+                        alignItems: "center",
+                    }}
+                >
+                    <Typography.Title level={4} style={{ margin: 0 }}>
+                        {`${title} - ${customerData?.name}`}
+                    </Typography.Title>
+                </Header>
+                <Content style={{ margin: "0 32px" }}>
+                    <Breadcrumb
+                        style={{ margin: "16px 5px" }}
+                        items={pathname.split("/").map(i => ({ title: i }))}
+                    ></Breadcrumb>
+                    <div
+                        style={{
+                            padding: 24,
+                            minHeight: 360,
+                            background: colorBgContainer,
+                        }}
+                    >
+                        {children}
+                    </div>
+                </Content>
+                <Footer style={{ textAlign: "center" }}>
+                    Made with ❤️ by Triple AI
+                </Footer>
+            </Layout>
+        </Layout>
     );
 };
 
