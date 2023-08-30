@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { routesManager } from "../../routes/routesManager";
-import { Card } from "antd";
+import { Card, Tooltip } from "antd";
 import { SettingOutlined } from "@ant-design/icons";
 
 interface IProjectProps {
@@ -25,13 +25,14 @@ const ProjectsItem = ({ id, title, description, onClick }: IProjectProps) => {
             onMouseOut={onMouseOut}
             onClick={onClick}
             actions={[
-                <SettingOutlined
-                    onClick={e => {
-                        e.stopPropagation();
-                        navigate(routesManager.getSourcesRoute(id));
-                    }}
-                    key="setting"
-                />,
+                <Tooltip title="Settings" key="setting" placement="bottom">
+                    <SettingOutlined
+                        onClick={e => {
+                            e.stopPropagation();
+                            navigate(routesManager.getSourcesRoute(id));
+                        }}
+                    />
+                </Tooltip>,
             ]}
             type="inner"
             title={title}

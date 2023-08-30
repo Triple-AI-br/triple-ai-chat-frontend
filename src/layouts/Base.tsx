@@ -164,20 +164,25 @@ const Base = ({ children, title }: IBaseProps) => {
                     items={items}
                 />
                 <div style={{ display: "flex", justifyContent: "center" }}>
-                    <Button
-                        danger
-                        onClick={handleLogout}
-                        style={{
-                            position: "absolute",
-                            margin: "0 auto",
-                            bottom: 15,
-                            width: "85%",
-                            background: "transparent",
-                        }}
-                        icon={<LogoutOutlined />}
+                    <Tooltip
+                        title={collapsed ? "Logout" : ""}
+                        placement="right"
                     >
-                        {collapsed ? null : "Logout"}
-                    </Button>
+                        <Button
+                            danger
+                            onClick={handleLogout}
+                            style={{
+                                position: "absolute",
+                                margin: "0 auto",
+                                bottom: 15,
+                                width: "85%",
+                                background: "transparent",
+                            }}
+                            icon={<LogoutOutlined />}
+                        >
+                            {collapsed ? null : "Logout"}
+                        </Button>
+                    </Tooltip>
                 </div>
                 {screenSize.xs ? null : (
                     <Tooltip
