@@ -22,6 +22,7 @@ import {
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import {
+    Image,
     Breadcrumb,
     Layout,
     Menu,
@@ -153,9 +154,27 @@ const Base = ({ children, title }: IBaseProps) => {
                         marginBottom: 10,
                     }}
                 >
-                    <Typography.Title level={5} style={{ color: "#fff" }}>
-                        {collapsed ? "T. AI" : "Triple AI"}
-                    </Typography.Title>
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: 10,
+                            marginTop: 10,
+                        }}
+                    >
+                        <Image
+                            preview={false}
+                            width={40}
+                            src={`${process.env.REACT_APP_BASE_FRONT_URL}/white-logo.png`}
+                        />
+                        <Typography.Title
+                            level={5}
+                            style={{ color: "#fff", margin: 0 }}
+                        >
+                            {collapsed ? "" : "Triple AI"}
+                        </Typography.Title>
+                    </div>
                 </div>
                 <Menu
                     theme="dark"
