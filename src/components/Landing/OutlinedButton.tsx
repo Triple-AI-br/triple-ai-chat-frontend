@@ -6,21 +6,21 @@ interface IOutlinedButtonProps extends ButtonProps {
 }
 
 function OutlinedButton({ text, borderColor, ...props }: IOutlinedButtonProps) {
-    return (
-        <Button
-            {...props}
-            variant="outlined"
-            sx={{
-                px: 6,
-                py: 3,
-                borderRadius: 10,
-                borderColor,
-                whiteSpace: "nowrap",
-            }}
-        >
-            {text}
-        </Button>
-    );
+	return (
+		<Button
+			{...props}
+			variant="outlined"
+			sx={{
+				px: 6,
+				py: 3,
+				borderRadius: 10,
+				borderColor,
+				whiteSpace: "nowrap",
+			}}
+		>
+			{text}
+		</Button>
+	);
 }
 
 export { OutlinedButton };

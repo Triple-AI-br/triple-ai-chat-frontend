@@ -16,10 +16,12 @@
     },
     "plugins": ["react", "@typescript-eslint"],
     "rules": {
-        "indent": ["error", 4],
+        "indent": [2, "tab"],
+        // "no-tabs": 0,
         "linebreak-style": ["error", "unix"],
         "quotes": ["error", "double"],
         "semi": ["error", "always"],
-        "react/react-in-jsx-scope": "off"
+        "react/react-in-jsx-scope": "off",
+        "no-mixed-spaces-and-tabs": 0
     }
 }
