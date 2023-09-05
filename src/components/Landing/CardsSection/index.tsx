@@ -3,9 +3,8 @@ import { Card, CardsContainer, Circle, DottedBackground, IconsSession, PromptImg
 
 const CardsSection: React.FC = () => {
 	return (
-		<CardsContainer>
+		<CardsContainer id='about-triple-ai'>
 			<Row>
-
 				<Card>
 					<h2>O que é possível fazer?</h2>
 					<WorksContainer>
@@ -34,7 +33,7 @@ const CardsSection: React.FC = () => {
 			<Row>
 				<Card>
 					<h2>Faça upload de arquivos e pergunte qualquer coisa</h2>
-					<ScreenShotImage src="/chatscreenshot.png"/>
+					<ScreenShotImage src="/pluginChat.png"/>
 					<Circle>
 						<div></div>
 					</Circle>

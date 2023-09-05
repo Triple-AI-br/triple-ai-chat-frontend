@@ -1,5 +1,6 @@
 import { Box, Chip, Modal, Typography } from "@mui/material";
 import { useState } from "react";
+import { ActionButton } from "./Footer/styled";
 
 const PrivacyTerms = () => {
 	const [open, setOpen] = useState(false);
@@ -22,11 +23,11 @@ const PrivacyTerms = () => {
 
 	return (
 		<>
-			<Chip
+			<ActionButton
+				type="primary" 
+				actiontype="secondary"
 				onClick={handleOpen}
-				label="Política de Privacidade"
-				sx={{ p: 2, color: "#444" }}
-			/>
+			>Política de Privacidade</ActionButton>
 			<Modal open={open} onClose={handleClose}>
 				<Box sx={style}>
 					<Typography variant="h4" component="h2">

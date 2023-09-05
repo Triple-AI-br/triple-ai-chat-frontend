@@ -147,12 +147,13 @@ export const ScreenShotImage = styled.img`
   margin-top: 20px;
   margin-bottom: 260px;
   width: 65%;
+  border-radius: 5px;
   @media(min-width: 600px) {
     margin-bottom: 0;
+    width: 220px;
   }
   @media(min-width: 1000px) {
-    width: auto;
-    height: 80%;
+    width: 180px;
     margin-left: 10%;
     margin-right: auto;
     margin-bottom: 0;
@@ -202,4 +203,8 @@ export const PromptImg = styled.img`
   border-radius: 12px;
   border: 1px solid #EDEFF7;
   margin-bottom: 30px;
+  @media(min-width: 600px) {
+    width: 100%;
+    background-color: red;
+  }
 `;

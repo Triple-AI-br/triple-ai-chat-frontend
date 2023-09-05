@@ -11,10 +11,16 @@ export const HeaderContainer = styled.section<{ bottomScroll?: boolean }>`
 	border-bottom: 1px solid rgba(0, 0, 0, 0.10);
 	padding: 10px 24px;
 	margin: 0 auto;
+	z-index: 20;
 	@media(min-width: 600px) {
-
-}
-	/* background-color: red; */	
+		position: sticky;
+		top: 0;
+		background: rgba(248, 252, 255, 0.5);
+		border-radius: 0 0 16px 16px;
+		backdrop-filter: blur(6.5px);
+		-webkit-backdrop-filter: blur(6.5px);
+		border: 1px solid rgba(248, 252, 255, 0.3);
+	}
 `;
 
 export const LogoImg = styled.img`
@@ -31,6 +37,13 @@ export const NavElements = styled.ul`
 		align-items: center;
 		gap: 20px;
 		list-style: none;
+		>li {
+			cursor: pointer;
+			>a {
+				color: #3e4352;
+				text-decoration: none;
+			}
+		}
 	}
 `;
 
@@ -38,6 +51,9 @@ export const ActionButton = styled(Button)`
 		display: none;
 	@media(min-width: 600px) {
 		display: inline-block;
+		font-weight: 600;
+		font-size: 16px;
+    line-height: 100%;
 		border-radius: 50px;
 		border: none;
 		background: linear-gradient(180deg, rgba(56, 93, 255, 0.80) 0%, rgba(134, 156, 252, 0.80) 100%);

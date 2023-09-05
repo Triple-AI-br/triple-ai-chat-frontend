@@ -28,7 +28,7 @@ export const Benefit = styled.div`
   align-items: center;
   text-align: center;
   gap: 0rem;
-  max-width: 24%;
+  max-width: 100%;
   >h2 {
     font-size: 20px;
     font-style: normal;
@@ -49,6 +49,7 @@ export const Benefit = styled.div`
   }
   @media(min-width: 600px) {
     align-items: flex-start;
+    max-width: 24%;
     text-align: start;
   }
 `;

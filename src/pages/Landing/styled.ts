@@ -1,14 +1,14 @@
 import styled from "styled-components";
 
 export const LandingPageContainer = styled.main`
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
   background-color: #F8FCFF;
   `;
 
 export const ScrollPage = styled.section`
   height: calc(100% - 52px);
   padding: 0 16px;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
   @media (min-width: 600px) {
     padding: 16px;
   }

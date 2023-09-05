@@ -6,15 +6,16 @@ export const FirstSectionContainer = styled.section`
   flex-direction: column;
   align-items: center;
   gap: 35px;
-  margin-bottom: 30px;
-  @media(min-width: 600px) {
+  margin-bottom: 120px;
+  @media(min-width: 900px) {
     flex-direction: row;
     justify-content: space-between;
     padding: 30px 32px;
+    gap: 5px;
   }
   @media(min-width: 1280px) {
     position: relative;
-    overflow: hidden;
+    /* overflow: hidden; */
   }
 `;
 
@@ -40,7 +41,7 @@ export const Title = styled.h1`
     height: 269px;
     flex-shrink: 0;
   }
-  @media(min-width: 600px) {
+  @media(min-width: 900px) {
     text-align: start;
   }
   @media(min-width: 1280px) {
@@ -55,7 +56,7 @@ export const LeftContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 35px;
-  @media(min-width: 600px) {
+  @media(min-width: 900px) {
     align-items: flex-start;
   }
 `;
@@ -68,6 +69,12 @@ export const VectorImage = styled.img`
   height: 526px;
   overflow: hidden;
   @media(min-width: 600px) {
+    left: 0;
+    width: 100%;
+    /* height: 600px; */
+    margin: 0 auto;
+  }
+  @media(min-width: 900px) {
     flex-shrink: 0;
     right: 0;
     width: 50%;
@@ -75,7 +82,8 @@ export const VectorImage = styled.img`
     top: 100px;
   }
   @media(min-width: 1280px) {
-    top: -30px;
+    top: 10px;
+    width: 60%;
   }
 `;
 
@@ -107,25 +115,105 @@ export const ActionButton = styled(Button)`
 		background: linear-gradient(180deg, rgba(56, 93, 255, 0.80) 0%, rgba(134, 156, 252, 0.80) 100%);
     width: fit-content;
     margin: 0 auto;
+    font-size: 16px;
+    line-height: 100%;
 	@media(min-width: 600px) {
     margin: 0;
 	}
 `;
 
-export const PlataformGif = styled.div`
-  width: 336.686px;
+export const BrowserWindow = styled.div<{openvideo: boolean}>`
   max-width: 100%;
-  height: 300px;
-  background: url('https://cdn.discordapp.com/attachments/888025163139002382/1148380750614380676/image_1.png');
-  background-repeat: no-repeat;
-  background-size: cover;
+  aspect-ratio: 16 / 9;
+  max-width: 100%;
   position: relative;
-  border-radius: 20px;
+  border-radius: 12px;
+  border: 1px solid #E4E6ED;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.7);
+  z-index: 1;
+  >svg {
+    background-color: #367CFF;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    left: 0; 
+    right: 0; 
+    margin-left: auto;
+    color: #fff;
+    border-radius: 50px;
+    margin-right: auto; 
+    z-index: 30;
+    cursor: pointer;
+    opacity: 0.8;
+    opacity: 0;
+    transition: 0.5s;
+  }
+  &:hover {
+    >svg {
+      display: ${props => props.openvideo ? "none" : "block"};
+      opacity: 1;
+    }
+  }
+  >div:nth-child(1) {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50px;
+    background-color: #c9cbd4;
+  }
+  >div:nth-child(2) {
+    position: absolute;
+    top: 10px;
+    left: 25px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50px;
+    background-color: #c9cbd4;
+  }
+  >div:nth-child(3) {
+    position: absolute;
+    top: 10px;
+    left: 35px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50px;
+    background-color: #c9cbd4;
+  }
+  >img {
+    display: ${props => props.openvideo ? "none" : "block"};
+  }
+  >video {
+    display: ${props => props.openvideo ? "block" : "none"};
+
+  }
   @media(min-width: 600px) {
-    width: 336.686px;
-    height: 300px;
+    min-width: min-content;
+    margin-right: 0;
   }
   @media(min-width: 1280px) {
-    width: 40%;
+    width: 50%;
   }
+`;
+
+export const Player = styled.video`
+  width: 95%;
+  margin: 20px auto 5px auto;
+  border-radius: 10px;
+  border: none;
+  border: 1px solid #E4E6ED;
+  z-index: 2;
+`;
+
+export const PlataformGif = styled.img`
+  width: 95%;
+  margin: 15px auto 0px auto;
+  border-radius: 10px;
+  border: 1px solid #E4E6ED;
+  z-index: 2;
+  cursor: pointer;
 `;
