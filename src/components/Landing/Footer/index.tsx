@@ -1,6 +1,6 @@
 /* eslint-disable no-case-declarations */
-import { Facebook, Instagram, LinkedIn, YouTube } from "@mui/icons-material";
-import { ActionButton, BottomContainer, ButtonsContainer, FooterContainer, Line, LogoImg, RightsContainer, SocialMidias, TopContainer } from "./styled";
+import { Instagram, LinkedIn, YouTube } from "@mui/icons-material";
+import { ActionButton, BottomContainer, ButtonsContainer, CenterContainer, FooterContainer, Line, LogoImg, RightsContainer, SocialMidias, TopContainer } from "./styled";
 import { PrivacyTerms } from "../PrivacyTerms";
 import { useNavigate } from "react-router-dom";
 import { routesManager } from "../../../routes/routesManager";
@@ -34,18 +34,22 @@ const LandingPageFooter: React.FC = () => {
 		<FooterContainer id="landing-footer">
 			<TopContainer>
 				<ButtonsContainer>
-					<ActionButton name='execute' type="primary" actiontype="primary" onClick={(e) => handleClick(e)} >Testar gratuitamente</ActionButton>
+					<ActionButton name='execute' type="primary" actiontype="primary" onClick={(e) => handleClick(e)} >Quero falar com um especialista</ActionButton>
 					<ActionButton type="primary"  name='email' actiontype="secondary" onClick={(e) => handleClick(e)}>fundadores@tripleai.com.br</ActionButton>
 					<ActionButton type="primary"  name='whatsapp' actiontype="secondary" onClick={(e) => handleClick(e)}>(27) 98121-3951</ActionButton>
 					<PrivacyTerms />
 				</ButtonsContainer>
 				<SocialMidias>
-					<Facebook />
-					<Instagram />
-					<YouTube />
-					<LinkedIn />
+					<ul>
+						<li><a href="https://www.instagram.com/tripleaibr/?hl=pt" target="blank"><Instagram /></a></li>
+						<li><a href="https://www.linkedin.com/company/tripleaibr/" target="blank"><LinkedIn /></a></li>
+						<li><a href="https://www.youtube.com/@TripleAI_" target="blank"><YouTube /></a></li>
+					</ul>
 				</SocialMidias>
-				<LogoImg src="/triple-ai.png" alt='logo' />
+				<CenterContainer>
+					<ActionButton name='execute' type="primary" actiontype="primary" onClick={(e) => handleClick(e)} >Quero falar com um especialista</ActionButton>
+					<LogoImg src="/triple-ai.png" alt='logo' />
+				</CenterContainer>
 			</TopContainer>
 			<BottomContainer>
 				<Line />
