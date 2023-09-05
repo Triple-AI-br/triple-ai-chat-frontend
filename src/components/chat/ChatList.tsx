@@ -10,28 +10,28 @@ interface IChatListProps {
 }
 
 const ChatList = ({
-    chats,
-    handleSelectChat,
-    handleDelete,
-    customerData,
+	chats,
+	handleSelectChat,
+	handleDelete,
+	customerData,
 }: IChatListProps) => {
-    return (
-        <>
-            {chats.map(item => (
-                <ChatItem
-                    customerData={customerData}
-                    key={item.id}
-                    email={item.email}
-                    id={item.id}
-                    subtitle={item.subtitle}
-                    date={item.date}
-                    isSelected={item.isSelected}
-                    onClick={handleSelectChat}
-                    onDelete={handleDelete}
-                />
-            ))}
-        </>
-    );
+	return (
+		<>
+			{chats.map(item => (
+				<ChatItem
+					customerData={customerData}
+					key={item.id}
+					email={item.email}
+					id={item.id}
+					subtitle={item.subtitle}
+					date={item.date}
+					isSelected={item.isSelected}
+					onClick={handleSelectChat}
+					onDelete={handleDelete}
+				/>
+			))}
+		</>
+	);
 };
 
 export { ChatList };

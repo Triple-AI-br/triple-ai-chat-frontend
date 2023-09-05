@@ -10,31 +10,31 @@ import { Col, Row } from "antd";
 const ProjectsPage = () => {
     const [projects, setProjects] = useState<IProject[]>();
 
-    useEffect(() => {
-        (async () => {
-            const _projects = await projectService.listProjects();
-            setProjects(_projects);
-        })();
-    }, []);
+	useEffect(() => {
+		(async () => {
+			const _projects = await projectService.listProjects();
+			setProjects(_projects);
+		})();
+	}, []);
 
-    return (
-        <Base title={"Your AI Chatbots"}>
-            <Box
-                flex={1}
-                px={3}
-                py={4}
-                display="flex"
-                flexDirection="column"
-                gap={5}
-            >
-                {projects === undefined ? (
-                    <Spinner />
-                ) : projects === null ? (
-                    <Typography>
+	return (
+		<Base title={"Your AI Chatbots"}>
+			<Box
+				flex={1}
+				px={3}
+				py={4}
+				display="flex"
+				flexDirection="column"
+				gap={5}
+			>
+				{projects === undefined ? (
+					<Spinner />
+				) : projects === null ? (
+					<Typography>
                         We haf a problem finding your projects
-                    </Typography>
-                ) : projects.length === 0 ? (
-                    <Typography>
+					</Typography>
+				) : projects.length === 0 ? (
+					<Typography>
                         You don&apos;t have any projects yet
                     </Typography>
                 ) : (

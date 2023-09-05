@@ -39,177 +39,177 @@ interface IState {
 }
 
 const fetchCustomer = async (
-    customerId: number,
-    token: string
+	customerId: number,
+	token: string
 ): Promise<ICustomerData> => {
-    const url = `${BASE_API_URL}/api/v1/customers/${customerId}`;
-    const res = await axios.get(url, {
-        headers: { Authorization: `Bearer ${token}` },
-    });
-    setCustomerDataToLocalStorage(JSON.stringify(res.data));
-    return res.data;
+	const url = `${BASE_API_URL}/api/v1/customers/${customerId}`;
+	const res = await axios.get(url, {
+		headers: { Authorization: `Bearer ${token}` },
+	});
+	setCustomerDataToLocalStorage(JSON.stringify(res.data));
+	return res.data;
 };
 
 const getCustomer = async (
-    customerId: number,
-    token: string
+	customerId: number,
+	token: string
 ): Promise<ICustomerData> => {
-    const data = localStorage.getItem(CUSTOMER_DATA_KEY);
-    if (data) {
-        return JSON.parse(data);
-    }
-    const customerData = await fetchCustomer(customerId, token);
-    return customerData;
+	const data = localStorage.getItem(CUSTOMER_DATA_KEY);
+	if (data) {
+		return JSON.parse(data);
+	}
+	const customerData = await fetchCustomer(customerId, token);
+	return customerData;
 };
 
 const getCustomerDataFromLocalStorage = () =>
-    localStorage.getItem(CUSTOMER_DATA_KEY);
+	localStorage.getItem(CUSTOMER_DATA_KEY);
 
 const getAccessTokenFromLocalStorage = () =>
-    localStorage.getItem(ACCESS_TOKEN_KEY);
+	localStorage.getItem(ACCESS_TOKEN_KEY);
 
 const setCustomerDataToLocalStorage = (customerData: string) =>
-    localStorage.setItem(CUSTOMER_DATA_KEY, customerData);
+	localStorage.setItem(CUSTOMER_DATA_KEY, customerData);
 
 const setAccessTokenToLocalStorage = (accessToken: string) =>
-    localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+	localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
 
 const _initialAccessToken = getAccessTokenFromLocalStorage() || "";
 const _initialCustomerData = getCustomerDataFromLocalStorage() || "";
 
 const customerData = _initialCustomerData
-    ? JSON.parse(_initialCustomerData)
-    : undefined;
+	? JSON.parse(_initialCustomerData)
+	: undefined;
 
 const userData = _initialAccessToken
-    ? parseJwt(_initialAccessToken)
-    : undefined;
+	? parseJwt(_initialAccessToken)
+	: undefined;
 
 const initialState: IState = {
-    status: "idle",
-    accessToken: _initialAccessToken,
-    isAuthenticated: Boolean(_initialAccessToken),
-    userData,
-    customerData,
+	status: "idle",
+	accessToken: _initialAccessToken,
+	isAuthenticated: Boolean(_initialAccessToken),
+	userData,
+	customerData,
 };
 
 const authSlice = createSlice({
-    name: "auth",
-    initialState,
-    reducers: {
-        logout(state) {
-            state.isAuthenticated = false;
-            localStorage.removeItem(ACCESS_TOKEN_KEY);
-            localStorage.removeItem(CUSTOMER_DATA_KEY);
-        },
-    },
-    extraReducers(builder) {
-        builder
-            .addCase(actionLogin.pending, state => {
-                state.status = "loading";
-                state.error = undefined;
-            })
-            .addCase(actionLogin.fulfilled, (state, action) => {
-                const {
-                    authData: { access_token: accessToken },
-                    customerData,
-                } = action.payload;
-                state.accessToken = accessToken;
-                state.isAuthenticated = true;
-                state.customerData = customerData;
-                setAccessTokenToLocalStorage(accessToken);
-            })
-            .addCase(actionLogin.rejected, state => {
-                state.error = "Failed to authenticate user";
-            })
-            .addCase(actionSwitchCustomer.pending, state => {
-                state.status = "loading";
-                state.error = undefined;
-            })
-            .addCase(actionSwitchCustomer.fulfilled, (state, action) => {
-                const {
-                    authData: { access_token: accessToken },
-                    customerData,
-                } = action.payload;
-                state.accessToken = accessToken;
-                state.isAuthenticated = true;
-                state.customerData = customerData;
-                setAccessTokenToLocalStorage(accessToken);
-            })
-            .addCase(actionSwitchCustomer.rejected, state => {
-                state.error = "Failed to switch customers";
-            })
-            .addCase(actionAcceptInviteOrResetPassword.pending, state => {
-                state.status = "loading";
-                state.error = undefined;
-            })
-            .addCase(
-                actionAcceptInviteOrResetPassword.fulfilled,
-                (state, action) => {
-                    const {
-                        authData: { access_token: accessToken },
-                        customerData,
-                    } = action.payload;
-                    state.accessToken = accessToken;
-                    state.isAuthenticated = true;
-                    state.customerData = customerData;
-                    setAccessTokenToLocalStorage(accessToken);
-                }
-            )
-            .addCase(actionAcceptInviteOrResetPassword.rejected, state => {
-                state.error = "Failed to authenticate user";
-            });
-    },
+	name: "auth",
+	initialState,
+	reducers: {
+		logout(state) {
+			state.isAuthenticated = false;
+			localStorage.removeItem(ACCESS_TOKEN_KEY);
+			localStorage.removeItem(CUSTOMER_DATA_KEY);
+		},
+	},
+	extraReducers(builder) {
+		builder
+			.addCase(actionLogin.pending, state => {
+				state.status = "loading";
+				state.error = undefined;
+			})
+			.addCase(actionLogin.fulfilled, (state, action) => {
+				const {
+					authData: { access_token: accessToken },
+					customerData,
+				} = action.payload;
+				state.accessToken = accessToken;
+				state.isAuthenticated = true;
+				state.customerData = customerData;
+				setAccessTokenToLocalStorage(accessToken);
+			})
+			.addCase(actionLogin.rejected, state => {
+				state.error = "Failed to authenticate user";
+			})
+			.addCase(actionSwitchCustomer.pending, state => {
+				state.status = "loading";
+				state.error = undefined;
+			})
+			.addCase(actionSwitchCustomer.fulfilled, (state, action) => {
+				const {
+					authData: { access_token: accessToken },
+					customerData,
+				} = action.payload;
+				state.accessToken = accessToken;
+				state.isAuthenticated = true;
+				state.customerData = customerData;
+				setAccessTokenToLocalStorage(accessToken);
+			})
+			.addCase(actionSwitchCustomer.rejected, state => {
+				state.error = "Failed to switch customers";
+			})
+			.addCase(actionAcceptInviteOrResetPassword.pending, state => {
+				state.status = "loading";
+				state.error = undefined;
+			})
+			.addCase(
+				actionAcceptInviteOrResetPassword.fulfilled,
+				(state, action) => {
+					const {
+						authData: { access_token: accessToken },
+						customerData,
+					} = action.payload;
+					state.accessToken = accessToken;
+					state.isAuthenticated = true;
+					state.customerData = customerData;
+					setAccessTokenToLocalStorage(accessToken);
+				}
+			)
+			.addCase(actionAcceptInviteOrResetPassword.rejected, state => {
+				state.error = "Failed to authenticate user";
+			});
+	},
 });
 
 // Actions
 export const { logout: actionLogout } = authSlice.actions;
 
 export const actionLogin = createAsyncThunk(
-    "auth/login",
-    async ({ email, password }: { email: string; password: string }) => {
-        const url = `${BASE_API_URL}/api/v1/login/access-token`;
-        const formdata = new FormData();
-        formdata.append("username", email);
-        formdata.append("password", password);
-        const authResponse = await axios.post(url, formdata);
-        const authData: IIncomingTokenCredentials = authResponse.data;
-        const { customer_id: customerId }: IUserData = parseJwt(
-            authData.access_token
-        );
-        const customerData = await getCustomer(
+	"auth/login",
+	async ({ email, password }: { email: string; password: string }) => {
+		const url = `${BASE_API_URL}/api/v1/login/access-token`;
+		const formdata = new FormData();
+		formdata.append("username", email);
+		formdata.append("password", password);
+		const authResponse = await axios.post(url, formdata);
+		const authData: IIncomingTokenCredentials = authResponse.data;
+		const { customer_id: customerId }: IUserData = parseJwt(
+			authData.access_token
+		);
+		const customerData = await getCustomer(
             customerId as number,
             authData.access_token
-        );
-        return { authData, customerData };
-    }
+		);
+		return { authData, customerData };
+	}
 );
 
 export const actionSwitchCustomer = createAsyncThunk(
-    "auth/switchCustomer",
-    async (customer_id: number) => {
-        const url = "/users/superuser-switch-customer";
-        const response = await api.post(url, { customer_id });
-        const authData: IIncomingTokenCredentials = response.data;
-        const { customer_id: customerId }: IUserData = parseJwt(
-            authData.access_token
-        );
-        const customerData = await fetchCustomer(
+	"auth/switchCustomer",
+	async (customer_id: number) => {
+		const url = "/users/superuser-switch-customer";
+		const response = await api.post(url, { customer_id });
+		const authData: IIncomingTokenCredentials = response.data;
+		const { customer_id: customerId }: IUserData = parseJwt(
+			authData.access_token
+		);
+		const customerData = await fetchCustomer(
             customerId as number,
             authData.access_token
-        );
-        return { authData, customerData };
-    }
+		);
+		return { authData, customerData };
+	}
 );
 
 export const actionAcceptInviteOrResetPassword = createAsyncThunk(
-    "auth/acceptInvite",
-    async ({
-        password,
-        confirmPassword,
-        token,
-        type,
-    }: {
+	"auth/acceptInvite",
+	async ({
+		password,
+		confirmPassword,
+		token,
+		type,
+	}: {
         type: "reset" | "invite";
         password: string;
         confirmPassword: string;
@@ -218,43 +218,43 @@ export const actionAcceptInviteOrResetPassword = createAsyncThunk(
         authData: IIncomingTokenCredentials;
         customerData: ICustomerData;
     }> => {
-        if (password !== confirmPassword) {
-            throw Error("Passwords dont match");
-        }
-        const url =
+		if (password !== confirmPassword) {
+			throw Error("Passwords dont match");
+		}
+		const url =
             type === "invite"
-                ? `${BASE_API_URL}/api/v1/login/invited-set-password`
-                : `${BASE_API_URL}/api/v1/login/reset-password`;
-        const authResponse = await axios.post(url, { token, password });
-        const authData: IIncomingTokenCredentials = authResponse.data;
-        const { customer_id: customerId }: IUserData = parseJwt(
-            authData.access_token
-        );
-        const customerData = await getCustomer(
+            	? `${BASE_API_URL}/api/v1/login/invited-set-password`
+            	: `${BASE_API_URL}/api/v1/login/reset-password`;
+		const authResponse = await axios.post(url, { token, password });
+		const authData: IIncomingTokenCredentials = authResponse.data;
+		const { customer_id: customerId }: IUserData = parseJwt(
+			authData.access_token
+		);
+		const customerData = await getCustomer(
             customerId as number,
             authData.access_token
-        );
-        return { authData, customerData };
-    }
+		);
+		return { authData, customerData };
+	}
 );
 
 // Selectors
 export const selectUserData = (state: RootState) => state.auth.userData;
 export const selectCustomerId = (state: RootState) =>
-    state.auth.userData?.customer_id;
+	state.auth.userData?.customer_id;
 export const selectCustomerData = (state: RootState) => state.auth.customerData;
 export const selectIsAuthenticated = (state: RootState) =>
-    state.auth.isAuthenticated;
+	state.auth.isAuthenticated;
 export const selectAccessToken = (state: RootState) => state.auth.accessToken;
 export const selectError = (state: RootState) => state.auth.error;
 export const selectIsAdmin = (state: RootState) =>
-    state.auth.userData?.is_admin;
+	state.auth.userData?.is_admin;
 export const selectIsSuperUser = (state: RootState) =>
-    state.auth.userData?.is_superuser;
+	state.auth.userData?.is_superuser;
 export const selectIsAdminOrSuperUser = (state: RootState) =>
-    state.auth.userData?.is_admin || state.auth.userData?.is_superuser;
+	state.auth.userData?.is_admin || state.auth.userData?.is_superuser;
 export const selectHasPermission = (permission: string) => (state: RootState) =>
-    selectIsAdminOrSuperUser(state) ||
+	selectIsAdminOrSuperUser(state) ||
     state.auth.userData?.permissions.includes(permission);
 
 // Reducer
