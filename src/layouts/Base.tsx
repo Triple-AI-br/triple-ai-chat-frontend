@@ -136,7 +136,7 @@ const Base = ({ children, title }: IBaseProps) => {
     }, [screenSize]);
 
     return (
-        <Layout style={{ minHeight: "100vh" }}>
+        <Layout style={{ minHeight: "100vh", minWidth: 300 }}>
             <CustomSnackbar />
             <Sider
                 collapsible
@@ -182,27 +182,30 @@ const Base = ({ children, title }: IBaseProps) => {
                     mode="inline"
                     items={items}
                 />
-                <div style={{ display: "flex", justifyContent: "center" }}>
-                    <Tooltip
-                        title={collapsed ? "Logout" : ""}
-                        placement="right"
-                    >
-                        <Button
-                            danger
-                            onClick={handleLogout}
-                            style={{
-                                position: "absolute",
-                                margin: "0 auto",
-                                bottom: 15,
-                                width: "85%",
-                                background: "transparent",
-                            }}
-                            icon={<LogoutOutlined />}
+
+                {!(screenSize.xs && collapsed) && (
+                    <div style={{ display: "flex", justifyContent: "center" }}>
+                        <Tooltip
+                            title={collapsed ? "Logout" : ""}
+                            placement="right"
                         >
-                            {collapsed ? null : "Logout"}
-                        </Button>
-                    </Tooltip>
-                </div>
+                            <Button
+                                danger
+                                onClick={handleLogout}
+                                style={{
+                                    position: "absolute",
+                                    margin: "0 auto",
+                                    bottom: 15,
+                                    width: "85%",
+                                    background: "transparent",
+                                }}
+                                icon={<LogoutOutlined />}
+                            >
+                                {collapsed ? null : "Logout"}
+                            </Button>
+                        </Tooltip>
+                    </div>
+                )}
                 {screenSize.xs ? null : (
                     <Tooltip
                         title={collapsed ? "Expand" : "Collapse"}
@@ -254,6 +257,7 @@ const Base = ({ children, title }: IBaseProps) => {
                         style={{
                             padding: 24,
                             minHeight: 360,
+                            minWidth: 250,
                             background: colorBgContainer,
                         }}
                     >

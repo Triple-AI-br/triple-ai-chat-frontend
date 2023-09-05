@@ -1,17 +1,14 @@
 import { Box, Typography } from "@mui/material";
 import { Base } from "../layouts/Base";
-import Grid from "@mui/material/Unstable_Grid2"; // Grid version 2
 import { ProjectsItem } from "../components/Projects";
 import { routesManager } from "../routes/routesManager";
 import { useEffect, useState } from "react";
 import { IProject, projectService } from "../services";
 import { Spinner } from "../components/loaders";
-import { useAppSelector } from "../redux/hooks";
-import { selectIsSuperUser } from "../redux/authenticationSlice";
+import { Col, Row } from "antd";
 
 const ProjectsPage = () => {
     const [projects, setProjects] = useState<IProject[]>();
-    const isSuperuser = useAppSelector(selectIsSuperUser);
 
     useEffect(() => {
         (async () => {
@@ -41,26 +38,36 @@ const ProjectsPage = () => {
                         You don&apos;t have any projects yet
                     </Typography>
                 ) : (
-                    <Grid container width="100%" spacing={2}>
+                    <Row gutter={[24, 24]} align="middle">
                         {projects.map(project => (
-                            <ProjectsItem
+                            <Col
                                 key={project.id}
-                                onClick={() =>
-                                    window.open(
-                                        `${
-                                            process.env.REACT_APP_BASE_FRONT_URL
-                                        }${routesManager.getChatRoute(
-                                            project.id
-                                        )}`,
-                                        "_blank"
-                                    )
-                                }
-                                title={"AI Chatbot"}
-                                description={project.description}
-                                id={project.id}
-                            />
+                                className="gutter-row"
+                                xs={24}
+                                sm={24}
+                                md={12}
+                                lg={8}
+                                xl={8}
+                            >
+                                <ProjectsItem
+                                    onClick={() =>
+                                        window.open(
+                                            `${
+                                                process.env
+                                                    .REACT_APP_BASE_FRONT_URL
+                                            }${routesManager.getChatRoute(
+                                                project.id
+                                            )}`,
+                                            "_blank"
+                                        )
+                                    }
+                                    title={project.title}
+                                    description={project.description}
+                                    id={project.id}
+                                />
+                            </Col>
                         ))}
-                    </Grid>
+                    </Row>
                 )}
             </Box>
         </Base>

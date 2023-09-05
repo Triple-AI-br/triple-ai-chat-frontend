@@ -2,6 +2,7 @@ import { api } from "./api";
 
 export interface IProject {
     id: number;
+    title: string;
     description: string;
     customer: { id: number; name: string };
 }

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { routesManager } from "../../routes/routesManager";
-import { Card, Tooltip } from "antd";
+import { Card, Tooltip, Typography } from "antd";
 import { SettingOutlined } from "@ant-design/icons";
 
 interface IProjectProps {
@@ -12,6 +12,7 @@ interface IProjectProps {
 }
 
 const ProjectsItem = ({ id, title, description, onClick }: IProjectProps) => {
+    const { Paragraph } = Typography;
     const defaultShadow = "0px 4px 8px 0px rgba(0, 0, 0, 0.1)";
     const hoverShadow = "0px 4px 12px 5px rgba(0, 0, 0, 0.12)";
     const [shadow, setShadow] = useState(defaultShadow);
@@ -37,12 +38,11 @@ const ProjectsItem = ({ id, title, description, onClick }: IProjectProps) => {
             type="inner"
             title={title}
             hoverable
-            style={{
-                width: 300,
-                boxShadow: shadow,
-            }}
+            style={{ boxShadow: shadow, minWidth: 180 }}
         >
-            <p>{description}</p>
+            <Paragraph ellipsis={{ rows: 2 }} style={{ height: "2.5rem" }}>
+                {description}
+            </Paragraph>
         </Card>
     );
 };
