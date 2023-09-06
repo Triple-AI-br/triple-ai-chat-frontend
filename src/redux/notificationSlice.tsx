@@ -18,33 +18,33 @@ interface INotificationState {
 const initialState: INotificationState = { isOpen: false };
 
 const notificationSlice = createSlice({
-	name: "notification",
-	initialState,
-	reducers: {
-		displayNotification(state, action: PayloadAction<INotification>) {
-			const notification = action.payload;
-			notification.variant ||= "filled";
-			notification.severity ||= "error";
-			notification.autoHideDuration ||= 4000;
-			notification.anchorOrigin ||= {
-				vertical: "top",
-				horizontal: "center",
-			};
-			state.notification = notification;
-			state.isOpen = true;
-		},
-		dismissNotification(state) {
-			state.isOpen = false;
-		},
-	},
+  name: "notification",
+  initialState,
+  reducers: {
+    displayNotification(state, action: PayloadAction<INotification>) {
+      const notification = action.payload;
+      notification.variant ||= "filled";
+      notification.severity ||= "error";
+      notification.autoHideDuration ||= 4000;
+      notification.anchorOrigin ||= {
+        vertical: "top",
+        horizontal: "center",
+      };
+      state.notification = notification;
+      state.isOpen = true;
+    },
+    dismissNotification(state) {
+      state.isOpen = false;
+    },
+  },
 });
 
 export const selectNotification = (state: RootState) =>
-	state.notification.notification;
+  state.notification.notification;
 export const selectIsNotificationOpen = (state: RootState) =>
-	state.notification.isOpen;
+  state.notification.isOpen;
 export const {
-	dismissNotification: actionDismissNotification,
-	displayNotification: actionDisplayNotification,
+  dismissNotification: actionDismissNotification,
+  displayNotification: actionDisplayNotification,
 } = notificationSlice.actions;
 export const notificationSliceReducer = notificationSlice.reducer;

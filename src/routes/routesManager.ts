@@ -8,24 +8,24 @@ const getResetPasswordRoute = (): string => "/reset-password";
 const getSuperuserRoute = (): string => "/superuser";
 const getPromptsRoute = (): string => "/prompts";
 const getChatRoute = (id?: number): string => {
-	if (id) return `/projects/${id}/chat`;
-	return "/projects/:id/chat";
+  if (id) return `/projects/${id}/chat`;
+  return "/projects/:id/chat";
 };
 const getSourcesRoute = (id?: string | number): string => {
-	if (id) return `/projects/${id}/sources`;
-	return "/projects/:id/sources";
+  if (id) return `/projects/${id}/sources`;
+  return "/projects/:id/sources";
 };
 
 export const routesManager = {
-	getSuperuserRoute,
-	getProjectsRoute,
-	getPromptsRoute,
-	getChatRoute,
-	getLandingRoute,
-	getLoginRoute,
-	getSourcesRoute,
-	getConfirmEmailRoute,
-	getAcceptInvitationRoute,
-	getAdminRoute,
-	getResetPasswordRoute,
+  getSuperuserRoute,
+  getProjectsRoute,
+  getPromptsRoute,
+  getChatRoute,
+  getLandingRoute,
+  getLoginRoute,
+  getSourcesRoute,
+  getConfirmEmailRoute,
+  getAcceptInvitationRoute,
+  getAdminRoute,
+  getResetPasswordRoute,
 };

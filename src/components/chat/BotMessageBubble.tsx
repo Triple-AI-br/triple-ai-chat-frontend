@@ -6,18 +6,18 @@ interface IUserMessageBubbleProps {
 }
 
 const BotMessageBubble = ({
-	markdownText,
-	references,
+  markdownText,
+  references,
 }: IUserMessageBubbleProps) => {
-	return (
-		<MessageBubble
-			float="left"
-			backgroundColor="#fff"
-			markdownText={markdownText}
-			borderBottomLeftRadius={0}
-			references={references}
-		/>
-	);
+  return (
+    <MessageBubble
+      float="left"
+      backgroundColor="#fff"
+      markdownText={markdownText}
+      borderBottomLeftRadius={0}
+      references={references}
+    />
+  );
 };
 
 export { BotMessageBubble };
