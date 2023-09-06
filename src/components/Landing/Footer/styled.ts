@@ -40,7 +40,8 @@ export const SocialMidias = styled.div`
     display: flex;
     align-items: center;
     gap: 15px;
-    margin: 20px 0;
+    margin: 20px 0px;
+    padding: 0;
     >li {
       >a {
         text-decoration: none;
@@ -55,7 +56,10 @@ export const SocialMidias = styled.div`
   }
   @media(min-width: 600px) {
     order: 2;
-    margin: 0;
+    >ul {
+      margin: 0 0;
+      padding: 0;
+    }
 	}
 `;
 
@@ -134,6 +138,7 @@ export const CenterContainer = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 20px;
+  margin: 0;
   >button {
       display: none;
   }
