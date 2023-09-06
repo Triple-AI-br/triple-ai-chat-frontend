@@ -148,7 +148,6 @@ export const { logout: actionLogout, updateUserAndCustomer: actionUpdateUserAndC
   authSlice.actions;
 
 export const actionUpdateAuthenticationStatus = createAsyncThunk("auth/refresh", async () => {
-  console.log("auth/refresh");
   const data = await usersService.getMe();
   return data;
 });
@@ -162,7 +161,7 @@ export const actionLogin = createAsyncThunk(
     formdata.append("password", password);
     const authResponse = await axios.post(url, formdata);
     const authData: IIncomingTokenCredentials = authResponse.data;
-    const { customer } = await usersService.getMe();
+    const { customer } = await usersService.getMe(authData.access_token);
     return { authData, customerData: customer };
   },
 );
@@ -173,7 +172,7 @@ export const actionSwitchCustomer = createAsyncThunk(
     const url = "/users/superuser-switch-customer";
     const response = await api.post(url, { customer_id });
     const authData: IIncomingTokenCredentials = response.data;
-    const { customer } = await usersService.getMe();
+    const { customer } = await usersService.getMe(authData.access_token);
     return { authData, customerData: customer };
   },
 );
@@ -203,7 +202,7 @@ export const actionAcceptInviteOrResetPassword = createAsyncThunk(
         : `${BASE_API_URL}/api/v1/login/reset-password`;
     const authResponse = await axios.post(url, { token, password });
     const authData: IIncomingTokenCredentials = authResponse.data;
-    const { customer } = await usersService.getMe();
+    const { customer } = await usersService.getMe(authData.access_token);
     return { authData, customerData: customer };
   },
 );
