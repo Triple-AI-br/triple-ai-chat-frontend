@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { chatService, customerService, projectService } from "../services";
+import { chatService } from "../services";
 import { v4 as uuidv4 } from "uuid";
 import { Spinner } from "../components/loaders";
 import {
@@ -14,10 +14,7 @@ import {
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { routesManager } from "../routes/routesManager";
-import {
-  ICustomerData,
-  selectCustomerData,
-} from "../redux/authenticationSlice";
+import { ICustomerData, selectCustomerData } from "../redux/authenticationSlice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { actionDisplayNotification } from "../redux/notificationSlice";
 import { CustomSnackbar } from "../components/shared";
@@ -33,25 +30,11 @@ const ChatPage = () => {
   const [currentMessage, setCurrentMessage] = useState("");
   const [selectedChat, setSelectedChat] = useState<number>();
   const [chats, setChats] = useState<IChat[]>();
-  const _customerData: ICustomerData | undefined =
-        useAppSelector(selectCustomerData);
-  const [customerData, setCustomerData] = useState<ICustomerData | undefined>(
-    _customerData
-  );
+  const customerData: ICustomerData | undefined | null = useAppSelector(selectCustomerData);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    (async () => {
-      const project = await projectService.getProject(projectId);
-      const newCustomerData = await customerService.getCustomer(
-        project.customer.id
-      );
-      setCustomerData(newCustomerData);
-    })();
-  }, []);
-
   const INITIAL_TEXT = `Olá, sou uma Inteligência Artificial conversacional. Fui treinada com os documentos [listados aqui](${routesManager.getSourcesRoute(
-    id
+    id,
   )} 'Knowledge base documents'). Você pode me fazer perguntas ou pedir para produzir textos com base nas informações contidas neles.`;
   const DEFAULT_MESSAGE: IMessage = {
     id: uuidv4(),
@@ -59,9 +42,7 @@ const ChatPage = () => {
     date_time: Date(),
     text: INITIAL_TEXT,
   };
-  const [messageList, setMessageList] = useState<IMessage[]>([
-    DEFAULT_MESSAGE,
-  ]);
+  const [messageList, setMessageList] = useState<IMessage[]>([DEFAULT_MESSAGE]);
 
   // Scrolls to bottom every time messageList or isLoadingAiResponse is modified
   useEffect(() => {
@@ -72,9 +53,9 @@ const ChatPage = () => {
   const handleDelete = async ({ sessionId }: { sessionId: number }) => {
     if (!confirm("Are you sure you'd like to delete this chat?")) return;
     if (!chats) return;
-    setChats(prevChatList => {
+    setChats((prevChatList) => {
       if (!prevChatList) return [];
-      return prevChatList.filter(item => item.id !== sessionId);
+      return prevChatList.filter((item) => item.id !== sessionId);
     });
     const success = await chatService.deleteChat({
       projectId,
@@ -93,7 +74,7 @@ const ChatPage = () => {
     const newChat = await chatService.createNewChat({
       projectId,
     });
-    setChats(prevChatList => {
+    setChats((prevChatList) => {
       if (!prevChatList) return [];
       return [
         {
@@ -117,7 +98,7 @@ const ChatPage = () => {
       });
       conversations.reverse();
       setChats(
-        conversations.map(item => ({
+        conversations.map((item) => ({
           id: item.id,
           email: item.user?.email,
           title: "AI Bot",
@@ -126,7 +107,7 @@ const ChatPage = () => {
           isSelected: false,
           onClick: handleSelectChat,
           onDelete: handleDelete,
-        }))
+        })),
       );
     })();
   }, []);
@@ -136,10 +117,8 @@ const ChatPage = () => {
     if (isLoadingAiResponse) {
       dispatch(
         actionDisplayNotification({
-          messages: [
-            "Please wait for the AI to respond before switching into another chat.",
-          ],
-        })
+          messages: ["Please wait for the AI to respond before switching into another chat."],
+        }),
       );
       return;
     }
@@ -153,9 +132,9 @@ const ChatPage = () => {
       if (!selectedChat) {
         return;
       }
-      setChats(prevList => {
+      setChats((prevList) => {
         if (!prevList) return [];
-        const newValue = prevList.map(item => {
+        const newValue = prevList.map((item) => {
           return {
             ...item,
             isSelected: item.id === selectedChat,
@@ -169,7 +148,7 @@ const ChatPage = () => {
         sessionId: selectedChat,
       });
       const messages: IMessage[] = [DEFAULT_MESSAGE];
-      chat.conversation.forEach(item => {
+      chat.conversation.forEach((item) => {
         messages.push({
           id: item.date_time,
           type: "user",
@@ -191,29 +170,18 @@ const ChatPage = () => {
 
   // Send message when Enter is pressed
   const handleEnterPressed = (event: React.KeyboardEvent<Element>) => {
-    if (
-      event.key === "Enter" &&
-            !event.shiftKey &&
-            currentMessage.trim() !== ""
-    ) {
+    if (event.key === "Enter" && !event.shiftKey && currentMessage.trim() !== "") {
       handleSendMessage();
     } else if (event.key === "Enter" && event.shiftKey) {
-      setCurrentMessage(prevMessage => prevMessage + "\n");
+      setCurrentMessage((prevMessage) => prevMessage + "\n");
     }
   };
 
   // Keep track of the state
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (
-      (e.nativeEvent as unknown as { inputType: string }).inputType ===
-            "insertLineBreak"
-    )
-      return;
+    if ((e.nativeEvent as unknown as { inputType: string }).inputType === "insertLineBreak") return;
     let text = e.target.value;
-    if (
-      (e.nativeEvent as unknown as { inputType: string }).inputType ===
-            "insertFromPaste"
-    ) {
+    if ((e.nativeEvent as unknown as { inputType: string }).inputType === "insertFromPaste") {
       text = text.trim();
     }
     setCurrentMessage(text);
@@ -221,18 +189,11 @@ const ChatPage = () => {
 
   // Send message
   const handleSendMessage = async () => {
-    if (
-      !selectedChat ||
-            currentMessage === "" ||
-            isLoadingAiResponse ||
-            isLoadingMessages
-    ) {
+    if (!selectedChat || currentMessage === "" || isLoadingAiResponse || isLoadingMessages) {
       dispatch(
         actionDisplayNotification({
-          messages: [
-            "Please wait for the AI to respond before sending another message.",
-          ],
-        })
+          messages: ["Please wait for the AI to respond before sending another message."],
+        }),
       );
       return;
     }
@@ -250,20 +211,15 @@ const ChatPage = () => {
       text: "|",
     };
     setCurrentMessage("");
-    setMessageList(prevMessageList => [
-      ...prevMessageList,
-      newUserMessage,
-      newAiResponse,
-    ]);
+    setMessageList((prevMessageList) => [...prevMessageList, newUserMessage, newAiResponse]);
     try {
       await chatService.sendMessageStream({
         prompt: currentMessage,
         projectId,
         sessionId: selectedChat,
         callback(data) {
-          setMessageList(prevMessageList => {
-            const lastMessage =
-                            prevMessageList[prevMessageList.length - 1];
+          setMessageList((prevMessageList) => {
+            const lastMessage = prevMessageList[prevMessageList.length - 1];
             if (data.references) {
               lastMessage.references = data.references;
             }
@@ -271,28 +227,25 @@ const ChatPage = () => {
               lastMessage.text = lastMessage.text.slice(0, -1);
               return [...prevMessageList];
             } else {
-              lastMessage.text =
-                                lastMessage.text.slice(0, -1) +
-                                data.delta +
-                                "|";
+              lastMessage.text = lastMessage.text.slice(0, -1) + data.delta + "|";
               return [...prevMessageList];
             }
           });
         },
       });
     } catch (error) {
-      setMessageList(prevMessageList => prevMessageList.slice(0, -2));
+      setMessageList((prevMessageList) => prevMessageList.slice(0, -2));
       dispatch(
         actionDisplayNotification({
           messages: [(error as { message: string }).message],
-        })
+        }),
       );
     }
     setIsLoadingAiResponse(false);
   };
 
   return (
-  // Main container
+    // Main container
     <Box sx={{ display: "flex", height: "100vh" }}>
       <CustomSnackbar />
       {/* Left column container */}
@@ -303,31 +256,16 @@ const ChatPage = () => {
         maxWidth="32%"
         borderRight="1px solid #ccc"
       >
-        <LeftTopBar
-          customerData={customerData}
-          handleNewChat={handleNewChat}
-        />
+        <LeftTopBar customerData={customerData} handleNewChat={handleNewChat} />
         <Box sx={{ overflowY: "scroll" }} height="100%">
           {chats === undefined ? (
             <Box display="flex" justifyContent="center" pt={3}>
-              <CircularProgress
-                sx={{ color: customerData?.main_color }}
-              />
+              <CircularProgress sx={{ color: customerData?.main_color }} />
             </Box>
           ) : chats.length === 0 ? (
-            <Box
-              width="100%"
-              pt={2}
-              display="flex"
-              flexDirection="column"
-              alignItems="center"
-            >
-              <Typography color="#555">
-                                You do not have any chats yet.
-              </Typography>
-              <Typography color="#555">
-                                Create a new one above 👆🏻
-              </Typography>
+            <Box width="100%" pt={2} display="flex" flexDirection="column" alignItems="center">
+              <Typography color="#555">You do not have any chats yet.</Typography>
+              <Typography color="#555">Create a new one above 👆🏻</Typography>
             </Box>
           ) : (
             <ChatList
@@ -357,21 +295,11 @@ const ChatPage = () => {
         >
           {!isLoadingMessages && selectedChat && <ChatBar />}
           {isLoadingMessages ? (
-            <Box
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              height="100%"
-            >
+            <Box display="flex" justifyContent="center" alignItems="center" height="100%">
               <Spinner />
             </Box>
           ) : selectedChat ? (
-            <Box
-              display="flex"
-              flexDirection="column"
-              height="100%"
-              sx={{ overflow: "scroll" }}
-            >
+            <Box display="flex" flexDirection="column" height="100%" sx={{ overflow: "scroll" }}>
               <MessageList messages={messageList} />
 
               <div ref={bottomRef} />
@@ -385,7 +313,7 @@ const ChatPage = () => {
               alignItems="center"
             >
               <Typography color="#999" fontSize={17}>
-                                Please select a chat on the left panel
+                Please select a chat on the left panel
               </Typography>
             </Box>
           )}

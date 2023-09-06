@@ -4,11 +4,11 @@ import { Forward as SendIcon } from "@mui/icons-material";
 import { ICustomerData } from "../../redux/authenticationSlice";
 
 interface ITextChatProps {
-    currentMessage: string;
-    handleChange(e: React.ChangeEvent<HTMLTextAreaElement>): void;
-    handleEnterPressed(e: React.KeyboardEvent<Element>): void;
-    handleSendMessage(): Promise<void>;
-    customerData?: ICustomerData;
+  currentMessage: string;
+  handleChange(e: React.ChangeEvent<HTMLTextAreaElement>): void;
+  handleEnterPressed(e: React.KeyboardEvent<Element>): void;
+  handleSendMessage(): Promise<void>;
+  customerData?: ICustomerData | null;
 }
 const TextChat = ({
   currentMessage,
