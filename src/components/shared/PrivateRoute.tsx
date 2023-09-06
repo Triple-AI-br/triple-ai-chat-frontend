@@ -8,20 +8,20 @@ interface IPrivateRouteProps {
 }
 
 const PrivateRoute = ({ children }: IPrivateRouteProps) => {
-    const location = useLocation();
-    const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const location = useLocation();
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
 
-    if (isAuthenticated) {
-        return children;
-    } else {
-        const url = location.pathname + location.search + location.hash;
-        return (
-            <Navigate
-                to={routesManager.getLoginRoute()}
-                state={{ next: url }}
-            ></Navigate>
-        );
-    }
+  if (isAuthenticated) {
+    return children;
+  } else {
+    const url = location.pathname + location.search + location.hash;
+    return (
+      <Navigate
+        to={routesManager.getLoginRoute()}
+        state={{ next: url }}
+      ></Navigate>
+    );
+  }
 };
 
 export { PrivateRoute };
