@@ -5,16 +5,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { routesManager } from "../../routes/routesManager";
 import { actionDisplayNotification } from "../../redux/notificationSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import {
-  actionLogin,
-  selectError,
-  selectIsAuthenticated,
-} from "../../redux/authenticationSlice";
+import { actionLogin, selectError, selectIsAuthenticated } from "../../redux/authenticationSlice";
 import { useEffect, useRef } from "react";
 
 interface IFormData {
-    email: string;
-    password: string;
+  email: string;
+  password: string;
 }
 
 const FormValidationSchema: yup.Schema<IFormData> = yup.object().shape({
@@ -29,8 +25,8 @@ const LoginForm = () => {
   const error = useAppSelector(selectError);
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const handleSubmitRef = useRef<
-        ((e?: React.FormEvent<HTMLFormElement> | undefined) => void) | undefined
-    >();
+    ((e?: React.FormEvent<HTMLFormElement> | undefined) => void) | undefined
+  >();
 
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
@@ -50,9 +46,9 @@ const LoginForm = () => {
   useEffect(() => {
     if (isAuthenticated) {
       const next =
-                location.state && location.state.next
-                	? location.state.next
-                	: routesManager.getProjectsRoute();
+        location.state && location.state.next
+          ? location.state.next
+          : routesManager.getProjectsRoute();
       navigate(next);
     }
   }, [isAuthenticated]);
@@ -62,7 +58,7 @@ const LoginForm = () => {
       dispatch(
         actionDisplayNotification({
           messages: [error],
-        })
+        }),
       );
     }
   }, [error]);
@@ -70,14 +66,14 @@ const LoginForm = () => {
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
-      validate={async values => {
+      validate={async (values) => {
         const errors: Record<string, string> = {};
         try {
           await FormValidationSchema.validate(values, {
             abortEarly: false,
           });
         } catch (err) {
-          (err as yup.ValidationError).inner.forEach(item => {
+          (err as yup.ValidationError).inner.forEach((item) => {
             if (!item.path) return;
             errors[item.path] = item.message;
           });
@@ -101,13 +97,7 @@ const LoginForm = () => {
       }) => {
         handleSubmitRef.current = handleSubmit;
         return (
-          <Box
-            width="100%"
-            display="flex"
-            flexDirection="column"
-            gap={5}
-            alignItems="center"
-          >
+          <Box width="100%" display="flex" flexDirection="column" gap={5} alignItems="center">
             <Box maxWidth="200px" mb={2}>
               <img
                 src={`${process.env.REACT_APP_BASE_FRONT_URL}/triple-ai.png`}
@@ -117,34 +107,17 @@ const LoginForm = () => {
               />
             </Box>
 
-            <Box
-              display="flex"
-              justifyContent="start"
-              mr="auto"
-              alignItems="end"
-            >
-              <Typography
-                fontSize={18}
-                fontWeight={600}
-                color="#444"
-              >
-                                Login&nbsp;
+            <Box display="flex" justifyContent="start" mr="auto" alignItems="end">
+              <Typography fontSize={18} fontWeight={600} color="#444">
+                Login&nbsp;
               </Typography>
-              <Typography
-                fontSize={15}
-                fontWeight={500}
-                color="#777"
-              >
-                                (invitation only)
+              <Typography fontSize={15} fontWeight={500} color="#777">
+                (invitation only)
               </Typography>
             </Box>
             <TextField
               id="email"
-              label={
-                errors.email && touched.email
-                  ? errors.email
-                  : "Email"
-              }
+              label={errors.email && touched.email ? errors.email : "Email"}
               fullWidth
               variant="filled"
               name="email"
@@ -156,11 +129,7 @@ const LoginForm = () => {
             />
             <TextField
               id="password"
-              label={
-                errors.password && touched.password
-                  ? errors.password
-                  : "Password"
-              }
+              label={errors.password && touched.password ? errors.password : "Password"}
               fullWidth
               variant="filled"
               name="password"
@@ -170,12 +139,8 @@ const LoginForm = () => {
               onBlur={handleBlur}
               error={Boolean(errors.password && touched.password)}
             />
-            <Button
-              onClick={() => handleSubmit()}
-              variant="contained"
-              disabled={isSubmitting}
-            >
-                            Log In
+            <Button onClick={() => handleSubmit()} variant="contained" disabled={isSubmitting}>
+              Log In
             </Button>
           </Box>
         );

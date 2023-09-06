@@ -6,7 +6,7 @@ interface IChatListProps {
     chats: IChat[];
     handleSelectChat(args: { sessionId: number }): void;
     handleDelete(args: { sessionId: number }): Promise<void>;
-    customerData?: ICustomerData;
+    customerData?: ICustomerData | null;
 }
 
 const ChatList = ({

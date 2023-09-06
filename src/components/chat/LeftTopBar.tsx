@@ -4,13 +4,12 @@ import { ICustomerData } from "../../redux/authenticationSlice";
 
 // Will this trigger vercel deployment?
 interface ILeftTopBarProps {
-    handleNewChat(): void;
-    customerData?: ICustomerData;
+  handleNewChat(): void;
+  customerData?: ICustomerData | null;
 }
 const LeftTopBar = ({ handleNewChat, customerData }: ILeftTopBarProps) => {
   const backgroundColor = customerData?.main_color;
-  const textColor =
-        backgroundColor?.toLowerCase() === "#fff" ? "#777" : "#fff";
+  const textColor = backgroundColor?.toLowerCase() === "#fff" ? "#777" : "#fff";
 
   return (
     <Box
@@ -21,17 +20,14 @@ const LeftTopBar = ({ handleNewChat, customerData }: ILeftTopBarProps) => {
       sx={{ backgroundColor, borderBottom: "1px solid #aaa" }}
       px={2}
     >
-      <Avatar
-        src={customerData?.logo_url}
-        sx={{ width: 80, height: 80 }}
-      />
+      <Avatar src={customerData?.logo_url} sx={{ width: 80, height: 80 }} />
       <Typography
         color={textColor}
         fontWeight={600}
         fontSize={18}
         sx={{ mr: 5 }}
       >
-                Your conversations
+        Your conversations
       </Typography>
       <Button
         onClick={handleNewChat}
@@ -45,7 +41,7 @@ const LeftTopBar = ({ handleNewChat, customerData }: ILeftTopBarProps) => {
           ":hover": { borderColor: "#ccc", color: "#ccc" },
         }}
       >
-                New
+        New
       </Button>
     </Box>
   );
