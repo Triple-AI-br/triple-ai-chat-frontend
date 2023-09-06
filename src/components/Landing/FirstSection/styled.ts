@@ -7,6 +7,7 @@ export const FirstSectionContainer = styled.section`
   align-items: center;
   gap: 35px;
   margin-bottom: 120px;
+  position: relative;
   @media (min-width: 900px) {
     flex-direction: row;
     justify-content: space-between;
@@ -15,7 +16,6 @@ export const FirstSectionContainer = styled.section`
   }
   @media (min-width: 1280px) {
     position: relative;
-    /* overflow: hidden; */
   }
 `;
 
