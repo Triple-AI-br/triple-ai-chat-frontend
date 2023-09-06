@@ -8,7 +8,7 @@ import { Spinner } from "../components/loaders";
 import { Col, Row } from "antd";
 
 const ProjectsPage = () => {
-    const [projects, setProjects] = useState<IProject[]>();
+	const [projects, setProjects] = useState<IProject[]>();
 
 	useEffect(() => {
 		(async () => {
@@ -36,42 +36,42 @@ const ProjectsPage = () => {
 				) : projects.length === 0 ? (
 					<Typography>
                         You don&apos;t have any projects yet
-                    </Typography>
-                ) : (
-                    <Row gutter={[24, 24]} align="middle">
-                        {projects.map(project => (
-                            <Col
-                                key={project.id}
-                                className="gutter-row"
-                                xs={24}
-                                sm={24}
-                                md={12}
-                                lg={8}
-                                xl={8}
-                            >
-                                <ProjectsItem
-                                    onClick={() =>
-                                        window.open(
-                                            `${
-                                                process.env
-                                                    .REACT_APP_BASE_FRONT_URL
-                                            }${routesManager.getChatRoute(
-                                                project.id
-                                            )}`,
-                                            "_blank"
-                                        )
-                                    }
-                                    title={project.title}
-                                    description={project.description}
-                                    id={project.id}
-                                />
-                            </Col>
-                        ))}
-                    </Row>
-                )}
-            </Box>
-        </Base>
-    );
+					</Typography>
+				) : (
+					<Row gutter={[24, 24]} align="middle">
+						{projects.map(project => (
+							<Col
+								key={project.id}
+								className="gutter-row"
+								xs={24}
+								sm={24}
+								md={12}
+								lg={8}
+								xl={8}
+							>
+								<ProjectsItem
+									onClick={() =>
+										window.open(
+											`${
+												process.env
+													.REACT_APP_BASE_FRONT_URL
+											}${routesManager.getChatRoute(
+												project.id
+											)}`,
+											"_blank"
+										)
+									}
+									title={project.title}
+									description={project.description}
+									id={project.id}
+								/>
+							</Col>
+						))}
+					</Row>
+				)}
+			</Box>
+		</Base>
+	);
 };
 
 export { ProjectsPage };

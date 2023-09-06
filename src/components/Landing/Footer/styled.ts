@@ -35,15 +35,23 @@ export const ActionButton = styled(Button)<{actiontype: string}>`
 `;
 
 export const SocialMidias = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin: 20px 0;
-  >svg {
-    width: 40px;
-    height: 40px;
-    color: #6c88ff;
-    cursor: pointer;
+  >ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 20px 0;
+    >li {
+      >a {
+        text-decoration: none;
+        >svg {
+          width: 40px;
+          height: 40px;
+          color: #6c88ff;
+          cursor: pointer;
+        }
+      }
+    }
   }
   @media(min-width: 600px) {
     order: 2;
@@ -53,9 +61,6 @@ export const SocialMidias = styled.div`
 
 export const LogoImg = styled.img`
 	height: 45px;
-	@media(min-width: 600px) {
-    order: 1;
-	}
 `;
 
 export const Line = styled.div`
@@ -121,5 +126,21 @@ export const BottomContainer = styled.div`
     flex-direction: row;
     align-items: flex-start;
     justify-content: center;
+  }
+`;
+
+export const CenterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  >button {
+      display: none;
+  }
+  @media(min-width: 600px) {
+    order: 1;
+    >button {
+      display: inline-block;
+    }
   }
 `;

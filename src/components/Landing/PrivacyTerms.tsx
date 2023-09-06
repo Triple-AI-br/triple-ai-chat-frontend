@@ -1,4 +1,4 @@
-import { Box, Chip, Modal, Typography } from "@mui/material";
+import { Box, Modal, Typography } from "@mui/material";
 import { useState } from "react";
 import { ActionButton } from "./Footer/styled";
 

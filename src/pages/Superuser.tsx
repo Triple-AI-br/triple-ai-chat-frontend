@@ -37,7 +37,7 @@ const SuperuserPage = () => {
 	};
 
 	const handleSubmit = async () => {
-		const res = await dispatch(actionSwitchCustomer(customerId));
+		await dispatch(actionSwitchCustomer(customerId));
 		dispatch(
 			actionDisplayNotification({
 				messages: ["Customer successfully changed"],
