@@ -6,18 +6,18 @@ interface IUserMessageBubbleProps {
 }
 
 const UserMessageBubble = ({
-	markdownText,
-	date_time,
+  markdownText,
+  date_time,
 }: IUserMessageBubbleProps) => {
-	return (
-		<MessageBubble
-			float="right"
-			backgroundColor="#fafffa"
-			markdownText={markdownText}
-			borderBottomRightRadius={0}
-			date_time={date_time}
-		/>
-	);
+  return (
+    <MessageBubble
+      float="right"
+      backgroundColor="#fafffa"
+      markdownText={markdownText}
+      borderBottomRightRadius={0}
+      date_time={date_time}
+    />
+  );
 };
 
 export { UserMessageBubble };

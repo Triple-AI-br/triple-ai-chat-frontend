@@ -8,11 +8,11 @@ interface IPublicRouteProps {
 }
 
 export default function PublicRoute({ children }: IPublicRouteProps) {
-	const isAuthenticated = useAppSelector(selectIsAuthenticated);
-	if (!isAuthenticated) {
-		return children;
-	} else {
-		return <Navigate to={routesManager.getProjectsRoute()} />;
-	}
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  if (!isAuthenticated) {
+    return children;
+  } else {
+    return <Navigate to={routesManager.getProjectsRoute()} />;
+  }
 }
 export { PublicRoute };

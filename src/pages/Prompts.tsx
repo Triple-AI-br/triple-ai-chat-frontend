@@ -1,15 +1,15 @@
 import {
-	Box,
-	Button,
-	Checkbox,
-	CircularProgress,
-	Fab,
-	FormControlLabel,
-	Modal,
-	Tab,
-	Tabs,
-	TextField,
-	Typography,
+  Box,
+  Button,
+  Checkbox,
+  CircularProgress,
+  Fab,
+  FormControlLabel,
+  Modal,
+  Tab,
+  Tabs,
+  TextField,
+  Typography,
 } from "@mui/material";
 import { Base } from "../layouts/Base";
 import { useEffect, useRef, useState } from "react";
@@ -22,27 +22,27 @@ import { useAppDispatch } from "../redux/hooks";
 import { actionDisplayNotification } from "../redux/notificationSlice";
 
 const PromptsPage = () => {
-	const [value, setValue] = useState(0);
-	const [prompts, setPrompts] = useState<IPrompt[]>();
-	const [isLoading, setIsLoading] = useState(false);
-	const [open, setOpen] = useState(false);
-	const setTouchRef = useRef<
+  const [value, setValue] = useState(0);
+  const [prompts, setPrompts] = useState<IPrompt[]>();
+  const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const setTouchRef = useRef<
         | ((_: { title: boolean; prompt: boolean; is_public: boolean }) => void)
         | undefined
     >();
-	const setValuesRef = useRef<((_: IPromptCreate) => void) | undefined>();
-	const dispatch = useAppDispatch();
+  const setValuesRef = useRef<((_: IPromptCreate) => void) | undefined>();
+  const dispatch = useAppDispatch();
 
-	const handleOpen = () => setOpen(true);
-	const handleClose = () => setOpen(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
-	const handleChange = (_: React.SyntheticEvent, newValue: number) => {
-		setValue(newValue);
-	};
+  const handleChange = (_: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
 
-	const removeFromPrompts = (promptId: number) => {
-		setPrompts(prev => prev?.filter(prompt => prompt.id !== promptId));
-	};
+  const removeFromPrompts = (promptId: number) => {
+    setPrompts(prev => prev?.filter(prompt => prompt.id !== promptId));
+  };
 
     interface IFormData {
         title: string;

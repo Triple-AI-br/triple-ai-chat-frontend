@@ -8,18 +8,18 @@ export interface IProject {
 }
 
 const getProject = async (id: string | number): Promise<IProject> => {
-	const url = `/projects/${id}`;
-	const response = await api.get(url);
-	return response.data;
+  const url = `/projects/${id}`;
+  const response = await api.get(url);
+  return response.data;
 };
 
 const listProjects = async (): Promise<IProject[]> => {
-	const url = "/projects";
-	const response = await api.get(url);
-	return response.data;
+  const url = "/projects";
+  const response = await api.get(url);
+  return response.data;
 };
 
 export const projectService = {
-	getProject,
-	listProjects,
+  getProject,
+  listProjects,
 };

@@ -62,106 +62,106 @@ export interface ISource {
 }
 
 const listSources = async ({
-	projectId,
+  projectId,
 }: {
     projectId: number;
 }): Promise<ISource[]> => {
-	const url = `/projects/${projectId}/sources`;
-	const response = await api.get(url);
-	return response.data;
+  const url = `/projects/${projectId}/sources`;
+  const response = await api.get(url);
+  return response.data;
 };
 
 const _uploadToS3 = async ({
-	file,
-	signedPost,
+  file,
+  signedPost,
 }: {
     file: File;
     signedPost: IS3SignedResponse;
 }) => {
-	const formData = new FormData();
-	Object.entries(signedPost.fields).forEach(([key, value]) =>
-		formData.append(key, value)
-	);
-	formData.append("file", file);
-	const response = await axios.post(signedPost.url, formData, {
-		headers: {
-			"Content-Type": "multipart/form-data",
-		},
-	});
-	return response.data;
+  const formData = new FormData();
+  Object.entries(signedPost.fields).forEach(([key, value]) =>
+    formData.append(key, value)
+  );
+  formData.append("file", file);
+  const response = await axios.post(signedPost.url, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
 };
 
 const _getUploadUrls = async ({
-	files,
-	projectId,
+  files,
+  projectId,
 }: {
     projectId: string;
     files: string[];
 }): Promise<IS3SignedResponse[]> => {
-	const url = `/projects/${projectId}/sources/upload-url`;
-	const response = await api.get(url, {
-		params: { files },
+  const url = `/projects/${projectId}/sources/upload-url`;
+  const response = await api.get(url, {
+    params: { files },
 
-		paramsSerializer: params => {
-			return Object.keys(params)
-				.map(
-					key =>
-						`${key}=${params[key]
-							.map((value: string) => encodeURIComponent(value))
-							.join(`&${key}=`)}`
-				)
-				.join("&");
-		},
-	});
-	return response.data;
+    paramsSerializer: params => {
+      return Object.keys(params)
+        .map(
+          key =>
+            `${key}=${params[key]
+              .map((value: string) => encodeURIComponent(value))
+              .join(`&${key}=`)}`
+        )
+        .join("&");
+    },
+  });
+  return response.data;
 };
 
 const uploadSources = async ({
-	projectId,
-	files,
+  projectId,
+  files,
 }: {
     files: File[];
     projectId: number | string;
 }): Promise<string[]> => {
-	const allowedExtensions = ["csv", "pdf", "pptx", "docx", "txt"];
-	files.forEach(file => {
-		const extension = file.name.split(".").pop() as string;
-		if (!allowedExtensions.includes(extension.toLowerCase())) {
-			throw new Error(
-				`Invalid file type: ${extension}. Allowed types are ${allowedExtensions.join(
-					", "
-				)}`
-			);
-		}
-	});
+  const allowedExtensions = ["csv", "pdf", "pptx", "docx", "txt"];
+  files.forEach(file => {
+    const extension = file.name.split(".").pop() as string;
+    if (!allowedExtensions.includes(extension.toLowerCase())) {
+      throw new Error(
+        `Invalid file type: ${extension}. Allowed types are ${allowedExtensions.join(
+          ", "
+        )}`
+      );
+    }
+  });
 
-	const signedPosts = await _getUploadUrls({
-		projectId: projectId.toString(),
-		files: files.map(file => file.name),
-	});
-	const uploads = files.map((file, index) =>
-		_uploadToS3({
-			file,
-			signedPost: signedPosts[index],
-		})
-	);
-	await Promise.all(uploads);
-	return signedPosts.map(signedPost => signedPost.fields.key);
+  const signedPosts = await _getUploadUrls({
+    projectId: projectId.toString(),
+    files: files.map(file => file.name),
+  });
+  const uploads = files.map((file, index) =>
+    _uploadToS3({
+      file,
+      signedPost: signedPosts[index],
+    })
+  );
+  await Promise.all(uploads);
+  return signedPosts.map(signedPost => signedPost.fields.key);
 };
 
 const deleteSource = async ({
-	projectId,
-	sourcePath,
+  projectId,
+  sourcePath,
 }: {
     projectId: number | string;
     sourcePath: string;
 }): Promise<{ success: boolean }> => {
-	const url = `/projects/${projectId}/sources`;
-	const response = await api.delete(url, {
-		data: { file_path: sourcePath },
-	});
-	const data = response.data;
-	return data;
+  const url = `/projects/${projectId}/sources`;
+  const response = await api.delete(url, {
+    data: { file_path: sourcePath },
+  });
+  const data = response.data;
+  return data;
 };
 
 // const uploadSources = async ({
@@ -184,7 +184,7 @@ const deleteSource = async ({
 // };
 
 export const sourcesService = {
-	listSources,
-	deleteSource,
-	uploadSources,
+  listSources,
+  deleteSource,
+  uploadSources,
 };

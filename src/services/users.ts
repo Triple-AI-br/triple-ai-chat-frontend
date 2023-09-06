@@ -9,11 +9,11 @@ export interface IUserDataResponse {
 }
 
 const listUsers = async (): Promise<IUserDataResponse[]> => {
-	const url = "/users";
-	const response = await api.get(url);
-	return response.data;
+  const url = "/users";
+  const response = await api.get(url);
+  return response.data;
 };
 
 export const usersService = {
-	listUsers,
+  listUsers,
 };
