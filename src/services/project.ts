@@ -5,6 +5,17 @@ export interface IProject {
     title: string;
     description: string;
     customer: { id: number; name: string };
+    is_public: boolean;
+    internal_knowledge_only: boolean;
+    system_tone: string;
+}
+
+export interface CreateProjectParams {
+  title: string;
+  description: string;
+  system_tone: string;
+  internal_knowledge_only: boolean;
+  is_public: boolean;
 }
 
 const getProject = async (id: string | number): Promise<IProject> => {
@@ -19,7 +30,14 @@ const listProjects = async (): Promise<IProject[]> => {
   return response.data;
 };
 
+const createProject = async (project: CreateProjectParams): Promise<IProject> => {
+  const url = "/projects";
+  const response = await api.post(url, project);
+  return response.data;
+};
+
 export const projectService = {
   getProject,
   listProjects,
+  createProject
 };

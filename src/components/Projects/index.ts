@@ -1,1 +1,1 @@
-export * from "./ProjectsItem";
+export * from "./ProjectCard/ProjectsItem";

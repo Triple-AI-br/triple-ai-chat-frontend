@@ -7,12 +7,13 @@ import { Spinner } from "../../components/loaders";
 import { Button, Col, Row, Typography } from "antd";
 import { TabTopContainer } from "./styled";
 import { PlusOutlined } from "@ant-design/icons";
-import { NewProjectModal } from "../../components/Projects/NewProjectModal";
+import { ProjectModal } from "../../components/Projects/ProjectModal";
 
 
 const ProjectsPage = () => {
   const [projects, setProjects] = useState<IProject[]>();
   const [openNewProjectModal, setOpenNewProjectModal] = useState(false);
+  const [openEditProjectModal, setOpenEditProjectModal] = useState<IProject | undefined>();
 
   useEffect(() => {
     (async () => {
@@ -65,9 +66,8 @@ const ProjectsPage = () => {
                         "_blank"
                       )
                     }
-                    title={project.title}
-                    description={project.description}
-                    id={project.id}
+                    onEdit={setOpenEditProjectModal}
+                    project={project}
                   />
                 </Col>
               ))}
@@ -85,11 +85,16 @@ const ProjectsPage = () => {
             type="primary"
             icon={ <PlusOutlined /> }
             onClick={() => setOpenNewProjectModal(prev => !prev)}
-          >Novo</Button>
+          >New</Button>
         </TabTopContainer>
-        <NewProjectModal
-          open={openNewProjectModal}
-          handleCancel={() => setOpenNewProjectModal(false)}
+        <ProjectModal
+          open={openNewProjectModal || !!openEditProjectModal}
+          handleCancel={() => {
+            setOpenNewProjectModal(false);
+            setOpenEditProjectModal(undefined);
+          }}
+          projectToEdit={openEditProjectModal}
+          formType={openNewProjectModal ? "create" : "edit"}
         />
         {
           renderProjects()
