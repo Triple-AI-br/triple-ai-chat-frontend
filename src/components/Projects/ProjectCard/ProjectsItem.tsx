@@ -21,6 +21,7 @@ const ProjectsItem = ({ project, onClick, onEdit }: IProjectProps) => {
     <CardContainer
       onClick={onClick}
       size="small"
+      bordered={true}
       actions={[
         <SettingOutlined
           key="setting"

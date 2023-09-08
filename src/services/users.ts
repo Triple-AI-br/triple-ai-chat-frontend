@@ -2,12 +2,14 @@ import axios from "axios";
 import { ICustomerData } from "../redux/authenticationSlice";
 import { api } from "./api";
 
+export type PermissionsArray = Array<"files:upload" | "files:delete">
+
 export interface IUserDataResponse {
   id: number;
   email: string;
   is_superuser: boolean;
   is_admin: boolean;
-  permissions: string[];
+  permissions: PermissionsArray;
 }
 
 export interface IUserMe {

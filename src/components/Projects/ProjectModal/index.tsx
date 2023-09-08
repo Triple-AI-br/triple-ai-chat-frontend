@@ -33,14 +33,21 @@ const ProjectModal = ({
   const dispatch = useAppDispatch();
   const isEditing = formType === "edit";
 
-  const handleOk = (e: FormValues) => {
+  const handleOk = (e: FormValues) =>{
     try {
+      const schema = {
+        title: e.title,
+        description: e.description,
+        is_public: !!e.is_public,
+        system_tone: e.system_tone || "",
+        internal_knowledge_only: !e.internal_knowledge_only,
+      };
       if (isEditing) {
         if (!projectToEdit) return;
-        projectService.editProject({ project_id: projectToEdit.id, project: e });
+        projectService.editProject({ project_id: projectToEdit.id, project: schema });
         console.log("Precisa editar o projeto no front pra mostrar as mudanças de imediato");
       } else {
-        projectService.createProject(e);
+        projectService.createProject(schema);
       }
       if (handleConfirm) {
         handleConfirm();
@@ -69,7 +76,6 @@ const ProjectModal = ({
     }
   };
 
-  console.log(open);
   return (
     <Modal
       open={open}
@@ -93,7 +99,8 @@ const ProjectModal = ({
         preserve={false}
         ref={formRef}
         onFinish={handleOk}
-        initialValues={projectToEdit}
+        initialValues={{ ...projectToEdit,
+          internal_knowledge_only: !projectToEdit?.internal_knowledge_only }}
         autoComplete="off"
         layout="vertical"
         style={{ marginTop: "20px" }}
@@ -131,7 +138,7 @@ const ProjectModal = ({
         </Form.Item>
         <Form.Item name="internal_knowledge_only" valuePropName="checked">
           <Checkbox
-            defaultChecked={projectToEdit ? !projectToEdit?.internal_knowledge_only : true}
+            defaultChecked={true}
             style={{ display: "flex", alignItems: "center" }}
           >
             Enable ChatGPT external knowledge

@@ -1,23 +1,26 @@
 import { Base } from "../../layouts/Base";
-import { ProjectsItem } from "../../components/Projects";
-import { routesManager } from "../../routes/routesManager";
 import { useEffect, useState } from "react";
 import { IProject, projectService } from "../../services";
 import { Spinner } from "../../components/loaders";
-import { Button, Col, Row, Typography } from "antd";
+import { Button, Typography } from "antd";
 import { TabTopContainer } from "./styled";
 import { PlusOutlined } from "@ant-design/icons";
 import { ProjectModal } from "../../components/Projects/ProjectModal";
+import { ProjectsCollapses } from "../../components/Projects/ProjectsCollapses";
 
 const ProjectsPage = () => {
   const [projects, setProjects] = useState<IProject[]>();
   const [openNewProjectModal, setOpenNewProjectModal] = useState(false);
   const [openEditProjectModal, setOpenEditProjectModal] = useState<IProject | undefined>();
 
+  const fetchProjects = async () => {
+    const res = await projectService.listProjects();
+    return res;
+  };
+
   useEffect(() => {
     (async () => {
-      const _projects = await projectService.listProjects();
-      setProjects(_projects);
+      setProjects(await fetchProjects());
     })();
   }, []);
 
@@ -32,30 +35,7 @@ const ProjectsPage = () => {
           return <Typography>You don&apos;t have any projects yet</Typography>;
         } else {
           return (
-            <Row gutter={[24, 24]} align="middle">
-              {projects.map((project) => (
-                <Col
-                  key={project.id}
-                  className="gutter-row"
-                  xs={24}
-                  sm={24}
-                  md={12}
-                  lg={8}
-                  xl={8}>
-                  <ProjectsItem
-                    onClick={() =>
-                      window.open(
-                        `${process.env.REACT_APP_BASE_FRONT_URL}${routesManager.getChatRoute(
-                          project.id,
-                        )}`,
-                        "_blank",
-                      )}
-                    onEdit={setOpenEditProjectModal}
-                    project={project}
-                  />
-                </Col>
-              ))}
-            </Row>
+            <ProjectsCollapses openEditModal={setOpenEditProjectModal} projects={projects} />
           );
         }
     }
@@ -75,9 +55,10 @@ const ProjectsPage = () => {
         </TabTopContainer>
         <ProjectModal
           open={openNewProjectModal || !!openEditProjectModal}
-          handleConfirm={() => {
+          handleConfirm={async () => {
             setOpenNewProjectModal(false);
             setOpenEditProjectModal(undefined);
+            setProjects(await fetchProjects());
           }}
           handleCancel={() => {
             setOpenNewProjectModal(false);
