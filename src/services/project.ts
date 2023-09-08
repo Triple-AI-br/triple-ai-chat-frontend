@@ -1,13 +1,13 @@
 import { api } from "./api";
 
 export interface IProject {
-    id: number;
-    title: string;
-    description: string;
-    customer: { id: number; name: string };
-    is_public: boolean;
-    internal_knowledge_only: boolean;
-    system_tone: string;
+  id: number;
+  title: string;
+  description: string;
+  customer: { id: number; name: string };
+  is_public: boolean;
+  internal_knowledge_only: boolean;
+  system_tone: string;
 }
 
 export interface CreateProjectParams {
@@ -36,8 +36,21 @@ const createProject = async (project: CreateProjectParams): Promise<IProject> =>
   return response.data;
 };
 
+const editProject = async ({
+  project,
+  project_id,
+}: {
+  project_id: number | string;
+  project: CreateProjectParams;
+}): Promise<IProject> => {
+  const url = `/projects/${project_id}`;
+  const response = await api.patch(url, project);
+  return response.data;
+};
+
 export const projectService = {
+  editProject,
   getProject,
   listProjects,
-  createProject
+  createProject,
 };

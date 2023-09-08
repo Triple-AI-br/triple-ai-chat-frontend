@@ -1,6 +1,16 @@
 import { useState } from "react";
 import { UseWindowSize } from "../../../utils/useWindowSize";
-import { ActionButton, BrowserWindow, Player, FirstSectionContainer, LeftContainer, PlataformGif, Subtitle, Title, VectorImage } from "./styled";
+import {
+  ActionButton,
+  BrowserWindow,
+  Player,
+  FirstSectionContainer,
+  LeftContainer,
+  PlataformGif,
+  Subtitle,
+  Title,
+  VectorImage,
+} from "./styled";
 import { PlayArrow } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { routesManager } from "../../../routes/routesManager";
@@ -20,12 +30,15 @@ function FirstSection() {
       <VectorImage src={isDesktop ? "/VectorDesktop.svg" : "/Vector.svg"} alt="vector image" />
       <LeftContainer>
         <Title>
-				CRIE O <span>CHATGPT</span> DA SUA EMPRESA
+          CRIE O <span>CHATGPT</span> DA SUA EMPRESA
         </Title>
         <Subtitle>
-				Automatize tarefas operacionais e torne sua empresa mais eficiente com o nosso copiloto inteligente.
+          Automatize tarefas operacionais e torne sua empresa mais eficiente com o nosso copiloto
+          inteligente.
         </Subtitle>
-        <ActionButton type="primary" onClick={() => navigate(routesManager.getProjectsRoute())} >Quero falar com um especialista</ActionButton>
+        <ActionButton type="primary" onClick={() => navigate(routesManager.getProjectsRoute())}>
+          Quero falar com um especialista
+        </ActionButton>
       </LeftContainer>
       <BrowserWindow openvideo={openVideo}>
         <div />
@@ -34,7 +47,7 @@ function FirstSection() {
         <Player controls={true}>
           <source src="/videoplataforma.mp4" type="video/mp4" />
         </Player>
-        <PlayArrow onClick={() => setOpenVideo(prev => !prev)} />
+        <PlayArrow onClick={() => setOpenVideo((prev) => !prev)} />
         <PlataformGif src="/GIFPlataforma.gif" />
       </BrowserWindow>
     </FirstSectionContainer>

@@ -8,11 +8,11 @@ import { useRef } from "react";
 
 type ProjectModalProps = {
   open: boolean;
-  handleConfirm?: (arg?: unknown) => void
-  handleCancel?: (arg?: unknown) => void
-  formType: "edit" | "create"
-  projectToEdit?: IProject
-}
+  handleConfirm?: (arg?: unknown) => void;
+  handleCancel?: (arg?: unknown) => void;
+  formType: "edit" | "create";
+  projectToEdit?: IProject;
+};
 
 type FormValues = {
   title: string;
@@ -20,50 +20,50 @@ type FormValues = {
   is_public: boolean;
   system_tone: string;
   internal_knowledge_only: boolean;
-}
+};
 
-const ProjectModal: React.FC<ProjectModalProps> = ({
+const ProjectModal = ({
   open,
   handleConfirm,
   handleCancel,
   formType,
-  projectToEdit
-}) => {
+  projectToEdit,
+}: ProjectModalProps) => {
   const formRef = useRef<FormInstance>(null);
   const dispatch = useAppDispatch();
   const isEditing = formType === "edit";
-  
+
   const handleOk = (e: FormValues) => {
     try {
-      if(isEditing) {
-
-        console.log("editar", e);
+      if (isEditing) {
+        if (!projectToEdit) return;
+        projectService.editProject({ project_id: projectToEdit.id, project: e });
+        console.log("Precisa editar o projeto no front pra mostrar as mudanças de imediato");
       } else {
-
         projectService.createProject(e);
       }
-      if(handleConfirm) {
+      if (handleConfirm) {
         handleConfirm();
       }
       dispatch(
         actionDisplayNotification({
-          messages: isEditing ? ["Project edited successfully"]: ["Project created successfully"],
+          messages: isEditing ? ["Project edited successfully"] : ["Project created successfully"],
           severity: "success",
-        })
+        }),
       );
-    } catch(err) {
+    } catch (err) {
       dispatch(
         actionDisplayNotification({
-          messages: isEditing ? ["Error in project editing"]: ["Error in project creation"],
+          messages: isEditing ? ["Error in project editing"] : ["Error in project creation"],
           severity: "error",
-        })
+        }),
       );
     }
   };
 
   const handleClose = () => {
     formRef.current?.resetFields();
-    if(handleCancel) {
+    if (handleCancel) {
       console.log("executing cancel");
       handleCancel();
     }
@@ -96,57 +96,53 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
         initialValues={projectToEdit}
         autoComplete="off"
         layout="vertical"
-        style={{marginTop: "20px"}}
+        style={{ marginTop: "20px" }}
       >
         <Form.Item
           label="Title"
           name="title"
-          rules={[{ 
-            required: true, 
-            message: "Project title is required!"
-          }]}
+          rules={[
+            {
+              required: true,
+              message: "Project title is required!",
+            },
+          ]}
         >
           <Input maxLength={30} />
         </Form.Item>
         <Form.Item
           label="Description"
           name="description"
-          rules={[{ 
-            required: true, 
-            message: "Project description is required!"
-          }]}
+          rules={[
+            {
+              required: true,
+              message: "Project description is required!",
+            },
+          ]}
         >
           <Input maxLength={100} />
         </Form.Item>
         <Form.Item
           label="Base prompt"
           name="system_tone"
-          tooltip='Sets the tone and behaviour of the chatbot'
+          tooltip="Sets the tone and behaviour of the chatbot"
         >
-          <TextArea
-            autoSize={{ minRows: 3, maxRows: 5 }}
-            showCount
-            maxLength={800}
-          />
+          <TextArea autoSize={{ minRows: 3, maxRows: 5 }} showCount maxLength={800} />
         </Form.Item>
-        <Form.Item
-          name="internal_knowledge_only"
-          valuePropName="checked"
-        >
+        <Form.Item name="internal_knowledge_only" valuePropName="checked">
           <Checkbox
             defaultChecked={projectToEdit ? !projectToEdit?.internal_knowledge_only : true}
-            style={{display: "flex", alignItems: "center"}}
+            style={{ display: "flex", alignItems: "center" }}
           >
             Enable ChatGPT external knowledge
             <Tooltip title="When disabled the chatbot will respond based on the uploaded documents only.">
-              <QuestionCircleOutlined style={{paddingLeft: "10px", cursor: "help", color: "#8c8c8c"}}  />
+              <QuestionCircleOutlined
+                style={{ paddingLeft: "10px", cursor: "help", color: "#8c8c8c" }}
+              />
             </Tooltip>
           </Checkbox>
         </Form.Item>
-        <Form.Item
-          name="is_public"
-          valuePropName="checked"
-        >
+        <Form.Item name="is_public" valuePropName="checked">
           <Checkbox>Public within your organization</Checkbox>
         </Form.Item>
       </Form>
@@ -154,4 +150,4 @@ const ProjectModal: React.FC<ProjectModalProps> = ({
   );
 };
 
-export {ProjectModal};
+export { ProjectModal };

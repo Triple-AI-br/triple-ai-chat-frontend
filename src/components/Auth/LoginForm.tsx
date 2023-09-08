@@ -97,7 +97,12 @@ const LoginForm = () => {
       }) => {
         handleSubmitRef.current = handleSubmit;
         return (
-          <Box width="100%" display="flex" flexDirection="column" gap={5} alignItems="center">
+          <Box
+            width="100%"
+            display="flex"
+            flexDirection="column"
+            gap={5}
+            alignItems="center">
             <Box maxWidth="200px" mb={2}>
               <img
                 src={`${process.env.REACT_APP_BASE_FRONT_URL}/triple-ai.png`}

@@ -1,18 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import { routesManager } from "../../../routes/routesManager";
-import {  Typography } from "antd";
-import { EditOutlined, SafetyOutlined, SettingOutlined } from "@ant-design/icons";
+import { Typography } from "antd";
+import { EditOutlined, LockOutlined, SettingOutlined } from "@ant-design/icons";
 import { CardContainer, PrivateProjectTag, TitleContainer } from "./styled";
 import { IProject } from "../../../services";
 
 interface IProjectProps {
-    onClick(): void;
-    onEdit(arg: IProject): void;
-    project: IProject;
+  onClick(): void;
+  onEdit(arg: IProject): void;
+  project: IProject;
 }
 
 const ProjectsItem = ({ project, onClick, onEdit }: IProjectProps) => {
-  const {id, title, description, is_public} = project;
+  const { id, title, description, is_public } = project;
 
   const { Paragraph } = Typography;
   const navigate = useNavigate();
@@ -24,28 +24,29 @@ const ProjectsItem = ({ project, onClick, onEdit }: IProjectProps) => {
       actions={[
         <SettingOutlined
           key="setting"
-          onClick={e => {
+          onClick={(e) => {
             e.stopPropagation();
             navigate(routesManager.getSourcesRoute(id));
           }}
         />,
-        <EditOutlined key="edit"  onClick={(e) =>{
-          e.stopPropagation();
-          onEdit(project);
-        }} />,
+        <EditOutlined
+          key="edit"
+          onClick={(e) => {
+            e.stopPropagation();
+            onEdit(project);
+          }}
+        />,
       ]}
       type="inner"
       title={
         <TitleContainer>
           {title}
-          {
-            !is_public ? (
-              <PrivateProjectTag>
-                <SafetyOutlined />
-                <span>Private</span>
-              </PrivateProjectTag>
-            ) : null
-          }
+          {!is_public ? (
+            <PrivateProjectTag>
+              <LockOutlined />
+              <span>Private</span>
+            </PrivateProjectTag>
+          ) : null}
         </TitleContainer>
       }
     >

@@ -9,7 +9,6 @@ import { TabTopContainer } from "./styled";
 import { PlusOutlined } from "@ant-design/icons";
 import { ProjectModal } from "../../components/Projects/ProjectModal";
 
-
 const ProjectsPage = () => {
   const [projects, setProjects] = useState<IProject[]>();
   const [openNewProjectModal, setOpenNewProjectModal] = useState(false);
@@ -23,28 +22,18 @@ const ProjectsPage = () => {
   }, []);
 
   const renderProjects = () => {
-    switch(projects) {
+    switch (projects) {
       case undefined:
-        return (
-          <Spinner />
-        );
+        return <Spinner />;
       case null:
-        return (
-          <Typography>
-          We haf a problem finding your projects
-          </Typography>
-        );
+        return <Typography>We had a problem finding your projects</Typography>;
       default:
-        if(!projects.length) {
-          return (
-            <Typography>
-              You don&apos;t have any projects yet
-            </Typography>
-          );
+        if (!projects.length) {
+          return <Typography>You don&apos;t have any projects yet</Typography>;
         } else {
           return (
             <Row gutter={[24, 24]} align="middle">
-              {projects.map(project => (
+              {projects.map((project) => (
                 <Col
                   key={project.id}
                   className="gutter-row"
@@ -52,20 +41,15 @@ const ProjectsPage = () => {
                   sm={24}
                   md={12}
                   lg={8}
-                  xl={8}
-                >
+                  xl={8}>
                   <ProjectsItem
                     onClick={() =>
                       window.open(
-                        `${
-                          process.env
-                            .REACT_APP_BASE_FRONT_URL
-                        }${routesManager.getChatRoute(
-                          project.id
+                        `${process.env.REACT_APP_BASE_FRONT_URL}${routesManager.getChatRoute(
+                          project.id,
                         )}`,
-                        "_blank"
-                      )
-                    }
+                        "_blank",
+                      )}
                     onEdit={setOpenEditProjectModal}
                     project={project}
                   />
@@ -83,12 +67,18 @@ const ProjectsPage = () => {
         <TabTopContainer>
           <Button
             type="primary"
-            icon={ <PlusOutlined /> }
-            onClick={() => setOpenNewProjectModal(prev => !prev)}
-          >New</Button>
+            icon={<PlusOutlined />}
+            onClick={() => setOpenNewProjectModal((prev) => !prev)}
+          >
+            New
+          </Button>
         </TabTopContainer>
         <ProjectModal
           open={openNewProjectModal || !!openEditProjectModal}
+          handleConfirm={() => {
+            setOpenNewProjectModal(false);
+            setOpenEditProjectModal(undefined);
+          }}
           handleCancel={() => {
             setOpenNewProjectModal(false);
             setOpenEditProjectModal(undefined);
@@ -96,9 +86,7 @@ const ProjectsPage = () => {
           projectToEdit={openEditProjectModal}
           formType={openNewProjectModal ? "create" : "edit"}
         />
-        {
-          renderProjects()
-        }
+        {renderProjects()}
       </>
     </Base>
   );

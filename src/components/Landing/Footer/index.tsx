@@ -19,7 +19,7 @@ import { routesManager } from "../../../routes/routesManager";
 const WPP_URL =
   "http://api.whatsapp.com/send?phone=5527981213951&text=Olá,%20gostaria%20de%20saber%20mais%20sobre%20os%20produtos%20Triple%20AI,%20e%20como%20podem%20ajudar%20a%20minha%20empresa.";
 
-const LandingPageFooter: React.FC = () => {
+const LandingPageFooter = () => {
   const navigate = useNavigate();
 
   const handleClick = (event: React.MouseEvent<HTMLElement, MouseEvent>): void => {
