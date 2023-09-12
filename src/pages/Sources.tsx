@@ -31,23 +31,28 @@ const SourcesPage = () => {
   const isUserOwner = project?.user_owner.id === userData?.id;
 
   const grantedUser = async (curProject: IProject) => {
-    const res = await projectService.getGrantedUsers(curProject.id);
+    try {
+      const res = await projectService.getGrantedUsers(curProject.id);
 
-    const userThatsHasAccess = res.find((user) => user.id === userData?.id)?.permissions;
-    setAccessToUpload(
-      (!!userThatsHasAccess &&
-        !!userThatsHasAccess.length &&
-        !!userThatsHasAccess["file:upload" as keyof PermissionsArray]) ||
-        isUserOwner ||
-        !!isAdmin,
-    );
-    setAccessToDelete(
-      (!!userThatsHasAccess &&
-        !!userThatsHasAccess.length &&
-        !!userThatsHasAccess["file:delete" as keyof PermissionsArray]) ||
-        isUserOwner ||
-        !!isAdmin,
-    );
+      const userThatsHasAccess = res.find((user) => user.id === userData?.id)?.permissions;
+      setAccessToUpload(
+        (userThatsHasAccess &&
+          userThatsHasAccess.length &&
+          !!userThatsHasAccess["file:upload" as keyof PermissionsArray]) ||
+          isUserOwner ||
+          !!isAdmin,
+      );
+      setAccessToDelete(
+        (userThatsHasAccess &&
+          userThatsHasAccess.length &&
+          !!userThatsHasAccess["file:delete" as keyof PermissionsArray]) ||
+          isUserOwner ||
+          !!isAdmin,
+      );
+    } catch (er) {
+      setAccessToUpload(false);
+      setAccessToDelete(false);
+    }
   };
 
   const uploadCallback = (files: File[], paths: string[]) => {
@@ -110,7 +115,7 @@ const SourcesPage = () => {
   useEffect(() => {
     if (!project) return;
     grantedUser(project);
-  }, [isUserOwner, project]);
+  }, [isUserOwner, project, userData]);
 
   return (
     <Base title="View your Data">
