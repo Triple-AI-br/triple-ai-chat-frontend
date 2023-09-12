@@ -25,6 +25,7 @@ const LandingHeader = () => {
           <a href="#landing-footer">Contatos</a>
         </li>
       </NavElements>
+
       <ActionButton type="primary" onClick={() => navigate(routesManager.getProjectsRoute())}>
         Login
       </ActionButton>

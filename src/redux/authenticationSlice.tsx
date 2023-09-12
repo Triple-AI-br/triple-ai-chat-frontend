@@ -5,7 +5,6 @@ import { api } from "../services/api";
 import { usersService } from "../services/users";
 
 const ACCESS_TOKEN_KEY = "jwt";
-const CUSTOMER_DATA_KEY = "customerData";
 const BASE_API_URL = process.env.REACT_APP_BASE_API_URL as string;
 
 interface IUserData {
@@ -57,7 +56,6 @@ const authSlice = createSlice({
     logout(state) {
       state.isAuthenticated = false;
       localStorage.removeItem(ACCESS_TOKEN_KEY);
-      localStorage.removeItem(CUSTOMER_DATA_KEY);
     },
     updateUserAndCustomer(
       state,
