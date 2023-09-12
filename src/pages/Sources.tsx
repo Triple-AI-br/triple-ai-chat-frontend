@@ -12,7 +12,6 @@ import { v4 as uuidv4 } from "uuid";
 import { Col, Divider, Row } from "antd";
 import { ProjectOwnerManager } from "../components/Projects/ProjectOwnerManager";
 import { useWindowSize } from "../utils/useWindowSize";
-import { PermissionsArray } from "../services/users";
 
 const SourcesPage = () => {
   const { width } = useWindowSize();
@@ -38,14 +37,14 @@ const SourcesPage = () => {
       setAccessToUpload(
         (userThatsHasAccess &&
           userThatsHasAccess.length &&
-          !!userThatsHasAccess["files:upload" as keyof PermissionsArray]) ||
+          !!userThatsHasAccess.includes("files:upload")) ||
           isUserOwner ||
           !!isAdmin,
       );
       setAccessToDelete(
         (userThatsHasAccess &&
           userThatsHasAccess.length &&
-          !!userThatsHasAccess["files:delete" as keyof PermissionsArray]) ||
+          !!userThatsHasAccess.includes("files:delete")) ||
           isUserOwner ||
           !!isAdmin,
       );
