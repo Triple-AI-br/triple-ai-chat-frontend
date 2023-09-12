@@ -54,7 +54,7 @@ const ProjectsPage = () => {
             icon={<PlusOutlined />}
             onClick={() => setOpenNewProjectModal((prev) => !prev)}
           >
-            New
+            New Project
           </Button>
         </TabTopContainer>
         <ProjectModal
