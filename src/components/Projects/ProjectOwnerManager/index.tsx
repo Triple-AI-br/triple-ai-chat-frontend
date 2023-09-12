@@ -7,7 +7,7 @@ import { ManageGrantedUsersModal } from "../GrantedUsersManageModal";
 import { PermissionsArray } from "../../../services/users";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { actionDisplayNotification } from "../../../redux/notificationSlice";
-import { selectUserData } from "../../../redux/authenticationSlice";
+import { selectIsAdmin, selectUserData } from "../../../redux/authenticationSlice";
 
 type ProjectOwnerManager = {
   project?: IProject;
@@ -17,6 +17,7 @@ type ProjectOwnerManager = {
 const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11 }) => {
   const dispatch = useAppDispatch();
   const userData = useAppSelector(selectUserData);
+  const isAdmin = useAppSelector(selectIsAdmin);
 
   const [peoplesThatsHasAccess, setPeoplesThatsHasAccess] = useState<IGrantedUsers[]>([]);
   const [openModal, setOpenModal] = useState(false);
@@ -24,7 +25,7 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
     useState<IGrantedUsers[]>(peoplesThatsHasAccess);
   const [modal, contextHolder] = Modal.useModal();
 
-  const isUserOwner = project?.user_owner.id === userData?.id;
+  const isUserOwner = project?.user_owner.id === userData?.id || isAdmin;
 
   const confirmRemoveUserModal = (email: string) => {
     modal.confirm({

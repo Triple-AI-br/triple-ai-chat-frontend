@@ -33,21 +33,11 @@ const SourcesPage = () => {
     try {
       const res = await projectService.getGrantedUsers(curProject.id);
 
-      const userThatsHasAccess = res.find((user) => user.id === userData?.id)?.permissions;
-      setAccessToUpload(
-        (userThatsHasAccess &&
-          userThatsHasAccess.length &&
-          !!userThatsHasAccess.includes("files:upload")) ||
-          isUserOwner ||
-          !!isAdmin,
-      );
-      setAccessToDelete(
-        (userThatsHasAccess &&
-          userThatsHasAccess.length &&
-          !!userThatsHasAccess.includes("files:delete")) ||
-          isUserOwner ||
-          !!isAdmin,
-      );
+      const findUser = res.find((user) => user.id === userData?.id);
+      const userThatsHasAccessToUpload = findUser?.permissions?.includes("files:upload");
+      const userThatsHasAccessToDelete = findUser?.permissions?.includes("files:delete");
+      setAccessToUpload(userThatsHasAccessToUpload || isUserOwner || !!isAdmin);
+      setAccessToDelete(userThatsHasAccessToDelete || isUserOwner || !!isAdmin);
     } catch (er) {
       setAccessToUpload(false);
       setAccessToDelete(false);
@@ -164,7 +154,7 @@ const SourcesPage = () => {
                       >
                         <Typography color="#656565">{file.file_name}</Typography>
 
-                        {isAdmin && accessToDelete && (
+                        {accessToDelete && (
                           <Button
                             disabled={isDeleting}
                             startIcon={<DeleteIcon />}
