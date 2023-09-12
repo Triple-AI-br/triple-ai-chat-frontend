@@ -119,14 +119,7 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
 
   const ListHeader = () => {
     return (
-      <Form
-        layout="vertical"
-        onFinish={(e) =>
-          setAllUsersWithAccess((prev) =>
-            prev.filter((people) => people.email.includes(e.user || "")),
-          )
-        }
-      >
+      <Form layout="vertical">
         <Form.Item name="user" required={false} label="Find users in project:">
           <Space.Compact style={{ width: "100%" }}>
             <Input
