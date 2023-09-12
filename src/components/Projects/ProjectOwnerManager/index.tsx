@@ -163,7 +163,7 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ projectId, span = 
           onClick={() => setOpenModal((prev) => !prev)}
           disabled={!isUserOwner}
         >
-          Add new
+          Share with others
         </Button>
         <List
           style={{ width: "100%", maxHeight: "500px", overflowY: "scroll" }}

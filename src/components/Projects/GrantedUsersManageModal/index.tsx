@@ -38,6 +38,15 @@ const ManageGrantedUsersModal = ({
   const [permissions, setPermissions] = useState({ "files:upload": false, "files:delete": false });
   const onConfirm = async () => {
     try {
+      if (!targetKeys.length) {
+        dispatch(
+          actionDisplayNotification({
+            messages: ["You must select at least one user."],
+            severity: "warning",
+          }),
+        );
+        return;
+      }
       const schema = {
         projectId: projectId,
         emails: filteredUserList

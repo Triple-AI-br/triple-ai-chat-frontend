@@ -22,15 +22,13 @@ export const TitleContainer = styled.div`
   color: #3e4352;
   justify-content: space-between;
   h4 {
-    width: 30%;
+    width: 80%;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-`;
-
-export const PrivateProjectTag = styled.div`
-  color: #ff8c00 !important;
-  opacity: 0.9;
-  font-size: 13px;
-  > span {
-    margin-right: 4px;
+  svg {
+    color: #ff8c00 !important;
+    opacity: 0.9;
+    font-size: 13px;
   }
 `;

@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { routesManager } from "../../../routes/routesManager";
 import { Tooltip, Typography } from "antd";
 import { DeleteOutlined, EditOutlined, LockOutlined, SettingOutlined } from "@ant-design/icons";
-import { CardContainer, PrivateProjectTag, TitleContainer } from "./styled";
+import { CardContainer, TitleContainer } from "./styled";
 import { IProject } from "../../../services";
 import { useAppSelector } from "../../../redux/hooks";
 import { selectUserData } from "../../../redux/authenticationSlice";
@@ -59,13 +59,10 @@ const ProjectsItem = ({ project, onClick, onEdit, confirmRemoveProjectModal }: I
       type="inner"
       title={
         <TitleContainer>
-          <h4>{title}</h4>
-          {!is_public ? (
-            <PrivateProjectTag>
-              <LockOutlined />
-              <span>Private</span>
-            </PrivateProjectTag>
-          ) : null}
+          <Tooltip title={title}>
+            <h4>{title}</h4>
+          </Tooltip>
+          {!is_public ? <LockOutlined /> : null}
         </TitleContainer>
       }
     >
