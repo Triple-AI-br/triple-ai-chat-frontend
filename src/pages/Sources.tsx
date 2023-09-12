@@ -38,14 +38,14 @@ const SourcesPage = () => {
       setAccessToUpload(
         (userThatsHasAccess &&
           userThatsHasAccess.length &&
-          !!userThatsHasAccess["file:upload" as keyof PermissionsArray]) ||
+          !!userThatsHasAccess["files:upload" as keyof PermissionsArray]) ||
           isUserOwner ||
           !!isAdmin,
       );
       setAccessToDelete(
         (userThatsHasAccess &&
           userThatsHasAccess.length &&
-          !!userThatsHasAccess["file:delete" as keyof PermissionsArray]) ||
+          !!userThatsHasAccess["files:delete" as keyof PermissionsArray]) ||
           isUserOwner ||
           !!isAdmin,
       );
