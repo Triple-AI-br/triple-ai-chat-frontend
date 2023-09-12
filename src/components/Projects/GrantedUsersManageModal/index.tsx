@@ -2,8 +2,7 @@ import { Button, Form, Switch, Transfer } from "antd";
 import { IGrantedUsers, projectService } from "../../../services";
 import { useEffect, useState } from "react";
 import { PermissionsArray, usersService } from "../../../services/users";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { selectUserData } from "../../../redux/authenticationSlice";
+import { useAppDispatch } from "../../../redux/hooks";
 import { StyledModal } from "./styled";
 import { actionDisplayNotification } from "../../../redux/notificationSlice";
 
@@ -12,6 +11,7 @@ type ManageGrantedUsersModalProps = {
   handleConfirm?: (arg?: unknown) => void;
   handleCancel?: (arg?: unknown) => void;
   projectId: string | number;
+  projectOwnerId: number;
   usersInProject: IGrantedUsers[];
 };
 
@@ -23,13 +23,13 @@ export interface TransferItem {
 }
 
 const ManageGrantedUsersModal = ({
-  open,
   handleConfirm,
   handleCancel,
+  open,
   projectId,
+  projectOwnerId,
   usersInProject,
 }: ManageGrantedUsersModalProps) => {
-  const userData = useAppSelector(selectUserData);
   const dispatch = useAppDispatch();
 
   const [filteredUserList, setFilteredFilterList] = useState<TransferItem[]>([]);
@@ -97,7 +97,7 @@ const ManageGrantedUsersModal = ({
 
         const emailsAlreadyinProject = usersInProject.map((user) => user.email);
         const filterUsersAlreadyInProject = users.filter(
-          (user) => !emailsAlreadyinProject?.includes(user.email) && user.id !== userData?.id,
+          (user) => !emailsAlreadyinProject?.includes(user.email) && user.id !== projectOwnerId,
         );
         const schema = filterUsersAlreadyInProject.map((user) => ({
           key: String(user.id),

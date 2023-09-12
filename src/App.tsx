@@ -1,17 +1,20 @@
 import { BrowserRouter } from "react-router-dom";
 import { AppRoutes } from "./routes";
 import { ThemeProvider } from "@mui/material";
-import { DefaultTheme } from "./themes";
+import { DefaultTheme, config } from "./themes";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
+import { ConfigProvider } from "antd";
 
 function App() {
   return (
     <BrowserRouter>
       <Provider store={store}>
-        <ThemeProvider theme={DefaultTheme}>
-          <AppRoutes />
-        </ThemeProvider>
+        <ConfigProvider theme={config}>
+          <ThemeProvider theme={DefaultTheme}>
+            <AppRoutes />
+          </ThemeProvider>
+        </ConfigProvider>
       </Provider>
     </BrowserRouter>
   );

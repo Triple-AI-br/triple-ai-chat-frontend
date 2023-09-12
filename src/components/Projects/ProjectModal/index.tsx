@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, FormInstance, Input, Modal, Tooltip } from "antd";
+import { Button, Checkbox, Form, FormInstance, Input, Modal, Tooltip, theme } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { IProject, projectService } from "../../../services";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
@@ -6,6 +6,7 @@ import { actionDisplayNotification } from "../../../redux/notificationSlice";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { useRef } from "react";
 import { selectUserData } from "../../../redux/authenticationSlice";
+const { useToken } = theme;
 
 type ProjectModalProps = {
   open: boolean;
@@ -30,6 +31,7 @@ const ProjectModal = ({
   formType,
   projectToEdit,
 }: ProjectModalProps) => {
+  const { token } = useToken();
   const dispatch = useAppDispatch();
   const userData = useAppSelector(selectUserData);
   const isEditing = formType === "edit";
@@ -157,7 +159,11 @@ const ProjectModal = ({
             Enable ChatGPT external knowledge
             <Tooltip title="When disabled the chatbot will respond based on the uploaded documents only.">
               <QuestionCircleOutlined
-                style={{ paddingLeft: "10px", cursor: "help", color: "#8c8c8c" }}
+                style={{
+                  paddingLeft: "10px",
+                  cursor: "help",
+                  color: token.colorBgMask,
+                }}
               />
             </Tooltip>
           </Checkbox>
