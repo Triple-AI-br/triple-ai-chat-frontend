@@ -100,7 +100,7 @@ const Base = ({ children, title }: IBaseProps) => {
   }, [screenSize]);
 
   return (
-    <Layout style={{ minHeight: "100vh", minWidth: 300 }}>
+    <Layout style={{ minHeight: "100vh" }}>
       <CustomSnackbar />
       <Sider
         collapsible
@@ -200,8 +200,8 @@ const Base = ({ children, title }: IBaseProps) => {
           <div
             style={{
               padding: 24,
-              minHeight: 360,
-              minWidth: 250,
+              minHeight: "100%",
+              // minWidth: 250,
               background: colorBgContainer,
             }}
           >

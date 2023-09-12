@@ -64,7 +64,12 @@ const MessageBubble = ({
         <ReactMarkdown>{markdownText}</ReactMarkdown>
       </Box>
       {date_time && (
-        <Box display="flex" justifyContent="end" pl={4} pr={2} pb={1}>
+        <Box
+          display="flex"
+          justifyContent="end"
+          pl={4}
+          pr={2}
+          pb={1}>
           <Typography color="#aaa" fontSize={12}>
             {moment(date_time).fromNow()}
           </Typography>

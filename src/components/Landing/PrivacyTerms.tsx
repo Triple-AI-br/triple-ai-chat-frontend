@@ -24,7 +24,7 @@ const PrivacyTerms = () => {
   return (
     <>
       <ActionButton
-        type="primary" 
+        type="primary"
         actiontype="secondary"
         onClick={handleOpen}
       >Política de Privacidade</ActionButton>

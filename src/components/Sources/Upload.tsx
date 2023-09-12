@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { sourcesService } from "../../services";
 import { useAppDispatch } from "../../redux/hooks";
-import { Box, Button, Chip, CircularProgress } from "@mui/material";
+import { Box, Chip, CircularProgress } from "@mui/material";
 import { actionDisplayNotification } from "../../redux/notificationSlice";
 import { useParams } from "react-router-dom";
+import { Button } from "antd";
 
 interface IUploadProps {
-    uploadCallback(_: File[], __: string[]): void;
+  uploadCallback(_: File[], __: string[]): void;
 }
 
 const Upload = ({ uploadCallback }: IUploadProps) => {
@@ -20,7 +21,7 @@ const Upload = ({ uploadCallback }: IUploadProps) => {
   };
 
   const handleDelete = (fileName: string) => {
-    setSelectedFiles(prev => prev.filter(file => file.name !== fileName));
+    setSelectedFiles((prev) => prev.filter((file) => file.name !== fileName));
   };
 
   const onFileUpload = async () => {
@@ -35,7 +36,7 @@ const Upload = ({ uploadCallback }: IUploadProps) => {
         actionDisplayNotification({
           messages: ["Uploaded file successfully!"],
           severity: "success",
-        })
+        }),
       );
       setSelectedFiles([]);
       uploadCallback && uploadCallback(selectedFiles, paths);
@@ -45,7 +46,7 @@ const Upload = ({ uploadCallback }: IUploadProps) => {
         actionDisplayNotification({
           messages: [(error as { message: string }).message],
           autoHideDuration: 6_000,
-        })
+        }),
       );
     }
     serIsUploading(false);
@@ -61,41 +62,19 @@ const Upload = ({ uploadCallback }: IUploadProps) => {
         onChange={onFileChange}
       />
       <label htmlFor="contained-button-file">
-        <Button variant="outlined" color="primary" component="span">
-                    Upload new Files
-        </Button>
+        <Button type="primary">Upload new Files</Button>
       </label>
 
-      <Box
-        maxWidth="70%"
-        sx={{ overflowX: "scroll" }}
-        display="flex"
-        gap={1}
-        flexWrap="wrap"
-      >
-        {selectedFiles.map(file => {
-          const name =
-                        file.name.length > 20
-                        	? file.name.slice(0, 20) + "..."
-                        	: file.name;
-          return (
-            <Chip
-              key={file.name}
-              label={name}
-              onDelete={() => handleDelete(file.name)}
-            />
-          );
+      <Box maxWidth="70%" sx={{ overflowX: "scroll" }} display="flex" gap={1} flexWrap="wrap">
+        {selectedFiles.map((file) => {
+          const name = file.name.length > 20 ? file.name.slice(0, 20) + "..." : file.name;
+          return <Chip key={file.name} label={name} onDelete={() => handleDelete(file.name)} />;
         })}
       </Box>
 
       {Boolean(selectedFiles.length) && (
-        <Button
-          disabled={isUploading}
-          variant="contained"
-          color="primary"
-          onClick={onFileUpload}
-        >
-                    Upload
+        <Button disabled={isUploading} type="primary" onClick={onFileUpload}>
+          Upload
         </Button>
       )}
       {isUploading && <CircularProgress />}

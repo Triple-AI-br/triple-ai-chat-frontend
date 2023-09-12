@@ -6,7 +6,7 @@ export const possibleWorks: Array<{icon: JSX.Element, description: string }> = [
   {
     icon: <UploadFileIcon />,
     description: "Faça upload de arquivos e pergunte qualquer coisa da sua empresa."
-  }, 
+  },
   {
     icon: <ConnectWithoutContactIcon />,
     description: "Crie diversos conteúdos instantaneamente para redes sociais.",
