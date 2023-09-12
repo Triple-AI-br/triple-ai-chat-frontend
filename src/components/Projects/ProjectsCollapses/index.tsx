@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { IProject, projectService } from "../../../services";
-import { Divider, Modal, Typography } from "antd";
+import { Divider, Modal, Typography, theme } from "antd";
 import { ProjectsItem } from "../ProjectCard/ProjectsItem";
 import { routesManager } from "../../../routes/routesManager";
 import { CardsContainer, StyledCollapse } from "./styled";
 import { WarningOutlined } from "@ant-design/icons";
 import { useAppDispatch } from "../../../redux/hooks";
 import { actionDisplayNotification } from "../../../redux/notificationSlice";
+const { useToken } = theme;
 
 type ProjectsCollapsesProps = {
   projects: IProject[];
@@ -19,6 +20,7 @@ const ProjectsCollapses: React.FC<ProjectsCollapsesProps> = ({
   openEditModal,
   setProjects,
 }) => {
+  const { token } = useToken();
   const dispatch = useAppDispatch();
   const [publicProjects, setPublicProjects] = useState<IProject[]>([]);
   const [privateProjects, setPrivateProjects] = useState<IProject[]>([]);
@@ -27,7 +29,7 @@ const ProjectsCollapses: React.FC<ProjectsCollapsesProps> = ({
   const confirmRemoveProjectModal = (id: number | string, title: string) => {
     modal.confirm({
       title: "Confirm",
-      icon: <WarningOutlined style={{ color: "#ff4d4f" }} />,
+      icon: <WarningOutlined style={{ color: token.colorError }} />,
       content: `Are you sure you want to delete project "${title}"?`,
       okText: "Delete",
       okButtonProps: { danger: true },

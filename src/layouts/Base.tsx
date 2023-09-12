@@ -18,6 +18,7 @@ import {
   RightOutlined,
   LeftOutlined,
   LogoutOutlined,
+  HomeOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Image, Breadcrumb, Layout, Menu, theme, Button, Tooltip, Typography, Grid } from "antd";
@@ -195,7 +196,18 @@ const Base = ({ children, title }: IBaseProps) => {
         <Content style={{ margin: "0 32px" }}>
           <Breadcrumb
             style={{ margin: "16px 5px" }}
-            items={pathname.split("/").map((i) => ({ title: i }))}
+            items={[
+              {
+                href: "/projects",
+                title: <HomeOutlined />,
+              },
+              ...pathname
+                .split("/")
+                .slice(1)
+                .map((i) => ({
+                  title: i,
+                })),
+            ]}
           ></Breadcrumb>
           <div
             style={{

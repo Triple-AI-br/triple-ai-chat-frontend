@@ -105,7 +105,7 @@ const SourcesPage = () => {
   }, [isUserOwner, project, userData]);
 
   return (
-    <Base title="View your Data">
+    <Base title={project ? `Project: ${project.title}` : "View your Data"}>
       {isLoading ? (
         <Box m="auto">
           <CircularProgress sx={{ color: "#999" }} />

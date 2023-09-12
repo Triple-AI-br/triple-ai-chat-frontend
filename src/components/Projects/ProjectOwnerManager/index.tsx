@@ -160,6 +160,7 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
         <ManageGrantedUsersModal
           open={openModal}
           projectId={project.id}
+          projectOwnerId={project.user_owner.id}
           handleCancel={() => setOpenModal(false)}
           handleConfirm={async () => {
             setOpenModal(false);

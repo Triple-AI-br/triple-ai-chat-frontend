@@ -20,6 +20,7 @@ const ProjectsItem = ({ project, onClick, onEdit, confirmRemoveProjectModal }: I
 
   const { id, title, description, is_public, user_owner } = project;
   const isOwner = userData?.id === user_owner.id;
+  const isSuperUser = userData?.is_superuser;
 
   const { Paragraph } = Typography;
 
@@ -45,16 +46,18 @@ const ProjectsItem = ({ project, onClick, onEdit, confirmRemoveProjectModal }: I
             }}
           />
         </Tooltip>,
-        isOwner && (
-          <Tooltip title="delete" key="delete" placement="bottom">
-            <DeleteOutlined
-              onClick={(e) => {
-                e.stopPropagation();
-                confirmRemoveProjectModal(id, title);
-              }}
-            />
-          </Tooltip>
-        ),
+        ...(isOwner || isSuperUser
+          ? [
+              <Tooltip title="delete" key="delete" placement="bottom">
+                <DeleteOutlined
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    confirmRemoveProjectModal(id, title);
+                  }}
+                />
+              </Tooltip>,
+            ]
+          : []),
       ]}
       type="inner"
       title={
