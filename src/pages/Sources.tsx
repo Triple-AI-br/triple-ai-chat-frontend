@@ -4,7 +4,7 @@ import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import { Base } from "../layouts/Base";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { selectHasPermission, selectIsAdmin, selectUserData } from "../redux/authenticationSlice";
+import { selectHasPermission, selectUserData } from "../redux/authenticationSlice";
 import { useParams } from "react-router-dom";
 import { actionDisplayNotification } from "../redux/notificationSlice";
 import { Upload } from "../components/Sources";
@@ -15,7 +15,6 @@ import { useWindowSize } from "../utils/useWindowSize";
 
 const SourcesPage = () => {
   const { width } = useWindowSize();
-  const isAdmin = useAppSelector(selectIsAdmin);
   const userData = useAppSelector(selectUserData);
   const [project, setProject] = useState<IProject>();
   const [sourcesList, setSourcesList] = useState<ISource[]>();
@@ -36,8 +35,8 @@ const SourcesPage = () => {
       const findUser = res.find((user) => user.id === userData?.id);
       const userThatsHasAccessToUpload = findUser?.permissions?.includes("files:upload");
       const userThatsHasAccessToDelete = findUser?.permissions?.includes("files:delete");
-      setAccessToUpload(userThatsHasAccessToUpload || isUserOwner || !!isAdmin);
-      setAccessToDelete(userThatsHasAccessToDelete || isUserOwner || !!isAdmin);
+      setAccessToUpload(userThatsHasAccessToUpload || isUserOwner || !!userData?.is_superuser);
+      setAccessToDelete(userThatsHasAccessToDelete || isUserOwner || !!userData?.is_superuser);
     } catch (er) {
       setAccessToUpload(false);
       setAccessToDelete(false);

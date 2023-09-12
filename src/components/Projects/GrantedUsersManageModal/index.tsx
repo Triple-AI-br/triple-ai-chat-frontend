@@ -79,6 +79,9 @@ const ManageGrantedUsersModal = ({
           severity: "warning",
         }),
       );
+    } finally {
+      setTargetKeys([]);
+      setSelectedKeys([]);
     }
   };
 
