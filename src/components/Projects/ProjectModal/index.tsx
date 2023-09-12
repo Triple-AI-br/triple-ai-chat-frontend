@@ -35,7 +35,7 @@ const ProjectModal = ({
   const isEditing = formType === "edit";
   const formRef = useRef<FormInstance>(null);
 
-  const isOwner = isEditing && projectToEdit && userData?.id === projectToEdit.user_owner.id;
+  const isOwner = isEditing && projectToEdit ? userData?.id === projectToEdit.user_owner.id : true;
 
   const handleOk = async (e: FormValues) => {
     try {
@@ -49,7 +49,6 @@ const ProjectModal = ({
       if (isEditing) {
         if (!projectToEdit) return;
         await projectService.editProject({ project_id: projectToEdit.id, project: schema });
-        console.log("Precisa editar o projeto no front pra mostrar as mudanças de imediato");
       } else {
         await projectService.createProject(schema);
       }
