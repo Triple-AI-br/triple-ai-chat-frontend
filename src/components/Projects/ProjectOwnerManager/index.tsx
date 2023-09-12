@@ -1,8 +1,9 @@
-import { Button, Col, Form, Input, List, Modal, Select, Space, Typography } from "antd";
+/* eslint-disable indent */
+import { Button, Col, Form, Input, List, Modal, Select, Space, Tooltip, Typography } from "antd";
 import { IGrantedUsers, IProject, projectService } from "../../../services";
 import { useEffect, useState } from "react";
 import { ListFooter, ListUserContainer, PermissionContainer } from "./styled";
-import { ExclamationCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { CrownOutlined, ExclamationCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { ManageGrantedUsersModal } from "../GrantedUsersManageModal";
 import { PermissionsArray } from "../../../services/users";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
@@ -196,35 +197,43 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
           itemLayout="horizontal"
           renderItem={(item) => (
             <List.Item
-              actions={[
-                <a
-                  key="list-loadmore-edit"
-                  style={{
-                    color: !isUserOwner ? "gray" : "-moz-initial",
-                    cursor: !isUserOwner ? "not-allowed" : "pointer",
-                  }}
-                  onClick={() => {
-                    if (!isUserOwner) return;
-                    changePermissions(item);
-                  }}
-                >
-                  edit
-                </a>,
-                <a
-                  key="list-loadmore-more"
-                  style={{
-                    color: !isUserOwner ? "gray" : "red",
-                    cursor: !isUserOwner ? "not-allowed" : "pointer",
-                  }}
-                  onClick={() => {
-                    if (!isUserOwner) return;
+              actions={
+                isUserOwner
+                  ? [
+                      <a
+                        key="list-loadmore-edit"
+                        style={{
+                          color: !isUserOwner ? "gray" : "-moz-initial",
+                          cursor: !isUserOwner ? "not-allowed" : "pointer",
+                        }}
+                        onClick={() => {
+                          if (!isUserOwner) return;
+                          changePermissions(item);
+                        }}
+                      >
+                        edit
+                      </a>,
+                      <a
+                        key="list-loadmore-more"
+                        style={{
+                          color: !isUserOwner ? "gray" : "red",
+                          cursor: !isUserOwner ? "not-allowed" : "pointer",
+                        }}
+                        onClick={() => {
+                          if (!isUserOwner) return;
 
-                    confirmRemoveUserModal(item.email);
-                  }}
-                >
-                  Remove
-                </a>,
-              ]}
+                          confirmRemoveUserModal(item.email);
+                        }}
+                      >
+                        Remove
+                      </a>,
+                    ]
+                  : [
+                      <Tooltip key="owner" title="Project Owner">
+                        <CrownOutlined style={{ color: "#FF8C00" }} />
+                      </Tooltip>,
+                    ]
+              }
             >
               <Typography.Text>{item.email}</Typography.Text>
             </List.Item>
