@@ -34,8 +34,12 @@ export interface IGrantedUsers {
 
 export interface inviteUserToProjectParams {
   projectId: string | number;
-  email: string;
+  emails: string[];
   permissions: PermissionsArray;
+}
+
+export interface RequestInvitesReturns {
+  failed_to_invite: string[];
 }
 
 const getProject = async (id: string | number): Promise<IProject> => {
@@ -74,9 +78,17 @@ const getGrantedUsers = async (projectId: number | string): Promise<IGrantedUser
   return response.data;
 };
 
-const inviteUserToProject = async (data: inviteUserToProjectParams) => {
-  const url = `/projects/${data.projectId}/invite-user`;
-  await api.post(url, data);
+const inviteManyUserToProject = async (
+  data: inviteUserToProjectParams,
+): Promise<RequestInvitesReturns> => {
+  const url = `/projects/${data.projectId}/invite-users`;
+  const response = await api.post(url, data);
+  return response.data;
+};
+
+const deleteProject = async (projectId: number | string) => {
+  const url = `/projects/${projectId}`;
+  await api.delete(url);
 };
 
 const deleteUserFromProject = async (projectId: number | string, email: string) => {
@@ -90,6 +102,7 @@ export const projectService = {
   listProjects,
   createProject,
   getGrantedUsers,
-  inviteUserToProject,
+  inviteManyUserToProject,
   deleteUserFromProject,
+  deleteProject,
 };

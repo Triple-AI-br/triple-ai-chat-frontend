@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { UseWindowSize } from "../../../utils/useWindowSize";
+import { useWindowSize } from "../../../utils/useWindowSize";
 import {
   ActionButton,
   BrowserWindow,
@@ -18,7 +18,7 @@ import { routesManager } from "../../../routes/routesManager";
 const DESKTOP_WIDTH = 600;
 
 function FirstSection() {
-  const { width } = UseWindowSize();
+  const { width } = useWindowSize();
   const navigate = useNavigate();
 
   const [openVideo, setOpenVideo] = useState(false);

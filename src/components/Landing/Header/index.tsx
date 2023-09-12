@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { UseWindowSize } from "../../../utils/useWindowSize";
+import { useWindowSize } from "../../../utils/useWindowSize";
 import { ActionButton, HeaderContainer, LogoImg, NavElements } from "./styled";
 import MenuIcon from "@mui/icons-material/Menu";
 import { routesManager } from "../../../routes/routesManager";
@@ -7,7 +7,7 @@ import { routesManager } from "../../../routes/routesManager";
 const DESKTOP_WIDTH = 600;
 
 const LandingHeader = () => {
-  const { width } = UseWindowSize();
+  const { width } = useWindowSize();
   const navigate = useNavigate();
   const isDesktop = width >= DESKTOP_WIDTH;
 

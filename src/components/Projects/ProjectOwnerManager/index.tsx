@@ -53,12 +53,13 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ projectId, span = 
   let permissionsToApply: PermissionsArray = [];
 
   const changePermissions = (grantedUser: IGrantedUsers) => {
+    permissionsToApply = grantedUser.permissions;
     modal.info({
       title: "Confirm",
       icon: <ExclamationCircleOutlined />,
+      closable: true,
       content: (
         <PermissionContainer>
-          {(permissionsToApply = grantedUser.permissions)}
           <h2>{`Permissions for ${grantedUser.email}`}</h2>
           <Select
             mode="multiple"
@@ -79,10 +80,10 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ projectId, span = 
           if (permissionsToApply === grantedUser.permissions) return;
           const schema = {
             projectId,
-            email: grantedUser.email,
+            emails: [grantedUser.email],
             permissions: permissionsToApply,
           };
-          await projectService.inviteUserToProject(schema);
+          await projectService.inviteManyUserToProject(schema);
           await setGrantedUsers();
         } catch (err) {
           dispatch(
@@ -141,9 +142,6 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ projectId, span = 
     );
   };
 
-  // if (isUserOwner) {
-  //   return <Typography.Text></Typography.Text>;
-  // }
   return (
     <Col span={span}>
       <ManageGrantedUsersModal
@@ -169,6 +167,7 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ projectId, span = 
         </Button>
         <List
           style={{ width: "100%", maxHeight: "500px", overflowY: "scroll" }}
+          locale={{ emptyText: "No users." }}
           header={ListHeader()}
           footer={
             <ListFooter>

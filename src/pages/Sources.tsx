@@ -11,10 +11,10 @@ import { Upload } from "../components/Sources";
 import { v4 as uuidv4 } from "uuid";
 import { Col, Divider, Row } from "antd";
 import { ProjectOwnerManager } from "../components/Projects/ProjectOwnerManager";
-import { UseWindowSize } from "../utils/useWindowSize";
+import { useWindowSize } from "../utils/useWindowSize";
 
 const SourcesPage = () => {
-  const { width } = UseWindowSize();
+  const { width } = useWindowSize();
   const isAdmin = useAppSelector(selectIsAdmin);
   const [sourcesList, setSourcesList] = useState<ISource[]>();
   const [isLoading, setIsLoading] = useState<boolean>(false);

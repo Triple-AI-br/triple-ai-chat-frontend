@@ -33,7 +33,7 @@ const ProjectModal = ({
   const dispatch = useAppDispatch();
   const isEditing = formType === "edit";
 
-  const handleOk = (e: FormValues) =>{
+  const handleOk = async (e: FormValues) => {
     try {
       const schema = {
         title: e.title,
@@ -44,13 +44,10 @@ const ProjectModal = ({
       };
       if (isEditing) {
         if (!projectToEdit) return;
-        projectService.editProject({ project_id: projectToEdit.id, project: schema });
+        await projectService.editProject({ project_id: projectToEdit.id, project: schema });
         console.log("Precisa editar o projeto no front pra mostrar as mudanças de imediato");
       } else {
-        projectService.createProject(schema);
-      }
-      if (handleConfirm) {
-        handleConfirm();
+        await projectService.createProject(schema);
       }
       dispatch(
         actionDisplayNotification({
@@ -65,13 +62,16 @@ const ProjectModal = ({
           severity: "error",
         }),
       );
+    } finally {
+      if (handleConfirm) {
+        handleConfirm();
+      }
     }
   };
 
   const handleClose = () => {
     formRef.current?.resetFields();
     if (handleCancel) {
-      console.log("executing cancel");
       handleCancel();
     }
   };
@@ -99,8 +99,10 @@ const ProjectModal = ({
         preserve={false}
         ref={formRef}
         onFinish={handleOk}
-        initialValues={{ ...projectToEdit,
-          internal_knowledge_only: !projectToEdit?.internal_knowledge_only }}
+        initialValues={{
+          ...projectToEdit,
+          internal_knowledge_only: !projectToEdit?.internal_knowledge_only,
+        }}
         autoComplete="off"
         layout="vertical"
         style={{ marginTop: "20px" }}
@@ -137,10 +139,7 @@ const ProjectModal = ({
           <TextArea autoSize={{ minRows: 3, maxRows: 5 }} showCount maxLength={800} />
         </Form.Item>
         <Form.Item name="internal_knowledge_only" valuePropName="checked">
-          <Checkbox
-            defaultChecked={true}
-            style={{ display: "flex", alignItems: "center" }}
-          >
+          <Checkbox defaultChecked={true} style={{ display: "flex", alignItems: "center" }}>
             Enable ChatGPT external knowledge
             <Tooltip title="When disabled the chatbot will respond based on the uploaded documents only.">
               <QuestionCircleOutlined

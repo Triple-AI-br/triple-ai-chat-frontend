@@ -35,7 +35,11 @@ const ProjectsPage = () => {
           return <Typography>You don&apos;t have any projects yet</Typography>;
         } else {
           return (
-            <ProjectsCollapses openEditModal={setOpenEditProjectModal} projects={projects} />
+            <ProjectsCollapses
+              openEditModal={setOpenEditProjectModal}
+              projects={projects}
+              setProjects={async () => setProjects(await fetchProjects())}
+            />
           );
         }
     }

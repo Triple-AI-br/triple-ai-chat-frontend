@@ -1,10 +1,11 @@
-import { Button, Form, Input, List, Modal, Popover, Space, Typography } from "antd";
+import { Button, Form, Switch, Transfer } from "antd";
 import { IGrantedUsers, projectService } from "../../../services";
 import { useEffect, useState } from "react";
-import { IUserDataResponse, usersService } from "../../../services/users";
-import { PopoverCotainer } from "./styled";
-import { useAppSelector } from "../../../redux/hooks";
+import { PermissionsArray, usersService } from "../../../services/users";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { selectUserData } from "../../../redux/authenticationSlice";
+import { StyledModal } from "./styled";
+import { actionDisplayNotification } from "../../../redux/notificationSlice";
 
 type ManageGrantedUsersModalProps = {
   open: boolean;
@@ -14,6 +15,13 @@ type ManageGrantedUsersModalProps = {
   usersInProject: IGrantedUsers[];
 };
 
+export interface TransferItem {
+  key: string;
+  title: string;
+  description?: string;
+  disabled?: boolean;
+}
+
 const ManageGrantedUsersModal = ({
   open,
   handleConfirm,
@@ -22,13 +30,52 @@ const ManageGrantedUsersModal = ({
   usersInProject,
 }: ManageGrantedUsersModalProps) => {
   const userData = useAppSelector(selectUserData);
+  const dispatch = useAppDispatch();
 
-  const [userList, setUserList] = useState<IUserDataResponse[]>([]);
-  const [filteredUserList, setFilteredFilterList] = useState<IUserDataResponse[]>(userList);
-  const [openPopover, setOpenPopover] = useState<number | false>(false);
-  const [usersToInvite, setUsersToInvite] = useState<string[]>([]);
+  const [filteredUserList, setFilteredFilterList] = useState<TransferItem[]>([]);
+  const [targetKeys, setTargetKeys] = useState<string[]>([]);
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const [permissions, setPermissions] = useState({ "files:upload": false, "files:delete": false });
+  const onConfirm = async () => {
+    try {
+      const schema = {
+        projectId: projectId,
+        emails: filteredUserList
+          .filter((user) => targetKeys.includes(String(user.key)))
+          .map((user) => user.title),
+        permissions: [
+          ...(permissions["files:upload"] ? ["files:upload"] : []),
+          ...(permissions["files:delete"] ? ["files:delete"] : []),
+        ] as PermissionsArray,
+      };
+      const res = await projectService.inviteManyUserToProject(schema);
+      if (handleConfirm) {
+        handleConfirm();
+      }
+      if (res.failed_to_invite.length) {
+        dispatch(
+          actionDisplayNotification({
+            messages: [
+              "The following users were not invited:",
+              ...res.failed_to_invite.map((email) => email),
+            ],
+            severity: "warning",
+          }),
+        );
+      }
+    } catch (err) {
+      dispatch(
+        actionDisplayNotification({
+          messages: ["Problem with Invites"],
+          severity: "warning",
+        }),
+      );
+    }
+  };
 
-  const resetUserList = () => setFilteredFilterList(userList);
+  const onSelectChange = (sourceSelectedKeys: string[], targetSelectedKeys: string[]) => {
+    setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys]);
+  };
 
   useEffect(() => {
     (async () => {
@@ -39,54 +86,17 @@ const ManageGrantedUsersModal = ({
         (user) => !emailsAlreadyinProject.includes(user.email) && user.id !== userData?.id,
       );
 
-      setUserList(filterUsersAlreadyInProject);
-      setFilteredFilterList(filterUsersAlreadyInProject);
+      const schema = filterUsersAlreadyInProject.map((user) => ({
+        key: String(user.id),
+        title: user.email,
+      }));
+
+      setFilteredFilterList(schema);
     })();
   }, [usersInProject]);
 
-  const onConfirm = async () => {
-    await Promise.all(
-      usersToInvite.map(async (userEmail) => {
-        const schema = {
-          projectId,
-          email: userEmail,
-          permissions: [],
-        };
-        await projectService.inviteUserToProject(schema);
-      }),
-    );
-    if (handleConfirm) {
-      handleConfirm();
-    }
-  };
-
-  const onInviteUser = (email: string) => {
-    setUsersToInvite((prev) => [...prev, email]);
-    setFilteredFilterList((prev) => prev.filter((user) => user.email !== email));
-    setOpenPopover(false);
-  };
-
-  const ListHeader = () => {
-    return (
-      <Form
-        layout="vertical"
-        onFinish={(e) =>
-          setFilteredFilterList((prev) =>
-            prev.filter((people) => people.email.includes(e.user || "")),
-          )
-        }
-      >
-        <Form.Item name="user" required={false} label="Find users:">
-          <Space.Compact style={{ width: "100%" }}>
-            <Input onChange={(e) => e.target.value === "" && resetUserList()} allowClear={true} />
-          </Space.Compact>
-        </Form.Item>
-      </Form>
-    );
-  };
-
   return (
-    <Modal
+    <StyledModal
       open={open}
       title={"Add new user to project"}
       onOk={async () => await onConfirm()}
@@ -102,40 +112,54 @@ const ManageGrantedUsersModal = ({
         </Button>,
       ]}
     >
-      <List
-        style={{
-          width: "100%",
-          maxHeight: "600px",
-          overflowY: "scroll",
-        }}
-        header={ListHeader()}
-        footer={<div>{userList.length} users</div>}
-        bordered={true}
+      <Transfer
         dataSource={filteredUserList}
-        itemLayout="horizontal"
-        renderItem={(item, index) => (
-          <List.Item
-            actions={[
-              <Popover
-                key="list-loadmore-more"
-                content={
-                  <PopoverCotainer>
-                    <a onClick={() => onInviteUser(item.email)}>Add to Project</a>
-                  </PopoverCotainer>
-                }
-                trigger="click"
-                open={openPopover === index}
-                onOpenChange={() => setOpenPopover((prev) => (!prev ? index : false))}
-              >
-                <a onClick={() => setOpenPopover((prev) => (!prev ? index : false))}>Add</a>
-              </Popover>,
-            ]}
-          >
-            <Typography.Text> {item.email}</Typography.Text>
-          </List.Item>
-        )}
+        titles={["Available users", "Users to invite"]}
+        listStyle={{ width: "50%", minHeight: "350px" }}
+        targetKeys={targetKeys}
+        showSearch
+        selectedKeys={selectedKeys}
+        onChange={(nextTargetKeys) => setTargetKeys(nextTargetKeys)}
+        onSelectChange={onSelectChange}
+        render={(item) => item.title}
       />
-    </Modal>
+      <h4>Permissions</h4>
+      <Form autoComplete="off" layout="inline" style={{ marginTop: "20px" }}>
+        <Form.Item
+          name="files:upload"
+          label="Upload files"
+          valuePropName="checked"
+          labelAlign="right"
+          style={{
+            borderRadius: "8px",
+            border: "1px solid rgba(0, 0, 0, 0.2)",
+            padding: "4px 18px",
+          }}
+        >
+          <Switch
+            checked={permissions["files:upload"]}
+            onChange={(value) => setPermissions((prev) => ({ ...prev, "files:upload": value }))}
+          />
+        </Form.Item>
+
+        <Form.Item
+          name="files:delete"
+          label="Delete files"
+          valuePropName="checked"
+          labelAlign="right"
+          style={{
+            borderRadius: "8px",
+            border: "1px solid rgba(0, 0, 0, 0.2)",
+            padding: "4px 18px",
+          }}
+        >
+          <Switch
+            checked={permissions["files:delete"]}
+            onChange={(value) => setPermissions((prev) => ({ ...prev, "files:delete": value }))}
+          />
+        </Form.Item>
+      </Form>
+    </StyledModal>
   );
 };
 

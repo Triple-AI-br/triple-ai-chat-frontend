@@ -9,6 +9,10 @@ export const CardContainer = styled(Card)`
     cursor: pointer;
     box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.05);
   }
+  width: 100%;
+  @media (min-width: 800px) {
+    width: calc(20% - 15px);
+  }
 `;
 
 export const TitleContainer = styled.div`
@@ -17,6 +21,9 @@ export const TitleContainer = styled.div`
   font-size: 14px;
   color: #3e4352;
   justify-content: space-between;
+  h4 {
+    width: 30%;
+  }
 `;
 
 export const PrivateProjectTag = styled.div`

@@ -6,17 +6,19 @@ export const CardsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: stretch;
   gap: 15px;
   margin: 15px 0;
-  @media(min-width: 800px) {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  @media (min-width: 800px) {
+    /* display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr; */
+    flex-direction: row;
+    flex-wrap: wrap;
   }
 `;
 
 export const StyledCollapse = styled(Collapse)`
-
-.ant-collapse-header {
+  .ant-collapse-header {
     border-radius: 14px;
     /* background-color: red; */
   }
