@@ -1,10 +1,11 @@
 import { Button, Checkbox, Form, FormInstance, Input, Modal, Tooltip } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { IProject, projectService } from "../../../services";
-import { useAppDispatch } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { actionDisplayNotification } from "../../../redux/notificationSlice";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { useRef } from "react";
+import { selectUserData } from "../../../redux/authenticationSlice";
 
 type ProjectModalProps = {
   open: boolean;
@@ -29,9 +30,12 @@ const ProjectModal = ({
   formType,
   projectToEdit,
 }: ProjectModalProps) => {
-  const formRef = useRef<FormInstance>(null);
   const dispatch = useAppDispatch();
+  const userData = useAppSelector(selectUserData);
   const isEditing = formType === "edit";
+  const formRef = useRef<FormInstance>(null);
+
+  const isOwner = isEditing && projectToEdit && userData?.id === projectToEdit.user_owner.id;
 
   const handleOk = async (e: FormValues) => {
     try {
@@ -85,10 +89,20 @@ const ProjectModal = ({
       destroyOnClose={true}
       afterClose={handleClose}
       footer={[
-        <Button key="back" onClick={handleClose}>
+        <Button
+          key="back"
+          onClick={handleClose}
+          style={{ display: !isOwner ? "none" : "inline-block" }}
+        >
           Cancel
         </Button>,
-        <Button key="submit" form="project-form" htmlType="submit" type="primary">
+        <Button
+          key="submit"
+          form="project-form"
+          htmlType="submit"
+          type="primary"
+          style={{ display: !isOwner ? "none" : "inline-block" }}
+        >
           Submit
         </Button>,
       ]}
@@ -99,6 +113,7 @@ const ProjectModal = ({
         preserve={false}
         ref={formRef}
         onFinish={handleOk}
+        disabled={!isOwner}
         initialValues={{
           ...projectToEdit,
           internal_knowledge_only: !projectToEdit?.internal_knowledge_only,
