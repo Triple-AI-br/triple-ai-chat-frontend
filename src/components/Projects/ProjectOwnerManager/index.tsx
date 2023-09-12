@@ -10,15 +10,14 @@ import { actionDisplayNotification } from "../../../redux/notificationSlice";
 import { selectUserData } from "../../../redux/authenticationSlice";
 
 type ProjectOwnerManager = {
-  projectId: string | number;
+  project?: IProject;
   span: number;
 };
 
-const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ projectId, span = 11 }) => {
+const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11 }) => {
   const dispatch = useAppDispatch();
   const userData = useAppSelector(selectUserData);
 
-  const [project, setProject] = useState<IProject>();
   const [peoplesThatsHasAccess, setPeoplesThatsHasAccess] = useState<IGrantedUsers[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [filteredUsersThatsHasAccess, setFilteredUsersThatsHasAccess] =
@@ -36,7 +35,8 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ projectId, span = 
       cancelText: "Cancel",
       onOk: async () => {
         try {
-          await projectService.deleteUserFromProject(projectId, email);
+          if (!project?.id) return;
+          await projectService.deleteUserFromProject(project.id, email);
           await setGrantedUsers();
         } catch (err) {
           dispatch(
@@ -77,9 +77,9 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ projectId, span = 
       okText: "Confirm",
       onOk: async () => {
         try {
-          if (permissionsToApply === grantedUser.permissions) return;
+          if (permissionsToApply === grantedUser.permissions || !project?.id) return;
           const schema = {
-            projectId,
+            projectId: project.id,
             emails: [grantedUser.email],
             permissions: permissionsToApply,
           };
@@ -101,21 +101,20 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ projectId, span = 
 
   const resetPeoplesThatsHasAccess = () => setFilteredUsersThatsHasAccess(peoplesThatsHasAccess);
 
-  const fetchGrantedUsers = async () => {
+  const fetchGrantedUsers = async (projectId: string | number) => {
     const userThatsHasAccess = await projectService.getGrantedUsers(projectId);
     return userThatsHasAccess;
   };
 
   const setGrantedUsers = async () => {
-    const grantedUsers = await fetchGrantedUsers();
+    if (!project?.id) return;
+    const grantedUsers = await fetchGrantedUsers(project.id);
     setPeoplesThatsHasAccess(grantedUsers);
     setFilteredUsersThatsHasAccess(grantedUsers);
   };
 
   useEffect(() => {
     (async () => {
-      const project = await projectService.getProject(projectId);
-      setProject(project);
       setGrantedUsers();
     })();
   }, []);
@@ -144,16 +143,18 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ projectId, span = 
 
   return (
     <Col span={span}>
-      <ManageGrantedUsersModal
-        open={openModal}
-        projectId={projectId}
-        handleCancel={() => setOpenModal(false)}
-        handleConfirm={async () => {
-          setOpenModal(false);
-          setGrantedUsers();
-        }}
-        usersInProject={peoplesThatsHasAccess}
-      />
+      {project ? (
+        <ManageGrantedUsersModal
+          open={openModal}
+          projectId={project.id}
+          handleCancel={() => setOpenModal(false)}
+          handleConfirm={async () => {
+            setOpenModal(false);
+            setGrantedUsers();
+          }}
+          usersInProject={peoplesThatsHasAccess}
+        />
+      ) : null}
       {contextHolder}
       <ListUserContainer>
         <h1>Project sharing</h1>

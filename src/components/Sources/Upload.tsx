@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { sourcesService } from "../../services";
 import { useAppDispatch } from "../../redux/hooks";
-import { Box, Chip, CircularProgress } from "@mui/material";
+import { Box, Button, Chip, CircularProgress } from "@mui/material";
 import { actionDisplayNotification } from "../../redux/notificationSlice";
 import { useParams } from "react-router-dom";
-import { Button } from "antd";
 
 interface IUploadProps {
   uploadCallback(_: File[], __: string[]): void;
@@ -62,7 +61,9 @@ const Upload = ({ uploadCallback }: IUploadProps) => {
         onChange={onFileChange}
       />
       <label htmlFor="contained-button-file">
-        <Button type="primary">Upload new Files</Button>
+        <Button variant="outlined" color="primary" component="span">
+          Upload new Files
+        </Button>
       </label>
 
       <Box maxWidth="70%" sx={{ overflowX: "scroll" }} display="flex" gap={1} flexWrap="wrap">
@@ -73,7 +74,7 @@ const Upload = ({ uploadCallback }: IUploadProps) => {
       </Box>
 
       {Boolean(selectedFiles.length) && (
-        <Button disabled={isUploading} type="primary" onClick={onFileUpload}>
+        <Button disabled={isUploading} variant="contained" color="primary" onClick={onFileUpload}>
           Upload
         </Button>
       )}

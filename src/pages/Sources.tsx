@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { ISource, sourcesService } from "../services";
+import { IProject, ISource, projectService, sourcesService } from "../services";
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import { Base } from "../layouts/Base";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { selectHasPermission, selectIsAdmin } from "../redux/authenticationSlice";
+import { selectHasPermission, selectIsAdmin, selectUserData } from "../redux/authenticationSlice";
 import { useParams } from "react-router-dom";
 import { actionDisplayNotification } from "../redux/notificationSlice";
 import { Upload } from "../components/Sources";
@@ -12,16 +12,43 @@ import { v4 as uuidv4 } from "uuid";
 import { Col, Divider, Row } from "antd";
 import { ProjectOwnerManager } from "../components/Projects/ProjectOwnerManager";
 import { useWindowSize } from "../utils/useWindowSize";
+import { PermissionsArray } from "../services/users";
 
 const SourcesPage = () => {
   const { width } = useWindowSize();
   const isAdmin = useAppSelector(selectIsAdmin);
+  const userData = useAppSelector(selectUserData);
+  const [project, setProject] = useState<IProject>();
   const [sourcesList, setSourcesList] = useState<ISource[]>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const [accessToUpload, setAccessToUpload] = useState<boolean>(false);
+  const [accessToDelete, setAccessToDelete] = useState<boolean>(false);
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
   const hasFileUploadPermission = useAppSelector(selectHasPermission("files:upload"));
+
+  const isUserOwner = project?.user_owner.id === userData?.id;
+
+  const grantedUser = async (curProject: IProject) => {
+    const res = await projectService.getGrantedUsers(curProject.id);
+
+    const userThatsHasAccess = res.find((user) => user.id === userData?.id)?.permissions;
+    setAccessToUpload(
+      (!!userThatsHasAccess &&
+        !!userThatsHasAccess.length &&
+        !!userThatsHasAccess["file:upload" as keyof PermissionsArray]) ||
+        isUserOwner ||
+        !!isAdmin,
+    );
+    setAccessToDelete(
+      (!!userThatsHasAccess &&
+        !!userThatsHasAccess.length &&
+        !!userThatsHasAccess["file:delete" as keyof PermissionsArray]) ||
+        isUserOwner ||
+        !!isAdmin,
+    );
+  };
 
   const uploadCallback = (files: File[], paths: string[]) => {
     setSourcesList((prev) => {
@@ -74,8 +101,16 @@ const SourcesPage = () => {
       });
       setSourcesList(data);
       setIsLoading(false);
+      if (!id) return;
+      const project = await projectService.getProject(id);
+      setProject(project);
     })();
-  }, []);
+  }, [id]);
+
+  useEffect(() => {
+    if (!project) return;
+    grantedUser(project);
+  }, [isUserOwner, project]);
 
   return (
     <Base title="View your Data">
@@ -87,9 +122,11 @@ const SourcesPage = () => {
         <Row align="stretch" gutter={[0, 80]}>
           <Col span={width >= 1100 ? 11 : 24}>
             <Box display="flex" flexDirection="column" gap={2}>
-              {hasFileUploadPermission && <Upload uploadCallback={uploadCallback} />}
+              {hasFileUploadPermission && accessToUpload && (
+                <Upload uploadCallback={uploadCallback} />
+              )}
               {sourcesList && !sourcesList.length ? (
-                hasFileUploadPermission ? (
+                hasFileUploadPermission && accessToUpload ? (
                   <Typography>
                     👆🏻 You don&apos;t have any files yet. Go ahead and upload some.
                   </Typography>
@@ -123,7 +160,7 @@ const SourcesPage = () => {
                       >
                         <Typography color="#656565">{file.file_name}</Typography>
 
-                        {isAdmin && (
+                        {isAdmin && accessToDelete && (
                           <Button
                             disabled={isDeleting}
                             startIcon={<DeleteIcon />}
@@ -145,7 +182,7 @@ const SourcesPage = () => {
           <Col span={width >= 1100 ? 2 : 0}>
             <Divider type="vertical" style={{ minHeight: "100%" }}></Divider>
           </Col>
-          <ProjectOwnerManager projectId={id as string} span={width >= 1100 ? 11 : 24} />
+          <ProjectOwnerManager project={project} span={width >= 1100 ? 11 : 24} />
         </Row>
       )}
     </Base>
