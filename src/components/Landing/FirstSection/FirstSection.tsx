@@ -12,14 +12,11 @@ import {
   VectorImage,
 } from "./styled";
 import { PlayArrow } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
-import { routesManager } from "../../../routes/routesManager";
 
 const DESKTOP_WIDTH = 600;
 
 function FirstSection() {
   const { width } = useWindowSize();
-  const navigate = useNavigate();
 
   const [openVideo, setOpenVideo] = useState(false);
 
@@ -36,9 +33,11 @@ function FirstSection() {
           Automatize tarefas operacionais e torne sua empresa mais eficiente com o nosso copiloto
           inteligente.
         </Subtitle>
-        <ActionButton type="primary" onClick={() => navigate(routesManager.getProjectsRoute())}>
-          Quero falar com um especialista
-        </ActionButton>
+        <ActionButton
+          text="Quero falar com um especialista!"
+          url="https://calendly.com/eduardo-tripleai/30min"
+          rootElement={document.getElementById("root") as HTMLElement}
+        ></ActionButton>
       </LeftContainer>
       <BrowserWindow openvideo={openVideo}>
         <div />

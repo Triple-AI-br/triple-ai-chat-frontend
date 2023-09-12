@@ -20,6 +20,7 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
 
   const [allUsersWithAccess, setAllUsersWithAccess] = useState<IGrantedUsers[]>([]);
   const [openModal, setOpenModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [filteredUsersWithAccess, setFilteredUsersWithAccess] =
     useState<IGrantedUsers[]>(allUsersWithAccess);
   const [modal, contextHolder] = Modal.useModal();
@@ -105,10 +106,22 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
   };
 
   const setGrantedUsers = async () => {
-    if (!project?.id) return;
-    const grantedUsers = await fetchGrantedUsers(project.id);
-    setAllUsersWithAccess(grantedUsers);
-    setFilteredUsersWithAccess(grantedUsers);
+    try {
+      setLoading(true);
+      if (!project?.id) return;
+      const grantedUsers = await fetchGrantedUsers(project.id);
+      setAllUsersWithAccess(grantedUsers);
+      setFilteredUsersWithAccess(grantedUsers);
+    } catch (er) {
+      dispatch(
+        actionDisplayNotification({
+          messages: ["An error occurred while fetching granted users."],
+          severity: "warning",
+        }),
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -178,6 +191,7 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
             </ListFooter>
           }
           bordered={true}
+          loading={loading}
           dataSource={filteredUsersWithAccess}
           itemLayout="horizontal"
           renderItem={(item) => (

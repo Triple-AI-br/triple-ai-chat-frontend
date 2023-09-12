@@ -36,6 +36,7 @@ const ManageGrantedUsersModal = ({
   const [targetKeys, setTargetKeys] = useState<string[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   const [permissions, setPermissions] = useState({ "files:upload": false, "files:delete": false });
+
   const onConfirm = async () => {
     try {
       if (!targetKeys.length) {
@@ -91,19 +92,22 @@ const ManageGrantedUsersModal = ({
 
   useEffect(() => {
     (async () => {
-      const users = await usersService.listUsers();
+      try {
+        const users = await usersService.listUsers();
 
-      const emailsAlreadyinProject = usersInProject.map((user) => user.email);
-      const filterUsersAlreadyInProject = users.filter(
-        (user) => !emailsAlreadyinProject.includes(user.email) && user.id !== userData?.id,
-      );
+        const emailsAlreadyinProject = usersInProject.map((user) => user.email);
+        const filterUsersAlreadyInProject = users.filter(
+          (user) => !emailsAlreadyinProject?.includes(user.email) && user.id !== userData?.id,
+        );
+        const schema = filterUsersAlreadyInProject.map((user) => ({
+          key: String(user.id),
+          title: user.email,
+        }));
 
-      const schema = filterUsersAlreadyInProject.map((user) => ({
-        key: String(user.id),
-        title: user.email,
-      }));
-
-      setFilteredFilterList(schema);
+        setFilteredFilterList(schema);
+      } catch (er) {
+        setFilteredFilterList([]);
+      }
     })();
   }, [usersInProject]);
 

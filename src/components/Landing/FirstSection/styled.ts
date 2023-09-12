@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { PopupButton } from "react-calendly";
 import styled from "styled-components";
 
 export const FirstSectionContainer = styled.section`
@@ -108,15 +108,17 @@ export const Subtitle = styled.span`
   }
 `;
 
-export const ActionButton = styled(Button)`
+export const ActionButton = styled(PopupButton)`
   display: inline-block;
   border-radius: 50px;
   border: none;
-  background: linear-gradient(
-    180deg,
-    rgba(56, 93, 255, 0.8) 0%,
-    rgba(134, 156, 252, 0.8) 100%
-  );
+  color: #fff;
+  font-weight: 600;
+  pointer-events: all;
+  z-index: 20;
+  padding: 10px 15px;
+  cursor: pointer;
+  background: linear-gradient(180deg, rgba(56, 93, 255, 0.8) 0%, rgba(134, 156, 252, 0.8) 100%);
   width: fit-content;
   margin: 0 auto;
   font-size: 16px;
@@ -156,7 +158,7 @@ export const BrowserWindow = styled.div<{ openvideo: boolean }>`
   }
   &:hover {
     > svg {
-      display: ${props => (props.openvideo ? "none" : "block")};
+      display: ${(props) => (props.openvideo ? "none" : "block")};
       opacity: 1;
     }
   }
@@ -188,10 +190,10 @@ export const BrowserWindow = styled.div<{ openvideo: boolean }>`
     background-color: #c9cbd4;
   }
   > img {
-    display: ${props => (props.openvideo ? "none" : "block")};
+    display: ${(props) => (props.openvideo ? "none" : "block")};
   }
   > video {
-    display: ${props => (props.openvideo ? "block" : "none")};
+    display: ${(props) => (props.openvideo ? "block" : "none")};
   }
   @media (min-width: 600px) {
     min-width: min-content;

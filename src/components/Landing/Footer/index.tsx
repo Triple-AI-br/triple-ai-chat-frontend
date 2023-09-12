@@ -4,6 +4,7 @@ import {
   ActionButton,
   BottomContainer,
   ButtonsContainer,
+  CalendlyButton,
   CenterContainer,
   FooterContainer,
   Line,
@@ -45,14 +46,11 @@ const LandingPageFooter = () => {
     <FooterContainer id="landing-footer">
       <TopContainer>
         <ButtonsContainer>
-          <ActionButton
-            name="execute"
-            type="primary"
-            actiontype="primary"
-            onClick={(e) => handleClick(e)}
-          >
-            Quero falar com um especialista
-          </ActionButton>
+          <CalendlyButton
+            text="Quero falar com um especialista!"
+            url="https://calendly.com/eduardo-tripleai/30min"
+            rootElement={document.getElementById("root") as HTMLElement}
+          />
           <ActionButton
             type="primary"
             name="email"
@@ -91,14 +89,11 @@ const LandingPageFooter = () => {
           </ul>
         </SocialMidias>
         <CenterContainer>
-          <ActionButton
-            name="execute"
-            type="primary"
-            actiontype="primary"
-            onClick={(e) => handleClick(e)}
-          >
-            Quero falar com um especialista
-          </ActionButton>
+          <CalendlyButton
+            text="Quero falar com um especialista!"
+            url="https://calendly.com/eduardo-tripleai/30min"
+            rootElement={document.getElementById("root") as HTMLElement}
+          />
           <LogoImg src="/triple-ai.png" alt="logo" />
         </CenterContainer>
       </TopContainer>

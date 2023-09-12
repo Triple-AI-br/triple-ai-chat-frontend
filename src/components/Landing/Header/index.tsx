@@ -26,7 +26,7 @@ const LandingHeader = () => {
         </li>
       </NavElements>
       <ActionButton type="primary" onClick={() => navigate(routesManager.getProjectsRoute())}>
-        Testar gratuitamente
+        Login
       </ActionButton>
       <MenuIcon sx={{ display: isDesktop ? "none" : "inline-block" }} />
     </HeaderContainer>
