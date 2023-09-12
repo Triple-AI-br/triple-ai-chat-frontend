@@ -4,7 +4,7 @@ import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import { Base } from "../layouts/Base";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { selectHasPermission, selectUserData } from "../redux/authenticationSlice";
+import { selectUserData } from "../redux/authenticationSlice";
 import { useParams } from "react-router-dom";
 import { actionDisplayNotification } from "../redux/notificationSlice";
 import { Upload } from "../components/Sources";
@@ -24,7 +24,6 @@ const SourcesPage = () => {
   const [accessToDelete, setAccessToDelete] = useState<boolean>(false);
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
-  const hasFileUploadPermission = useAppSelector(selectHasPermission("files:upload"));
 
   const isUserOwner = project?.user_owner.id === userData?.id;
 
@@ -115,11 +114,9 @@ const SourcesPage = () => {
         <Row align="stretch" gutter={[0, 80]}>
           <Col span={width >= 1100 ? 11 : 24}>
             <Box display="flex" flexDirection="column" gap={2}>
-              {hasFileUploadPermission && accessToUpload && (
-                <Upload uploadCallback={uploadCallback} />
-              )}
+              {accessToUpload && <Upload uploadCallback={uploadCallback} />}
               {sourcesList && !sourcesList.length ? (
-                hasFileUploadPermission && accessToUpload ? (
+                accessToUpload ? (
                   <Typography>
                     👆🏻 You don&apos;t have any files yet. Go ahead and upload some.
                   </Typography>

@@ -218,8 +218,6 @@ export const selectIsAdmin = (state: RootState) => state.auth.userData?.is_admin
 export const selectIsSuperUser = (state: RootState) => state.auth.userData?.is_superuser;
 export const selectIsAdminOrSuperUser = (state: RootState) =>
   state.auth.userData?.is_admin || state.auth.userData?.is_superuser;
-export const selectHasPermission = (permission: string) => (state: RootState) =>
-  selectIsAdminOrSuperUser(state) || state.auth.userData?.permissions.includes(permission);
 
 // Reducer
 export const authSliceReducer = authSlice.reducer;
