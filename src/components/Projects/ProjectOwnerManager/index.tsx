@@ -18,10 +18,10 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
   const dispatch = useAppDispatch();
   const userData = useAppSelector(selectUserData);
 
-  const [peoplesThatsHasAccess, setPeoplesThatsHasAccess] = useState<IGrantedUsers[]>([]);
+  const [allUsersWithAccess, setAllUsersWithAccess] = useState<IGrantedUsers[]>([]);
   const [openModal, setOpenModal] = useState(false);
-  const [filteredUsersThatsHasAccess, setFilteredUsersThatsHasAccess] =
-    useState<IGrantedUsers[]>(peoplesThatsHasAccess);
+  const [filteredUsersWithAccess, setFilteredUsersWithAccess] =
+    useState<IGrantedUsers[]>(allUsersWithAccess);
   const [modal, contextHolder] = Modal.useModal();
 
   const isUserOwner = project?.user_owner.id === userData?.id || userData?.is_superuser;
@@ -99,8 +99,6 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
     });
   };
 
-  const resetPeoplesThatsHasAccess = () => setFilteredUsersThatsHasAccess(peoplesThatsHasAccess);
-
   const fetchGrantedUsers = async (projectId: string | number) => {
     const userThatsHasAccess = await projectService.getGrantedUsers(projectId);
     return userThatsHasAccess;
@@ -109,8 +107,8 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
   const setGrantedUsers = async () => {
     if (!project?.id) return;
     const grantedUsers = await fetchGrantedUsers(project.id);
-    setPeoplesThatsHasAccess(grantedUsers);
-    setFilteredUsersThatsHasAccess(grantedUsers);
+    setAllUsersWithAccess(grantedUsers);
+    setFilteredUsersWithAccess(grantedUsers);
   };
 
   useEffect(() => {
@@ -124,7 +122,7 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
       <Form
         layout="vertical"
         onFinish={(e) =>
-          setPeoplesThatsHasAccess((prev) =>
+          setAllUsersWithAccess((prev) =>
             prev.filter((people) => people.email.includes(e.user || "")),
           )
         }
@@ -132,7 +130,16 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
         <Form.Item name="user" required={false} label="Find users in project:">
           <Space.Compact style={{ width: "100%" }}>
             <Input
-              onChange={(e) => e.target.value === "" && resetPeoplesThatsHasAccess()}
+              onChange={(e) => {
+                const value = e.target.value.trim().toLowerCase();
+                if (e.target.value !== "") {
+                  setFilteredUsersWithAccess(
+                    allUsersWithAccess.filter((user) => user.email.includes(value)),
+                  );
+                } else {
+                  setFilteredUsersWithAccess(allUsersWithAccess);
+                }
+              }}
               allowClear={true}
             />
           </Space.Compact>
@@ -152,7 +159,7 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
             setOpenModal(false);
             setGrantedUsers();
           }}
-          usersInProject={peoplesThatsHasAccess}
+          usersInProject={allUsersWithAccess}
         />
       ) : null}
       {contextHolder}
@@ -172,13 +179,13 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
           header={ListHeader()}
           footer={
             <ListFooter>
-              <span>{peoplesThatsHasAccess.length}</span> user
-              {peoplesThatsHasAccess.length !== 1 && "s"} have access to the project{" "}
+              <span>{allUsersWithAccess.length}</span> user
+              {allUsersWithAccess.length !== 1 && "s"} have access to the project{" "}
               <span>{project?.title}</span>
             </ListFooter>
           }
           bordered={true}
-          dataSource={filteredUsersThatsHasAccess}
+          dataSource={filteredUsersWithAccess}
           itemLayout="horizontal"
           renderItem={(item) => (
             <List.Item

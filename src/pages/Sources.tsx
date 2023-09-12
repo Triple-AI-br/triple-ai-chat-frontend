@@ -125,7 +125,7 @@ const SourcesPage = () => {
                   </Typography>
                 ) : (
                   <Typography>
-                    No files uplaoded yet. Ask yout admin to upload the relevant documents.
+                    No files uploaded yet. Ask yout admin to upload the relevant documents.
                   </Typography>
                 )
               ) : (
