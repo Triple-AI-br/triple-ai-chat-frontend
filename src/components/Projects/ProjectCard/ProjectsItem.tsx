@@ -65,7 +65,11 @@ const ProjectsItem = ({ project, onClick, onEdit, confirmRemoveProjectModal }: I
           <Tooltip title={title}>
             <h4>{title}</h4>
           </Tooltip>
-          {!is_public ? <LockOutlined /> : null}
+          {!is_public ? (
+            <Tooltip title="Private project" placement="top">
+              <LockOutlined />
+            </Tooltip>
+          ) : null}
         </TitleContainer>
       }
     >

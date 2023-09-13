@@ -46,7 +46,7 @@ const ProjectsPage = () => {
   };
 
   return (
-    <Base title={"Your AI Chatbots"}>
+    <Base title={"Your Projects"}>
       <>
         <TabTopContainer>
           <Button

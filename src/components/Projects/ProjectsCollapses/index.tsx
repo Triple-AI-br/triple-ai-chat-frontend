@@ -5,8 +5,9 @@ import { ProjectsItem } from "../ProjectCard/ProjectsItem";
 import { routesManager } from "../../../routes/routesManager";
 import { CardsContainer, StyledCollapse } from "./styled";
 import { WarningOutlined } from "@ant-design/icons";
-import { useAppDispatch } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { actionDisplayNotification } from "../../../redux/notificationSlice";
+import { selectUserData } from "../../../redux/authenticationSlice";
 const { useToken } = theme;
 
 type ProjectsCollapsesProps = {
@@ -22,9 +23,10 @@ const ProjectsCollapses: React.FC<ProjectsCollapsesProps> = ({
 }) => {
   const { token } = useToken();
   const dispatch = useAppDispatch();
-  const [publicProjects, setPublicProjects] = useState<IProject[]>([]);
-  const [privateProjects, setPrivateProjects] = useState<IProject[]>([]);
+  const [myProjects, setMyProjects] = useState<IProject[]>([]);
+  const [sharedProjects, setSharedProjects] = useState<IProject[]>([]);
   const [modal, contextHolder] = Modal.useModal();
+  const userData = useAppSelector(selectUserData);
 
   const confirmRemoveProjectModal = (id: number | string, title: string) => {
     modal.confirm({
@@ -57,17 +59,18 @@ const ProjectsCollapses: React.FC<ProjectsCollapsesProps> = ({
   };
 
   useEffect(() => {
-    let publicProjects: IProject[] = [];
-    let privateProjects: IProject[] = [];
-    projects.map((project) => {
-      if (project.is_public) {
-        publicProjects = [...publicProjects, project];
+    if (!userData) return;
+    let myProjectsBuffer: IProject[] = [];
+    let sharedProjectsBuffer: IProject[] = [];
+    projects.forEach((project) => {
+      if (project.user_owner.email.toLowerCase() === userData.email.toLowerCase()) {
+        myProjectsBuffer = [...myProjectsBuffer, project];
       } else {
-        privateProjects = [...privateProjects, project];
+        sharedProjectsBuffer = [...sharedProjectsBuffer, project];
       }
     });
-    setPublicProjects(publicProjects);
-    setPrivateProjects(privateProjects);
+    setMyProjects(myProjectsBuffer);
+    setSharedProjects(sharedProjectsBuffer);
   }, [projects]);
 
   return (
@@ -78,10 +81,10 @@ const ProjectsCollapses: React.FC<ProjectsCollapsesProps> = ({
         items={[
           {
             key: "1",
-            label: "Private Projects",
-            children: privateProjects.length ? (
+            label: "Your Projects",
+            children: myProjects.length ? (
               <CardsContainer>
-                {privateProjects.map((project) => {
+                {myProjects.map((project) => {
                   return (
                     <ProjectsItem
                       key={project.id}
@@ -101,7 +104,7 @@ const ProjectsCollapses: React.FC<ProjectsCollapsesProps> = ({
                 })}
               </CardsContainer>
             ) : (
-              <Typography>You don&apos;t have any private projects yet</Typography>
+              <Typography>You don&apos;t own any projects yet</Typography>
             ),
           },
         ]}
@@ -114,10 +117,10 @@ const ProjectsCollapses: React.FC<ProjectsCollapsesProps> = ({
         items={[
           {
             key: "1",
-            label: "Public Projects",
-            children: publicProjects.length ? (
+            label: "Projects shared with you",
+            children: sharedProjects.length ? (
               <CardsContainer>
-                {publicProjects.map((project) => {
+                {sharedProjects.map((project) => {
                   return (
                     <ProjectsItem
                       key={project.id}
@@ -137,7 +140,7 @@ const ProjectsCollapses: React.FC<ProjectsCollapsesProps> = ({
                 })}
               </CardsContainer>
             ) : (
-              <Typography>You don&apos;t have any public projects yet</Typography>
+              <Typography>No projects shared with you yet</Typography>
             ),
           },
         ]}

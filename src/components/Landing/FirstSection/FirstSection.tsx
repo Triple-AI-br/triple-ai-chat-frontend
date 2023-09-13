@@ -34,7 +34,7 @@ function FirstSection() {
           inteligente.
         </Subtitle>
         <ActionButton
-          text="Quero falar com um especialista!"
+          text="Agende uma demo"
           url="https://calendly.com/eduardo-tripleai/30min"
           rootElement={document.getElementById("root") as HTMLElement}
         ></ActionButton>

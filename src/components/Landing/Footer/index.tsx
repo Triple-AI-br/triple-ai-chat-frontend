@@ -47,7 +47,7 @@ const LandingPageFooter = () => {
       <TopContainer>
         <ButtonsContainer>
           <CalendlyButton
-            text="Quero falar com um especialista!"
+            text="Agende uma demo"
             url="https://calendly.com/eduardo-tripleai/30min"
             rootElement={document.getElementById("root") as HTMLElement}
           />
@@ -90,7 +90,7 @@ const LandingPageFooter = () => {
         </SocialMidias>
         <CenterContainer>
           <CalendlyButton
-            text="Quero falar com um especialista!"
+            text="Agende uma demo"
             url="https://calendly.com/eduardo-tripleai/30min"
             rootElement={document.getElementById("root") as HTMLElement}
           />

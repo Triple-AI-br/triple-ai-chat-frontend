@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useWindowSize } from "../../../utils/useWindowSize";
-import { ActionButton, HeaderContainer, LogoImg, NavElements } from "./styled";
+import { HeaderContainer, LogoImg, NavElements } from "./styled";
+import { ActionButton } from "../FirstSection/styled";
 import MenuIcon from "@mui/icons-material/Menu";
 import { routesManager } from "../../../routes/routesManager";
+import { Button } from "antd";
 
 const DESKTOP_WIDTH = 600;
 
@@ -26,9 +28,18 @@ const LandingHeader = () => {
         </li>
       </NavElements>
 
-      <ActionButton type="primary" onClick={() => navigate(routesManager.getProjectsRoute())}>
-        Login
-      </ActionButton>
+      <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+        <ActionButton
+          text="Agende uma demo"
+          url="https://calendly.com/eduardo-tripleai/30min"
+          rootElement={document.getElementById("root") as HTMLElement}
+        ></ActionButton>
+
+        <Button type="link" onClick={() => navigate(routesManager.getProjectsRoute())}>
+          Entrar / Login
+        </Button>
+      </div>
+
       <MenuIcon sx={{ display: isDesktop ? "none" : "inline-block" }} />
     </HeaderContainer>
   );
