@@ -180,6 +180,18 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
         >
           Share with others
         </Button>
+        <Typography.Text type="secondary">
+          Project owner:{" "}
+          {project?.user_owner.id === userData?.id ? (
+            "You"
+          ) : (
+            <Typography.Link
+              href={`mailto:${project?.user_owner.email}?subject=Project: "${project?.title}" | Triple AI`}
+            >
+              {project?.user_owner.email.split("@")[0]}
+            </Typography.Link>
+          )}
+        </Typography.Text>
         <List
           style={{ width: "100%", maxHeight: "500px", overflowY: "scroll" }}
           locale={{ emptyText: "No users." }}
