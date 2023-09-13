@@ -37,7 +37,10 @@ const ProjectModal = ({
   const isEditing = formType === "edit";
   const formRef = useRef<FormInstance>(null);
 
-  const isOwner = isEditing && projectToEdit ? userData?.id === projectToEdit.user_owner.id : true;
+  const isOwner =
+    isEditing && projectToEdit
+      ? userData?.is_superuser || userData?.id === projectToEdit.user_owner.id
+      : true;
 
   const handleOk = async (e: FormValues) => {
     try {
