@@ -157,6 +157,7 @@ const ManageGrantedUsersModal = ({
         listStyle={{ width: "50%", minHeight: "350px" }}
         footer={() => (targetKeys.length >= 50 ? "Max 50 users" : "")}
         targetKeys={targetKeys}
+        disabled={usersInProject.length >= 50}
         showSearch
         selectedKeys={selectedKeys}
         onChange={onChange}
