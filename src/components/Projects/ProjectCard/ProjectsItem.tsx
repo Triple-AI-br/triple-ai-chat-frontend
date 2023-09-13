@@ -6,6 +6,7 @@ import { CardContainer, TitleContainer } from "./styled";
 import { IProject } from "../../../services";
 import { useAppSelector } from "../../../redux/hooks";
 import { selectUserData } from "../../../redux/authenticationSlice";
+import { useTranslation } from "react-i18next";
 
 interface IProjectProps {
   onClick(): void;
@@ -15,6 +16,7 @@ interface IProjectProps {
 }
 
 const ProjectsItem = ({ project, onClick, onEdit, confirmRemoveProjectModal }: IProjectProps) => {
+  const { t } = useTranslation();
   const userData = useAppSelector(selectUserData);
   const navigate = useNavigate();
 
@@ -30,7 +32,7 @@ const ProjectsItem = ({ project, onClick, onEdit, confirmRemoveProjectModal }: I
       size="small"
       bordered={true}
       actions={[
-        <Tooltip title="settings" key="setting" placement="bottom">
+        <Tooltip title={t("global.settings")} key="setting" placement="bottom">
           <SettingOutlined
             onClick={(e) => {
               e.stopPropagation();
@@ -38,7 +40,7 @@ const ProjectsItem = ({ project, onClick, onEdit, confirmRemoveProjectModal }: I
             }}
           />
         </Tooltip>,
-        <Tooltip title="edit" key="edit" placement="bottom">
+        <Tooltip title={t("global.edit")} key="edit" placement="bottom">
           <EditOutlined
             onClick={(e) => {
               e.stopPropagation();
@@ -48,7 +50,7 @@ const ProjectsItem = ({ project, onClick, onEdit, confirmRemoveProjectModal }: I
         </Tooltip>,
         ...(isOwner || isSuperUser
           ? [
-              <Tooltip title="delete" key="delete" placement="bottom">
+              <Tooltip title={t("global.delete")} key="delete" placement="bottom">
                 <DeleteOutlined
                   onClick={(e) => {
                     e.stopPropagation();
@@ -66,7 +68,7 @@ const ProjectsItem = ({ project, onClick, onEdit, confirmRemoveProjectModal }: I
             <h4>{title}</h4>
           </Tooltip>
           {!is_public ? (
-            <Tooltip title="Private project" placement="top">
+            <Tooltip title={t("global.private")} placement="top">
               <LockOutlined />
             </Tooltip>
           ) : null}

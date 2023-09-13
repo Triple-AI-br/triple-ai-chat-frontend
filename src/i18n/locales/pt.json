@@ -1,0 +1,63 @@
+{
+  "translation": {
+    "global": {
+      "login": "Entrar",
+      "logout": "Sair",
+      "confirm": "Confirmar",
+      "cancel": "Cancelar",
+      "delete": "Deletar",
+      "settings": "Configurações",
+      "edit": "Editar",
+      "private": "Privado",
+      "public": "Público",
+      "loading": "Carregando",
+      "submit": "Enviar",
+      "successDeletedMessage": "Excluído com sucesso!",
+      "successUpdateMessage": "Atualizado com sucesso!",
+      "successCreateMessage": "Criado com sucesso!",
+      "failureDeleteMessage": "Falha ao excluir!",
+      "failureUpdateMessage": "Falha ao atualizar!",
+      "failureCreateMessage": "Falha ao criar!"
+    },
+    "landing": {
+      "title": "CRIE O CHATGPT DA SUA EMPRESA",
+      "subtitle": "Automatize tarefas operacionais e torne sua empresa mais eficiente com o nosso copiloto inteligente."
+    },
+    "pages": {
+      "projects": {
+        "tab": "Projetos",
+        "title": "Seus projetos",
+        "listErrorMessage": "Tivemos problemas para encontrar seus projetos",
+        "noProjectsMessage": "Você ainda não tem nenhum projeto",
+        "components": {
+          "newProjectBtn": "Novo Projeto",
+          "deleteConfirmationMessage": "Tem certeza que deseja deletar o projeto {{project}}",
+          "collapse": {
+            "your":"Seus projetos",
+            "shared": "Projetos compartilhados com você"
+          },
+          "createEditModal": {
+            "editModalTitle": "Editar projeto",
+            "createModalTitle": "Criar projeto",
+            "title": "Título do Projeto",
+            "description": "Descrição",
+            "basePrompt": "Prompt Base",
+            "externalKnowledge": "Habilitar conhecimento externo do ChatGPT",
+            "public": "Público dentro da sua organização",
+            "tooltip": {
+              "basePrompt": "Define o tom e o comportamento do chatbot",
+              "externalKnowledge": "Quando desativado, o chatbot responderá apenas com base nos documentos carregados"
+            },
+            "required": {
+              "title": "O título é obrigatório",
+              "description": "A descrição é obrigatória"
+            }
+          }
+        }
+      },
+      "prompts": {
+        "tab": "Prompts"
+      }
+    }
+  }
+}

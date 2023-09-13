@@ -1,0 +1,63 @@
+{
+  "translation": {
+    "global": {
+      "login": "Login",
+      "logout": "Logout",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "settings": "Settings",
+      "edit": "Edit",
+      "private": "Private",
+      "public": "Public",
+      "loading": "Loading",
+      "submit": "Submit",
+      "successDeletedMessage": "Successfully deleted!",
+      "successUpdateMessage": "Successfully updated!",
+      "successCreateMessage": "Successfully created!",
+      "failureDeleteMessage": "Failed to delete!",
+      "failureUpdateMessage": "Failed to update!",
+      "failureCreateMessage": "Failed to create!"
+    },
+    "landing": {
+      "title": "Create your company's CHATGPT",
+      "subtitle": "Automate operational tasks and make your company more efficient with our intelligent copilot."
+    },
+    "pages": {
+      "projects": {
+        "tab": "Projects",
+        "title": "Your Projects",
+        "listErrorMessage": "We had a problem finding your projects",
+        "noProjectsMessage": "You don't have any projects yet",
+        "components": {
+          "newProjectBtn": "New Project",
+          "deleteConfirmationMessage": "Are you sure you want to delete project {{project}}",
+          "collapse": {
+            "your":"Your Projects",
+            "shared": "Projects shared with you"
+          },
+          "createEditModal": {
+            "editModalTitle": "Edit project",
+            "createModalTitle": "Create project",
+            "title": "Project Title",
+            "description": "Description",
+            "basePrompt": "Base Prompt",
+            "externalKnowledge": "Enable ChatGPT external knowledge",
+            "public": "Public within your organization",
+            "tooltip": {
+              "basePrompt": "Sets the tone and behaviour of the chatbot",
+              "externalKnowledge": "When disabled the chatbot will respond based on the uploaded documents only."
+            },
+            "required": {
+              "title": "Title is required",
+              "description": "Description is required"
+            }
+          }
+        }
+      },
+      "prompts": {
+        "tab": "Prompts"
+      }
+    }
+  }
+}

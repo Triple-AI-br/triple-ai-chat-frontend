@@ -1,0 +1,63 @@
+{
+  "translation": {
+    "global": {
+      "login": "Iniciar sesión",
+      "logout": "Cerrar sesión",
+      "confirm": "Confirmar",
+      "cancel": "Cancelar",
+      "delete": "Eliminar",
+      "settings": "Configuración",
+      "edit": "Editar",
+      "private": "Privado",
+      "public": "Público",
+      "loading": "Cargando",
+      "submit": "Enviar",
+      "successDeletedMessage": "¡Eliminado con éxito!",
+      "successUpdateMessage": "¡Actualizado con éxito!",
+      "successCreateMessage": "¡Creado con éxito!",
+      "failureDeleteMessage": "Error al eliminar",
+      "failureUpdateMessage": "Error al actualizar",
+      "failureCreateMessage": "Error al crear"
+    },
+    "landing": {
+      "title": "Crea el CHATGPT de tu empresa",
+      "subtitle": "Automatiza tareas operativas y haz que tu empresa sea más eficiente con nuestro copiloto inteligente."
+    },
+    "pages": {
+      "projects": {
+        "tab": "Proyectos",
+        "title": "Tus Proyectos",
+        "listErrorMessage": "Tuvimos un problema al encontrar tus proyectos",
+        "noProjectsMessage": "Aún no tienes proyectos",
+        "components": {
+          "newProjectBtn": "Nuevo Proyecto",
+          "deleteConfirmationMessage": "¿Estás seguro de que deseas eliminar el proyecto {{project}}?",
+          "collapse": {
+            "your": "Tus Proyectos",
+            "shared": "Proyectos compartidos contigo"
+          },
+          "createEditModal": {
+            "editModalTitle": "Editar proyecto",
+            "createModalTitle": "Crear proyecto",
+            "title": "Título del Proyecto",
+            "description": "Descripción",
+            "basePrompt": "Prompt Base",
+            "externalKnowledge": "Habilitar conocimiento externo de ChatGPT",
+            "public": "Público dentro de tu organización",
+            "tooltip": {
+              "basePrompt": "Define el tono y el comportamiento del chatbot",
+              "externalKnowledge": "Cuando está deshabilitado, el chatbot responderá solo en función de los documentos cargados."
+            },
+            "required": {
+              "title": "Se requiere el título",
+              "description": "Se requiere la descripción"
+            }
+          }
+        }
+      },
+      "prompts": {
+        "tab": "Prompts"
+      }
+    }
+  }
+}

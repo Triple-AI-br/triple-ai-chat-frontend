@@ -3,7 +3,6 @@ import styled from "styled-components";
 
 export const CardContainer = styled(Card)`
   transition: all 0.1s ease-in-out;
-  min-width: 180px;
   &:hover {
     transform: translate3D(0, -1px, 0) scale(1.03);
     cursor: pointer;

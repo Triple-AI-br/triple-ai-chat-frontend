@@ -7,8 +7,10 @@ import { TabTopContainer } from "./styled";
 import { PlusOutlined } from "@ant-design/icons";
 import { ProjectModal } from "../../components/Projects/ProjectModal";
 import { ProjectsCollapses } from "../../components/Projects/ProjectsCollapses";
+import { useTranslation } from "react-i18next";
 
 const ProjectsPage = () => {
+  const { t } = useTranslation();
   const [projects, setProjects] = useState<IProject[]>();
   const [openNewProjectModal, setOpenNewProjectModal] = useState(false);
   const [openEditProjectModal, setOpenEditProjectModal] = useState<IProject | undefined>();
@@ -29,10 +31,10 @@ const ProjectsPage = () => {
       case undefined:
         return <Spinner />;
       case null:
-        return <Typography>We had a problem finding your projects</Typography>;
+        return <Typography>{t("pages.projects.listErrorMessage")}</Typography>;
       default:
         if (!projects.length) {
-          return <Typography>You don&apos;t have any projects yet</Typography>;
+          return <Typography>{t("pages.projects.noProjectsMessage")}</Typography>;
         } else {
           return (
             <ProjectsCollapses
@@ -46,7 +48,7 @@ const ProjectsPage = () => {
   };
 
   return (
-    <Base title={"Your Projects"}>
+    <Base title={t("pages.projects.title")}>
       <>
         <TabTopContainer>
           <Button
@@ -54,7 +56,7 @@ const ProjectsPage = () => {
             icon={<PlusOutlined />}
             onClick={() => setOpenNewProjectModal((prev) => !prev)}
           >
-            New Project
+            {t("pages.projects.components.newProjectBtn")}
           </Button>
         </TabTopContainer>
         <ProjectModal

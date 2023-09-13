@@ -8,6 +8,7 @@ import { WarningOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { actionDisplayNotification } from "../../../redux/notificationSlice";
 import { selectUserData } from "../../../redux/authenticationSlice";
+import { useTranslation } from "react-i18next";
 const { useToken } = theme;
 
 type ProjectsCollapsesProps = {
@@ -22,6 +23,7 @@ const ProjectsCollapses: React.FC<ProjectsCollapsesProps> = ({
   setProjects,
 }) => {
   const { token } = useToken();
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [myProjects, setMyProjects] = useState<IProject[]>([]);
   const [sharedProjects, setSharedProjects] = useState<IProject[]>([]);
@@ -30,26 +32,28 @@ const ProjectsCollapses: React.FC<ProjectsCollapsesProps> = ({
 
   const confirmRemoveProjectModal = (id: number | string, title: string) => {
     modal.confirm({
-      title: "Confirm",
+      title: t("global.confirm"),
       icon: <WarningOutlined style={{ color: token.colorError }} />,
-      content: `Are you sure you want to delete project "${title}"?`,
-      okText: "Delete",
+      content: t("pages.projects.components.deleteConfirmationMessage", {
+        project: title,
+      }),
+      okText: t("global.delete"),
       okButtonProps: { danger: true },
-      cancelText: "Cancel",
+      cancelText: t("global.cancel"),
       onOk: async () => {
         try {
           await projectService.deleteProject(id);
           setProjects();
           dispatch(
             actionDisplayNotification({
-              messages: ["Sucessfully deleted project."],
+              messages: [t("global.successDeletedMessage")],
               severity: "success",
             }),
           );
         } catch (err) {
           dispatch(
             actionDisplayNotification({
-              messages: ["An error occurred while deleting project."],
+              messages: [t("global.failureDeleteMessage")],
               severity: "error",
             }),
           );
@@ -81,7 +85,7 @@ const ProjectsCollapses: React.FC<ProjectsCollapsesProps> = ({
         items={[
           {
             key: "1",
-            label: "Your Projects",
+            label: t("pages.projects.components.collapse.your"),
             children: myProjects.length ? (
               <CardsContainer>
                 {myProjects.map((project) => {
@@ -104,7 +108,7 @@ const ProjectsCollapses: React.FC<ProjectsCollapsesProps> = ({
                 })}
               </CardsContainer>
             ) : (
-              <Typography>You don&apos;t own any projects yet</Typography>
+              <Typography>{t("pages.projects.noProjectsMessage")}</Typography>
             ),
           },
         ]}
@@ -117,7 +121,7 @@ const ProjectsCollapses: React.FC<ProjectsCollapsesProps> = ({
         items={[
           {
             key: "1",
-            label: "Projects shared with you",
+            label: t("pages.projects.components.collapse.shared"),
             children: sharedProjects.length ? (
               <CardsContainer>
                 {sharedProjects.map((project) => {
@@ -140,7 +144,7 @@ const ProjectsCollapses: React.FC<ProjectsCollapsesProps> = ({
                 })}
               </CardsContainer>
             ) : (
-              <Typography>No projects shared with you yet</Typography>
+              <Typography>{t("pages.projects.noProjectsMessage")}</Typography>
             ),
           },
         ]}
