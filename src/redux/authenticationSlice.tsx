@@ -41,6 +41,7 @@ const getAccessTokenFromLocalStorage = () => localStorage.getItem(ACCESS_TOKEN_K
 
 const setAccessTokenToLocalStorage = (accessToken: string) =>
   localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
 
 const _initialAccessToken = getAccessTokenFromLocalStorage() || "";
 

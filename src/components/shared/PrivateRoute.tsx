@@ -29,12 +29,7 @@ const PrivateRoute = ({ children }: IPrivateRouteProps) => {
     return children;
   } else {
     const url = location.pathname + location.search + location.hash;
-    return (
-      <Navigate
-        to={routesManager.getLoginRoute()}
-        state={{ next: url }}
-      ></Navigate>
-    );
+    return <Navigate to={routesManager.getLoginRoute()} state={{ next: url }}></Navigate>;
   }
 };
 

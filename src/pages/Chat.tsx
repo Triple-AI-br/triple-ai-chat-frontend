@@ -10,6 +10,13 @@ import {
   IChat,
   IMessage,
   TextChat,
+  ChatBar,
+  ChatList,
+  LeftTopBar,
+  MessageList,
+  IChat,
+  IMessage,
+  TextChat,
 } from "../components/chat";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
@@ -44,6 +51,10 @@ const ChatPage = () => {
   };
   const [messageList, setMessageList] = useState<IMessage[]>([DEFAULT_MESSAGE]);
 
+  // Scrolls to bottom every time messageList or isLoadingAiResponse is modified
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messageList, isLoadingAiResponse]);
   // Scrolls to bottom every time messageList or isLoadingAiResponse is modified
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -123,6 +134,8 @@ const ChatPage = () => {
       return;
     }
 
+    setSelectedChat(sessionId);
+  };
     setSelectedChat(sessionId);
   };
 

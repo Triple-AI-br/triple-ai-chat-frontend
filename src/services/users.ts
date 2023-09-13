@@ -2,7 +2,7 @@ import axios from "axios";
 import { ICustomerData } from "../redux/authenticationSlice";
 import { api } from "./api";
 
-export type PermissionsArray = Array<"files:upload" | "files:delete">
+export type PermissionsArray = Array<"files:upload" | "files:delete">;
 
 export interface IUserDataResponse {
   id: number;
@@ -23,7 +23,9 @@ const getMe = async (token?: string): Promise<IUserMe> => {
   if (token) {
     const BASE_API_URL = process.env.REACT_APP_BASE_API_URL as string;
     const completeUrl = `${BASE_API_URL}/api/v1` + url;
-    const response = await axios.get(completeUrl, { headers: { Authorization: `Bearer ${token}` } });
+    const response = await axios.get(completeUrl, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     data = response.data;
   } else {
     const response = await api.get(url);
@@ -33,6 +35,9 @@ const getMe = async (token?: string): Promise<IUserMe> => {
 };
 
 const listUsers = async (): Promise<IUserDataResponse[]> => {
+  const url = "/users";
+  const response = await api.get(url);
+  return response.data;
   const url = "/users";
   const response = await api.get(url);
   return response.data;
