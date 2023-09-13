@@ -5,6 +5,7 @@ import { PermissionsArray, usersService } from "../../../services/users";
 import { useAppDispatch } from "../../../redux/hooks";
 import { StyledModal } from "./styled";
 import { actionDisplayNotification } from "../../../redux/notificationSlice";
+import { TransferDirection } from "antd/es/transfer";
 
 type ManageGrantedUsersModalProps = {
   open: boolean;
@@ -86,6 +87,27 @@ const ManageGrantedUsersModal = ({
     }
   };
 
+  const handleAdd = (nextTargetKeys: string[]) => {
+    setTargetKeys(nextTargetKeys);
+  };
+  const handleDelete = (nextTargetKeys: string[]) => {
+    setTargetKeys(nextTargetKeys);
+  };
+
+  const onChange = (nextTargetKeys: string[], direction: TransferDirection) => {
+    if (direction === "left") {
+      handleDelete(nextTargetKeys);
+    } else {
+      if (targetKeys.length === 50) return;
+      if (nextTargetKeys.length > 50) {
+        console.log(nextTargetKeys.slice(0, 50));
+        handleAdd(nextTargetKeys.slice(0, 50));
+        return;
+      }
+      handleAdd(nextTargetKeys);
+    }
+  };
+
   const onSelectChange = (sourceSelectedKeys: string[], targetSelectedKeys: string[]) => {
     setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys]);
   };
@@ -130,12 +152,14 @@ const ManageGrantedUsersModal = ({
     >
       <Transfer
         dataSource={filteredUserList}
+        status={targetKeys.length >= 50 ? "warning" : ""}
         titles={["Available users", "Users to invite"]}
         listStyle={{ width: "50%", minHeight: "350px" }}
+        footer={() => (targetKeys.length >= 50 ? "Max 50 users" : "")}
         targetKeys={targetKeys}
         showSearch
         selectedKeys={selectedKeys}
-        onChange={(nextTargetKeys) => setTargetKeys(nextTargetKeys)}
+        onChange={onChange}
         onSelectChange={onSelectChange}
         render={(item) => item.title}
       />
