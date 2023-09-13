@@ -1,9 +1,20 @@
 import { fileIcons, possibleWorks, securityAndPrivacy } from "./contants";
-import { Card, CardsContainer, Circle, DottedBackground, IconsSession, PromptImg, Row, ScreenShotImage, SecurityContainer, WorksContainer } from "./styled";
+import {
+  Card,
+  CardsContainer,
+  Circle,
+  DottedBackground,
+  IconsSession,
+  PromptImg,
+  Row,
+  ScreenShotImage,
+  SecurityContainer,
+  WorksContainer,
+} from "./styled";
 
-const CardsSection: React.FC = () => {
+const CardsSection = () => {
   return (
-    <CardsContainer id='about-triple-ai'>
+    <CardsContainer id="about-triple-ai">
       <Row>
         <Card>
           <h2>O que é possível fazer?</h2>
@@ -19,30 +30,26 @@ const CardsSection: React.FC = () => {
         <Card>
           <h2>Nossos requisitos de segurança e privacidade</h2>
           <SecurityContainer>
-            {
-              securityAndPrivacy.map((security, index) => (
-                <div key={index}>
-                  <img src={security.imageUrl} alt={security.title} />
-                  <h3>{security.title}</h3>
-                </div>
-              ))
-            }
+            {securityAndPrivacy.map((security, index) => (
+              <div key={index}>
+                <img src={security.imageUrl} alt={security.title} />
+                <h3>{security.title}</h3>
+              </div>
+            ))}
           </SecurityContainer>
         </Card>
       </Row>
       <Row>
         <Card>
           <h2>Faça upload de arquivos e pergunte qualquer coisa</h2>
-          <ScreenShotImage src="/pluginChat.png"/>
+          <ScreenShotImage src="/pluginChat.png" />
           <Circle>
             <div></div>
           </Circle>
           <IconsSession>
-            {
-              fileIcons.map((icon, index) => (
-                <img src={icon} key={index} />
-              ))
-            }
+            {fileIcons.map((icon, index) => (
+              <img src={icon} key={index} />
+            ))}
           </IconsSession>
         </Card>
         <Card>
@@ -55,4 +62,4 @@ const CardsSection: React.FC = () => {
   );
 };
 
-export {CardsSection};
+export { CardsSection };

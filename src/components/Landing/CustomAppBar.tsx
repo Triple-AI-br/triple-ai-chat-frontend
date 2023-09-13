@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -17,9 +17,7 @@ const pages: string[] = [];
 
 function CustomAppBar() {
   const navigate = useNavigate();
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -83,14 +81,9 @@ function CustomAppBar() {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map(page => (
-                <MenuItem
-                  key={page}
-                  onClick={handleCloseNavMenu}
-                >
-                  <Typography textAlign="center">
-                    {page}
-                  </Typography>
+              {pages.map((page) => (
+                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -106,7 +99,7 @@ function CustomAppBar() {
           </Box>
 
           <Box ml="auto" sx={{ display: { xs: "none", md: "flex" } }}>
-            {pages.map(page => (
+            {pages.map((page) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
@@ -121,9 +114,7 @@ function CustomAppBar() {
               </Button>
             ))}
             <Button
-              onClick={() =>
-                navigate(routesManager.getProjectsRoute())
-              }
+              onClick={() => navigate(routesManager.getProjectsRoute())}
               endIcon={<LoginOutlinedIcon />}
               variant="contained"
               sx={{
@@ -135,7 +126,7 @@ function CustomAppBar() {
                 boxShadow: "2px 2px 7px 0px #aaa",
               }}
             >
-                            Entrar
+              Entrar
             </Button>
           </Box>
         </Toolbar>
