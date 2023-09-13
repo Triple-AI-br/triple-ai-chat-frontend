@@ -5,13 +5,13 @@ import ReactMarkdown from "react-markdown";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import moment from "moment";
 interface IMessageBubbleProps {
-    markdownText: string;
-    backgroundColor: string;
-    float?: "left" | "right";
-    borderBottomRightRadius?: number;
-    borderBottomLeftRadius?: number;
-    references?: string[];
-    date_time?: string;
+  markdownText: string;
+  backgroundColor: string;
+  float?: "left" | "right";
+  borderBottomRightRadius?: number;
+  borderBottomLeftRadius?: number;
+  references?: string[];
+  date_time?: string;
 }
 
 const MessageBubble = ({
@@ -31,14 +31,14 @@ const MessageBubble = ({
   const isRightDisabled = activeStep === maxSteps - 1;
 
   const handleClickLeft = () => {
-    setActiveStep(prevActiveStep => {
+    setActiveStep((prevActiveStep) => {
       if (prevActiveStep === 0) return prevActiveStep;
       return prevActiveStep - 1;
     });
   };
 
   const handleClickRight = () => {
-    setActiveStep(prevActiveStep => {
+    setActiveStep((prevActiveStep) => {
       if (prevActiveStep === maxSteps - 1) return prevActiveStep;
       return prevActiveStep + 1;
     });
@@ -64,12 +64,7 @@ const MessageBubble = ({
         <ReactMarkdown>{markdownText}</ReactMarkdown>
       </Box>
       {date_time && (
-        <Box
-          display="flex"
-          justifyContent="end"
-          pl={4}
-          pr={2}
-          pb={1}>
+        <Box display="flex" justifyContent="end" pl={4} pr={2} pb={1}>
           <Typography color="#aaa" fontSize={12}>
             {moment(date_time).fromNow()}
           </Typography>
@@ -89,7 +84,7 @@ const MessageBubble = ({
           }}
         >
           <Box
-            onClick={() => setShowReferences(prev => !prev)}
+            onClick={() => setShowReferences((prev) => !prev)}
             sx={{ cursor: "pointer" }}
             width="100%"
             display="flex"
@@ -97,27 +92,14 @@ const MessageBubble = ({
           >
             <Typography color="#606060" variant="caption">
               {showReferences ? "Hide Sources" : "View Sources"}{" "}
-              {showReferences
-                ? `(${activeStep + 1}/${maxSteps})`
-                : null}
+              {showReferences ? `(${activeStep + 1}/${maxSteps})` : null}
             </Typography>
-            <InfoOutlinedIcon
-              fontSize="small"
-              sx={{ color: "#999" }}
-            />
+            <InfoOutlinedIcon fontSize="small" sx={{ color: "#999" }} />
           </Box>
 
           {references && references.length && showReferences ? (
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              gap={2}
-              alignItems="center"
-            >
-              <IconButton
-                onClick={handleClickLeft}
-                disabled={isLeftDisabled}
-              >
+            <Box display="flex" justifyContent="space-between" gap={2} alignItems="center">
+              <IconButton onClick={handleClickLeft} disabled={isLeftDisabled}>
                 <KeyboardArrowLeft
                   sx={{
                     color: isLeftDisabled ? "#ccc" : "#888",
@@ -125,23 +107,13 @@ const MessageBubble = ({
                   }}
                 />
               </IconButton>
-              <Typography
-                fontWeight={600}
-                color="#888"
-                variant="body2"
-                noWrap
-              >
+              <Typography fontWeight={600} color="#888" variant="body2" noWrap>
                 {references?.[activeStep]}
               </Typography>
-              <IconButton
-                onClick={handleClickRight}
-                disabled={isRightDisabled}
-              >
+              <IconButton onClick={handleClickRight} disabled={isRightDisabled}>
                 <KeyboardArrowRight
                   sx={{
-                    color: isRightDisabled
-                      ? "#ccc"
-                      : "#888",
+                    color: isRightDisabled ? "#ccc" : "#888",
                     cursor: "pointer",
                   }}
                 />
