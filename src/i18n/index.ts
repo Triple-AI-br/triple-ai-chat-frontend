@@ -11,7 +11,7 @@ export const languagesSupport = [
     value: "en",
   },
   {
-    label: "português",
+    label: "Português - BR",
     value: "pt",
   },
   {
