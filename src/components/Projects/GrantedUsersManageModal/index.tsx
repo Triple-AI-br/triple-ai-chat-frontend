@@ -6,6 +6,7 @@ import { useAppDispatch } from "../../../redux/hooks";
 import { StyledModal } from "./styled";
 import { actionDisplayNotification } from "../../../redux/notificationSlice";
 import { TransferDirection } from "antd/es/transfer";
+import { useTranslation } from "react-i18next";
 
 type ManageGrantedUsersModalProps = {
   open: boolean;
@@ -32,7 +33,7 @@ const ManageGrantedUsersModal = ({
   usersInProject,
 }: ManageGrantedUsersModalProps) => {
   const dispatch = useAppDispatch();
-
+  const { t } = useTranslation();
   const [filteredUserList, setFilteredFilterList] = useState<TransferItem[]>([]);
   const [targetKeys, setTargetKeys] = useState<string[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
@@ -43,7 +44,7 @@ const ManageGrantedUsersModal = ({
       if (!targetKeys.length) {
         dispatch(
           actionDisplayNotification({
-            messages: ["You must select at least one user."],
+            messages: [t("pages.sources.components.inviteModal.atLeastOneMessa")],
             severity: "warning",
           }),
         );
@@ -67,7 +68,7 @@ const ManageGrantedUsersModal = ({
         dispatch(
           actionDisplayNotification({
             messages: [
-              "The following users were not invited:",
+              t("pages.sources.components.inviteModal.errorOnInviteFollowingUsers"),
               ...res.failed_to_invite.map((email) => email),
             ],
             severity: "warning",
@@ -77,7 +78,7 @@ const ManageGrantedUsersModal = ({
     } catch (err) {
       dispatch(
         actionDisplayNotification({
-          messages: ["Problem with Invites"],
+          messages: [t("global.failureInviteMessage")],
           severity: "warning",
         }),
       );
@@ -136,24 +137,27 @@ const ManageGrantedUsersModal = ({
   return (
     <StyledModal
       open={open}
-      title={"Add new user to project"}
+      title={t("pages.sources.components.inviteModal.title")}
       onOk={async () => await onConfirm()}
       onCancel={handleCancel}
       destroyOnClose={true}
       afterClose={handleCancel}
       footer={[
         <Button key="back" onClick={handleCancel}>
-          Cancel
+          {t("global.cancel")}
         </Button>,
         <Button key="confirm" type="primary" onClick={async () => await onConfirm()}>
-          Submit
+          {t("global.submit")}
         </Button>,
       ]}
     >
       <Transfer
         dataSource={filteredUserList}
         status={targetKeys.length >= 50 ? "warning" : ""}
-        titles={["Available users", "Users to invite"]}
+        titles={[
+          t("pages.sources.components.inviteModal.availableUsers"),
+          t("pages.sources.components.inviteModal.usersToInvite"),
+        ]}
         listStyle={{ width: "50%", minHeight: "350px" }}
         footer={() => (targetKeys.length >= 50 ? "Max 50 users" : "")}
         targetKeys={targetKeys}
@@ -164,11 +168,11 @@ const ManageGrantedUsersModal = ({
         onSelectChange={onSelectChange}
         render={(item) => item.title}
       />
-      <h4>Permissions</h4>
+      <h4>{t("pages.sources.components.inviteModal.permissionsTitle")}</h4>
       <Form autoComplete="off" layout="inline" style={{ marginTop: "20px" }}>
         <Form.Item
           name="files:upload"
-          label="Upload files"
+          label={t("pages.sources.components.inviteModal.uploadFilesPermissionSwitch")}
           valuePropName="checked"
           labelAlign="right"
           style={{
@@ -185,7 +189,7 @@ const ManageGrantedUsersModal = ({
 
         <Form.Item
           name="files:delete"
-          label="Delete files"
+          label={t("pages.sources.components.inviteModal.deleteFilesPermissionSwitch")}
           valuePropName="checked"
           labelAlign="right"
           style={{

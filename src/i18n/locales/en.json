@@ -55,6 +55,27 @@
           }
         }
       },
+      "sources": {
+        "title": "Project: {{project}}",
+        "noFilesMessage": "The project does not have any files yet. Go ahead and upload some.",
+        "noFilesAndNoPermissionMessage": "The project does not have any files yet. Please ask your administrator to upload relevant documents.",
+        "owner": "Project Owner",
+        "grantedUsersCountMessage": "{{count}} users have access to the project: {{project}}",
+        "components": {
+          "uploadFilesBtn": "Upload New Files",
+          "shareProjectTitle": "Project Sharing",
+          "shareProjectBtn": "Share with Others",
+          "searchUserInputLabel": "Find users in the project:",
+          "inviteModal": {
+            "title": "Add New Users to the Project",
+            "availableUsers": "Available Users",
+            "usersToInvite": "Users to Invite",
+            "permissionTitle": "Permission",
+            "uploadFilePermissionSwitch": "Upload Files",
+            "deleteFilePermissionSwitch": "Delete Files"
+          }
+        }
+      },
       "prompts": {
         "tab": "Prompts"
       }

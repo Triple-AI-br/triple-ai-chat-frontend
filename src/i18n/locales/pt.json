@@ -12,12 +12,16 @@
       "public": "Público",
       "loading": "Carregando",
       "submit": "Enviar",
+      "you": "Você",
+      "noUsers": "Sem usuários",
       "successDeletedMessage": "Excluído com sucesso!",
       "successUpdateMessage": "Atualizado com sucesso!",
       "successCreateMessage": "Criado com sucesso!",
       "failureDeleteMessage": "Falha ao excluir!",
       "failureUpdateMessage": "Falha ao atualizar!",
-      "failureCreateMessage": "Falha ao criar!"
+      "failureCreateMessage": "Falha ao criar!",
+      "failureInviteMessage": "Falha ao convidar!",
+      "fetchErrorWarning": "Falha na requisição"
     },
     "landing": {
       "title": "CRIE O CHATGPT DA SUA EMPRESA",
@@ -52,6 +56,31 @@
               "title": "O título é obrigatório",
               "description": "A descrição é obrigatória"
             }
+          }
+        }
+      },
+      "sources": {
+        "title": "Projeto: {{project}}",
+        "noFilesMessage": "O projeto ainda não possui arquivos. Vá em frente e faça upload de alguns",
+        "noFilesAndNoPermissionMessage": "O projeto ainda não possui arquivos. Peça ao seu administrador para fazer o upload dos documentos relevantes.",
+        "owner": "Proprietário do projeto",
+        "grantedUsersCountMessage": "{{count}} usuário/s tem acesso ao projeto: {{project}}",
+        "components": {
+          "uploadFilesBtn": "Upload de novos arquivos",
+          "shareProjectTitle": "Compartilhamento do projeto",
+          "shareProjectBtn": "Compartilhar com outros",
+          "searchUserInputLabel": "Encontre usuários no projeto:",
+          "permissionsFor": "Permissão para: {{user}}",
+          "removeGrantedUserConfirmation": "Tem certeza que deseja remover o usuário {{user}} do projeto?",
+          "inviteModal": {
+            "title": "Adicionar novos usuários ao projeto",
+            "atLeastOneMessage": "Você precisa escolher pelo menos 1 usuário",
+            "errorOnInviteFollowingUsers": "Os seguintes usuários não foram convidados:",
+            "availableUsers": "Usuários disponíveis",
+            "usersToInvite": "Usuários para convidar",
+            "permissionsTitle": "Permissões",
+            "uploadFilesPermissionSwitch": "Fazer upload de aquivos",
+            "deleteFilesPermissionSwitch": "Apagar arquivos"
           }
         }
       },
