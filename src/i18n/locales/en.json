@@ -14,6 +14,21 @@
       "submit": "Submit",
       "you": "You",
       "noUsers": "No users",
+      "relativeTime": {
+        "future": "in %s",
+        "past": "%s ago",
+        "s": "seconds",
+        "m": "a minute",
+        "mm": "%d minutes",
+        "h": "an hour",
+        "hh": "%d hours",
+        "d": "a day",
+        "dd": "%d days",
+        "M": "a month",
+        "MM": "%d months",
+        "y": "a year",
+        "yy": "%d years"
+      },
       "successDeletedMessage": "Successfully deleted!",
       "successUpdateMessage": "Successfully updated!",
       "successCreateMessage": "Successfully created!",
@@ -87,7 +102,27 @@
         }
       },
       "prompts": {
-        "tab": "Prompts"
+        "tab": "Prompts",
+        "title": "Find great prompts",
+        "listErrorMessage": "We had a problem finding your prompts",
+        "noPromptsMessage": "No prompts yet",
+        "likes": "{{likes}} like",
+        "plural": "s",
+        "components": {
+          "tabMenu": {
+            "latest": "Latest prompts",
+            "top": "Top Liked",
+            "likes": "My Likes",
+            "my": "My Prompts"
+          },
+          "modal": {
+            "createTitle": "Create a new prompt",
+            "inputTitle": "Title",
+            "inputPrompt": "Prompt",
+            "public": "Make it public within my company",
+            "copyPrompt": "Copy prompt"
+          }
+        }
       }
     }
   }

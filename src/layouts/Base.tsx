@@ -38,6 +38,7 @@ import React from "react";
 import { languagesSupport } from "../i18n";
 import i18next from "i18next";
 import { useTranslation } from "react-i18next";
+import { setLanguageToStorage } from "../utils/setLanguageToStorage";
 
 const { Header, Content, Footer, Sider } = Layout;
 type MenuItem = Required<MenuProps>["items"][number];
@@ -210,7 +211,10 @@ const Base = ({ children, title }: IBaseProps) => {
           <Select
             value={i18next.language}
             style={{ width: "200px", maxWidth: "40%" }}
-            onChange={(key) => i18next.changeLanguage(key)}
+            onChange={(key) => {
+              setLanguageToStorage(key as "en" | "pt" | "es");
+              i18next.changeLanguage(key);
+            }}
             options={languagesSupport}
           />
         </Header>

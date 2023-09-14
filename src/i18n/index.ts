@@ -27,6 +27,10 @@ const resources = {
 };
 
 const findLanguageByBrowser = () => {
+  const storageLanguage = localStorage.getItem("language");
+  if (storageLanguage) {
+    return storageLanguage;
+  }
   switch (navigator.language) {
     case "pt-BR":
       return "pt";

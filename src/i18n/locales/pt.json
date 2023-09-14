@@ -14,6 +14,21 @@
       "submit": "Enviar",
       "you": "Você",
       "noUsers": "Sem usuários",
+      "relativeTime": {
+        "future": "em %s",
+        "past": "%s atrás",
+        "s": "segundos",
+        "m": "um minuto",
+        "mm": "%d minutos",
+        "h": "uma hora",
+        "hh": "%d horas",
+        "d": "um dia",
+        "dd": "%d dias",
+        "M": "um mês",
+        "MM": "%d meses",
+        "y": "um ano",
+        "yy": "%d anos"
+      },
       "successDeletedMessage": "Excluído com sucesso!",
       "successUpdateMessage": "Atualizado com sucesso!",
       "successCreateMessage": "Criado com sucesso!",
@@ -87,7 +102,27 @@
         }
       },
       "prompts": {
-        "tab": "Prompts"
+        "tab": "Prompts",
+        "title": "Encontre ótimos prompts",
+        "listErrorMessage": "Tivemos um problema ao encontrar seus prompts",
+        "noPromptsMessage": "Ainda não há prompts",
+        "likes": "{{likes}} curtida",
+        "plural": "s",
+        "components": {
+          "tabMenu": {
+            "latest": "Últimos prompts",
+            "top": "Mais Curtidos",
+            "likes": "Minhas Curtidas",
+            "my": "Meus Prompts"
+          },
+          "modal": {
+            "createTitle": "Criar um novo prompt",
+            "inputTitle": "Título",
+            "inputPrompt": "Prompt",
+            "public": "Torná-lo público dentro da minha empresa",
+            "copyPrompt": "Copiar prompt"
+          }
+        }
       }
     }
   }
