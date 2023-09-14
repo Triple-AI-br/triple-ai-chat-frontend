@@ -29,10 +29,17 @@ const ProjectsPage = () => {
       case undefined:
         return <Spinner />;
       case null:
-        return <Typography>We had a problem finding your projects</Typography>;
+        return <Typography>We had a problem retrieving your projects.</Typography>;
       default:
         if (!projects.length) {
-          return <Typography>You don&apos;t have any projects yet</Typography>;
+          return (
+            <>
+              <Typography>You don&apos;t have access to any projects yet.</Typography>
+              <Typography>
+                You may create a new one or ask someone for an invitation to an existing project.
+              </Typography>
+            </>
+          );
         } else {
           return (
             <ProjectsCollapses
