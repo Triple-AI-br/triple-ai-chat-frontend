@@ -66,7 +66,9 @@ const ProjectModal = ({
     } catch (err) {
       dispatch(
         actionDisplayNotification({
-          messages: isEditing ? ["Error in project editing"] : ["Error in project creation"],
+          messages: isEditing
+            ? ["Error in project editing"]
+            : [(err as { response: { data: { detail: string } } }).response.data.detail],
           severity: "error",
         }),
       );

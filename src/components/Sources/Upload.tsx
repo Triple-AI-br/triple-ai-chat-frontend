@@ -40,10 +40,10 @@ const Upload = ({ uploadCallback }: IUploadProps) => {
       setSelectedFiles([]);
       uploadCallback && uploadCallback(selectedFiles, paths);
     } catch (error) {
-      console.error(error);
+      const message = (error as { response: { data: { detail: string } } }).response.data.detail;
       dispatch(
         actionDisplayNotification({
-          messages: [(error as { message: string }).message],
+          messages: [message],
           autoHideDuration: 6_000,
         }),
       );
