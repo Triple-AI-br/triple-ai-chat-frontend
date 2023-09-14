@@ -12,12 +12,18 @@
       "public": "Público",
       "loading": "Cargando",
       "submit": "Enviar",
-      "successDeletedMessage": "¡Eliminado con éxito!",
-      "successUpdateMessage": "¡Actualizado con éxito!",
-      "successCreateMessage": "¡Creado con éxito!",
+      "you": "Tú",
+      "noUsers": "No hay usuarios",
+      "successDeletedMessage": "Eliminado con éxito!",
+      "successUpdateMessage": "Actualizado con éxito!",
+      "successCreateMessage": "Creado con éxito!",
+      "successUploadMessage": "Subida con éxito!",
+      "failureUploadMessage": "Error al subir!",
       "failureDeleteMessage": "Error al eliminar",
       "failureUpdateMessage": "Error al actualizar",
-      "failureCreateMessage": "Error al crear"
+      "failureCreateMessage": "Error al crear",
+      "failureInviteMessage": "¡Error al invitar!",
+      "failureRequestMessage": "¡Error al obtener los datos!"
     },
     "landing": {
       "title": "Crea el CHATGPT de tu empresa",
@@ -57,22 +63,26 @@
       },
       "sources": {
         "title": "Proyecto: {{project}}",
-        "noFilesMessage": "El proyecto aún no tiene archivos. Adelante y sube algunos.",
-        "noFilesAndNoPermissionMessage": "El proyecto aún no tiene archivos. Pide a tu administrador que suba documentos relevantes.",
+        "noFilesMessage": "El proyecto aún no tiene archivos. Adelante y carga algunos.",
+        "noFilesAndNoPermissionMessage": "El proyecto aún no tiene archivos. Pide a tu administrador que cargue los documentos relevantes.",
         "owner": "Propietario del Proyecto",
-        "grantedUsersCountMessage": "{{count}} usuarios tienen acceso al proyecto: {{project}}",
+        "grantedUsersCountMessage": "{{count}} usuario(s) tienen acceso al proyecto: {{project}}",
         "components": {
-          "uploadFilesBtn": "Subir Nuevos Archivos",
+          "uploadFilesBtn": "Cargar Nuevos Archivos",
           "shareProjectTitle": "Compartir Proyecto",
           "shareProjectBtn": "Compartir con Otros",
           "searchUserInputLabel": "Buscar usuarios en el proyecto:",
+          "permissionsFor": "Permiso para: {{user}}",
+          "removeGrantedUserConfirmation": "¿Estás seguro de que deseas eliminar al usuario {{user}} del proyecto?",
           "inviteModal": {
             "title": "Agregar Nuevos Usuarios al Proyecto",
+            "atLeastOneMessage": "Debes elegir al menos 1 usuario",
+            "errorOnInviteFollowingUsers": "Los siguientes usuarios no fueron invitados:",
             "availableUsers": "Usuarios Disponibles",
-            "usersToInvite": "Usuarios para Invitar",
-            "permissionTitle": "Permiso",
-            "uploadFilePermissionSwitch": "Subir Archivos",
-            "deleteFilePermissionSwitch": "Eliminar Archivos"
+            "usersToInvite": "Usuarios a Invitar",
+            "permissionsTitle": "Permisos",
+            "uploadFilesPermissionSwitch": "Cargar Archivos",
+            "deleteFilesPermissionSwitch": "Eliminar Archivos"
           }
         }
       },

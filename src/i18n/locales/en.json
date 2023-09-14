@@ -12,12 +12,18 @@
       "public": "Public",
       "loading": "Loading",
       "submit": "Submit",
+      "you": "You",
+      "noUsers": "No users",
       "successDeletedMessage": "Successfully deleted!",
       "successUpdateMessage": "Successfully updated!",
       "successCreateMessage": "Successfully created!",
+      "successUploadMessage": "Successfully uploaded!",
+      "failureUploadMessage": "Failed to upload!",
       "failureDeleteMessage": "Failed to delete!",
       "failureUpdateMessage": "Failed to update!",
-      "failureCreateMessage": "Failed to create!"
+      "failureCreateMessage": "Failed to create!",
+      "failureInviteMessage": "Failed to invite!",
+      "failureRequestMessage": "Failed to pull data!"
     },
     "landing": {
       "title": "Create your company's CHATGPT",
@@ -57,22 +63,26 @@
       },
       "sources": {
         "title": "Project: {{project}}",
-        "noFilesMessage": "The project does not have any files yet. Go ahead and upload some.",
-        "noFilesAndNoPermissionMessage": "The project does not have any files yet. Please ask your administrator to upload relevant documents.",
+        "noFilesMessage": "The project doesn't have any files yet. Go ahead and upload some.",
+        "noFilesAndNoPermissionMessage": "The project doesn't have any files yet. Ask your administrator to upload the relevant documents.",
         "owner": "Project Owner",
-        "grantedUsersCountMessage": "{{count}} users have access to the project: {{project}}",
+        "grantedUsersCountMessage": "{{count}} user(s) have access to the project: {{project}}",
         "components": {
           "uploadFilesBtn": "Upload New Files",
           "shareProjectTitle": "Project Sharing",
           "shareProjectBtn": "Share with Others",
           "searchUserInputLabel": "Find users in the project:",
+          "permissionsFor": "Permission for: {{user}}",
+          "removeGrantedUserConfirmation": "Are you sure you want to remove user {{user}} from the project?",
           "inviteModal": {
             "title": "Add New Users to the Project",
+            "atLeastOneMessage": "You need to choose at least 1 user",
+            "errorOnInviteFollowingUsers": "The following users were not invited:",
             "availableUsers": "Available Users",
             "usersToInvite": "Users to Invite",
-            "permissionTitle": "Permission",
-            "uploadFilePermissionSwitch": "Upload Files",
-            "deleteFilePermissionSwitch": "Delete Files"
+            "permissionsTitle": "Permissions",
+            "uploadFilesPermissionSwitch": "Upload Files",
+            "deleteFilesPermissionSwitch": "Delete Files"
           }
         }
       },

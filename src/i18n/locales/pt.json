@@ -17,11 +17,13 @@
       "successDeletedMessage": "Excluído com sucesso!",
       "successUpdateMessage": "Atualizado com sucesso!",
       "successCreateMessage": "Criado com sucesso!",
+      "successUploadMessage": "Upload com sucesso!",
+      "failureUploadMessage": "Falha ao fazer upload!",
       "failureDeleteMessage": "Falha ao excluir!",
       "failureUpdateMessage": "Falha ao atualizar!",
       "failureCreateMessage": "Falha ao criar!",
       "failureInviteMessage": "Falha ao convidar!",
-      "fetchErrorWarning": "Falha na requisição"
+      "failureRequestMessage": "Falha na requisição!"
     },
     "landing": {
       "title": "CRIE O CHATGPT DA SUA EMPRESA",
@@ -64,7 +66,7 @@
         "noFilesMessage": "O projeto ainda não possui arquivos. Vá em frente e faça upload de alguns",
         "noFilesAndNoPermissionMessage": "O projeto ainda não possui arquivos. Peça ao seu administrador para fazer o upload dos documentos relevantes.",
         "owner": "Proprietário do projeto",
-        "grantedUsersCountMessage": "{{count}} usuário/s tem acesso ao projeto: {{project}}",
+        "grantedUsersCountMessage": "{{count}} usuário(s) tem acesso ao projeto: {{project}}",
         "components": {
           "uploadFilesBtn": "Upload de novos arquivos",
           "shareProjectTitle": "Compartilhamento do projeto",

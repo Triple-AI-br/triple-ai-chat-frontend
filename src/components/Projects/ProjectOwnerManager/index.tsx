@@ -124,7 +124,7 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
     } catch (er) {
       dispatch(
         actionDisplayNotification({
-          messages: [t("global.fetchErrorWarning")],
+          messages: [t("global.failureRequestMessage")],
           severity: "warning",
         }),
       );
