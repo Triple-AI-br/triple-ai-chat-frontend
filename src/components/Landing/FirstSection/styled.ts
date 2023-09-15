@@ -6,7 +6,7 @@ export const FirstSectionContainer = styled.section`
   flex-direction: column;
   align-items: center;
   gap: 35px;
-  margin-bottom: 120px;
+  margin: 50px 0 80px 0;
   position: relative;
   @media (min-width: 900px) {
     flex-direction: row;
@@ -16,6 +16,10 @@ export const FirstSectionContainer = styled.section`
   }
   @media (min-width: 1280px) {
     position: relative;
+    margin-bottom: 160px;
+    width: 1280px;
+    margin: 50px auto 120px auto;
+    padding: 40px 32px;
   }
 `;
 
@@ -82,8 +86,9 @@ export const VectorImage = styled.img`
     top: 100px;
   }
   @media (min-width: 1280px) {
-    top: 10px;
+    top: -40px;
     width: 60%;
+    height: auto;
   }
 `;
 

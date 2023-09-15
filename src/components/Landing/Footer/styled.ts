@@ -4,10 +4,14 @@ import styled from "styled-components";
 
 export const FooterContainer = styled.footer`
   width: 100%;
-  margin: 30px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
+  @media (min-width: 1280px) {
+    width: 1280px;
+    margin: 0 auto;
+    padding: 40px 32px;
+  }
 `;
 
 export const ButtonsContainer = styled.div`

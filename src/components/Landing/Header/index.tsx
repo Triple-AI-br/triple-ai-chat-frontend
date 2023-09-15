@@ -1,17 +1,23 @@
 import { useNavigate } from "react-router-dom";
-import { useWindowSize } from "../../../utils/useWindowSize";
-import { HeaderContainer, LogoImg, NavElements } from "./styled";
+import { ActionContainer, HeaderContainer, LogoImg, NavElements } from "./styled";
 import { ActionButton } from "../FirstSection/styled";
 import MenuIcon from "@mui/icons-material/Menu";
 import { routesManager } from "../../../routes/routesManager";
 import { Button } from "antd";
-
-const DESKTOP_WIDTH = 600;
+import { useState } from "react";
+import { LandingDrawer } from "../Drawer";
 
 const LandingHeader = () => {
-  const { width } = useWindowSize();
   const navigate = useNavigate();
-  const isDesktop = width >= DESKTOP_WIDTH;
+  const [open, setOpen] = useState(false);
+
+  const showDrawer = () => {
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
 
   return (
     <HeaderContainer bottomScroll={false}>
@@ -27,8 +33,8 @@ const LandingHeader = () => {
           <a href="#landing-footer">Contatos</a>
         </li>
       </NavElements>
-
-      <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+      <LandingDrawer onClose={onClose} open={open} />
+      <ActionContainer style={{ display: "flex", gap: 10, alignItems: "center" }}>
         <ActionButton
           text="Agende uma demo"
           url="https://calendly.com/eduardo-tripleai/30min"
@@ -38,9 +44,9 @@ const LandingHeader = () => {
         <Button type="link" onClick={() => navigate(routesManager.getProjectsRoute())}>
           Entrar / Login
         </Button>
-      </div>
 
-      <MenuIcon sx={{ display: isDesktop ? "none" : "inline-block" }} />
+        <MenuIcon onClick={showDrawer} />
+      </ActionContainer>
     </HeaderContainer>
   );
 };
