@@ -1,8 +1,9 @@
 import { Button, Drawer } from "antd";
 import { useNavigate } from "react-router-dom";
 import { routesManager } from "../../../routes/routesManager";
-import { ActionButton } from "../FirstSection/styled";
+import { ActionButton } from "../Header/styled";
 import { DrawerContainer, Navigator, RightsContainer } from "./styled";
+import { useTranslation } from "react-i18next";
 
 type LandingDrawerProps = {
   onClose: () => void;
@@ -10,10 +11,11 @@ type LandingDrawerProps = {
 };
 
 const LandingDrawer: React.FC<LandingDrawerProps> = ({ onClose, open }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   return (
     <Drawer
-      title="Navegação"
+      title={t("pages.landing.components.drawerTitle")}
       placement="right"
       onClose={onClose}
       open={open}
@@ -21,29 +23,28 @@ const LandingDrawer: React.FC<LandingDrawerProps> = ({ onClose, open }) => {
     >
       <DrawerContainer>
         <Button type="link" onClick={() => navigate(routesManager.getProjectsRoute())}>
-          Entrar / Login
+          {t("pages.landing.components.header.loginBtn")}
         </Button>
         <ActionButton
-          text="Agende uma demo"
+          text={t("pages.landing.components.actionBtn")}
           url="https://calendly.com/eduardo-tripleai/30min"
           rootElement={document.getElementById("root") as HTMLElement}
         ></ActionButton>
         <Navigator>
           <Button type="text" onClick={onClose}>
-            <a href="#first-section">Home</a>
+            <a href="#first-section">{t("pages.landing.components.header.navLinks.home")}</a>
           </Button>
           <Button type="text" onClick={onClose}>
-            <a href="#about-triple-ai">Sobre nós</a>
+            <a href="#about-triple-ai">{t("pages.landing.components.header.navLinks.aboutUs")}</a>
           </Button>
           <Button type="text" onClick={onClose}>
-            <a href="#landing-footer">Contatos</a>
+            <a href="#landing-footer">{t("pages.landing.components.header.navLinks.contacts")}</a>
           </Button>
         </Navigator>
       </DrawerContainer>
       <RightsContainer>
-        <span>© Triple AI. Todos os direitos reservados.</span>
-        <div></div>
-        <span>Design por Triple AI</span>
+        <span>{t("pages.landing.components.footer.copyright")}</span>
+        <span>{t("pages.landing.components.footer.designBy")}</span>
       </RightsContainer>
     </Drawer>
   );

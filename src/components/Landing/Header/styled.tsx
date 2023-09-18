@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Button } from "antd";
+import { PopupButton } from "react-calendly";
 
 export const HeaderContainer = styled.section<{ bottomScroll?: boolean }>`
   max-width: 1280px;
@@ -50,16 +50,23 @@ export const NavElements = styled.ul`
   }
 `;
 
-export const ActionButton = styled(Button)`
-  display: none;
+export const ActionButton = styled(PopupButton)`
+  display: inline-block;
+  border-radius: 50px;
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  pointer-events: all;
+  z-index: 20;
+  padding: 10px 15px;
+  cursor: pointer;
+  background: linear-gradient(180deg, rgba(56, 93, 255, 0.8) 0%, rgba(134, 156, 252, 0.8) 100%);
+  width: fit-content;
+  margin: 0 auto;
+  font-size: 16px;
+  line-height: 100%;
   @media (min-width: 600px) {
-    display: inline-block;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 100%;
-    border-radius: 50px;
-    border: none;
-    background: linear-gradient(180deg, rgba(56, 93, 255, 0.8) 0%, rgba(134, 156, 252, 0.8) 100%);
+    margin: 0;
   }
 `;
 

@@ -43,11 +43,11 @@ export const Card = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 24px;
+  gap: 30px;
   text-align: center;
   position: relative;
   overflow: hidden;
   h2 {
-    line-height: 100%;
     z-index: 1;
     align-self: flex-start;
   }

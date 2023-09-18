@@ -40,11 +40,72 @@
       "failureInviteMessage": "Falha ao convidar!",
       "failureRequestMessage": "Falha na requisição!"
     },
-    "landing": {
-      "title": "CRIE O CHATGPT DA SUA EMPRESA",
-      "subtitle": "Automatize tarefas operacionais e torne sua empresa mais eficiente com o nosso copiloto inteligente."
-    },
     "pages": {
+      "landing": {
+        "components": {
+          "drawerTitle": "Navegação",
+          "actionBtn": "Agende uma demo",
+          "header": {
+            "navLinks": {
+              "home": "Início",
+              "aboutUs": "Sobre nós",
+              "contacts": "Contatos"
+            },
+            "loginBtn": "Entrar"
+          },
+          "firstSection": {
+            "title": "CRIE O <span>CHATGPT</span> DA SUA EMPRESA",
+            "subtitle": "Automatize tarefas operacionais e torne sua empresa mais eficiente com o nosso copiloto inteligente."
+          },
+          "partners": {
+            "title": "Nossos parceiros"
+          },
+          "cardsSection": {
+            "first": {
+              "title": "O que é possível fazer?",
+              "upload": "Faça upload de arquivos e pergunte qualquer coisa da sua empresa.",
+              "createForSocialMidia": "Crie diversos conteúdos instantaneamente para redes sociais.",
+              "optimize": "Otimize seus processos criando projetos inteiros com só um comando."
+            },
+            "second": {
+              "title": "Nossos requisitos de segurança e privacidade",
+              "cryptography": "Dados são mantidos criptografados",
+              "lgpd": "Conformidade com LGPD",
+              "dataBySectors": "Segmente dados por setores da sua empresa",
+              "privacy": "Alto padrão de privacidade e segurança"
+            },
+            "third": {
+              "title": "Faça upload de arquivos e pergunte qualquer coisa"
+            },
+            "fourth": {
+              "title": "Gereciador de Prompts com centenas de modelos prontos para uso"
+            }
+          },
+          "benefits": {
+            "first": {
+              "title": "Com as melhores funcionalidades 🚀",
+              "subtitle": "Utilize nossa solução para fins de gestão do conhecimento, onboarding de funcionários, atendimento ao cliente, produção de conteúdo, dentre outras finalidades."
+            },
+            "second": {
+              "title": "Aumento da produtividade",
+              "subtitle": "Recursos e tempo serão alocados para que você possa direcionar seu foco a outras áreas do negócio, resultando em um aumento de produtividade."
+            },
+            "third": {
+              "title": "Insights",
+              "subtitle": "A empresa poderá adquirir conhecimentos valiosos de forma rápida, o que contribui para aprimorar o funcionamento geral do negócio."
+            },
+            "fourth": {
+              "title": "Eficiência",
+              "subtitle": "Automatização de tarefas dos processos de Recursos Humanos e de suporte interno."
+            }
+          },
+          "footer": {
+            "copyright": "© Triple AI. Todos os direitos reservados.",
+            "designBy": "Design por Triple AI",
+            "privacyPoliticsBtn": "Política de privacidade"
+          }
+        }
+      },
       "projects": {
         "tab": "Projetos",
         "title": "Seus projetos",

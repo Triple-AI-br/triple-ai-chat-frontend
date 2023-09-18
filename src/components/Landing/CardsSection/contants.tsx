@@ -1,39 +1,48 @@
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import ConnectWithoutContactIcon from "@mui/icons-material/ConnectWithoutContact";
 import DesignServicesIcon from "@mui/icons-material/DesignServices";
+import i18n from "../../../i18n";
 
-export const possibleWorks: Array<{icon: JSX.Element, description: string }> = [
+export const possibleWorks: Array<{ icon: JSX.Element; description: string }> = [
   {
     icon: <UploadFileIcon />,
-    description: "Faça upload de arquivos e pergunte qualquer coisa da sua empresa."
+    description: i18n.t("pages.landing.components.cardsSection.first.upload"),
   },
   {
     icon: <ConnectWithoutContactIcon />,
-    description: "Crie diversos conteúdos instantaneamente para redes sociais.",
+    description: i18n.t("pages.landing.components.cardsSection.first.createForSocialMidia"),
   },
   {
     icon: <DesignServicesIcon />,
-    description: "Otimize seus processos criando projetos inteiros com só um comando."
-  }
+    description: i18n.t("pages.landing.components.cardsSection.first.optimize"),
+  },
 ];
 
-export const securityAndPrivacy: Array<{imageUrl: string, title: string }> = [
+export const securityAndPrivacy: Array<{ imageUrl: string; title: string }> = [
   {
     imageUrl: "/securityIcons/criptografia.png",
-    title: "Dados são mantidos criptografados",
+    title: i18n.t("pages.landing.components.cardsSection.second.cryptography"),
   },
   {
     imageUrl: "/securityIcons/LGPD.jpeg",
-    title: "Conformidade com LGPD",
+    title: i18n.t("pages.landing.components.cardsSection.second.lgpd"),
   },
   {
     imageUrl: "/securityIcons/setorizado.svg",
-    title: "Segmente dados por setores da sua empresa",
+    title: i18n.t("pages.landing.components.cardsSection.second.dataBySectors"),
   },
   {
     imageUrl: "/securityIcons/privacy.svg",
-    title: "Alto padrão de privacidade e segurança",
-  }
+    title: i18n.t("pages.landing.components.cardsSection.second.privacy"),
+  },
 ];
 
-export const fileIcons = ["/fileIcons/envio.png","/fileIcons/fecho-eclair.png", "/fileIcons/imagem.png", "/fileIcons/palavra.png", "/fileIcons/pdf.png", "/fileIcons/power-point.png", "/fileIcons/xls.png"];
+export const fileIcons = [
+  "/fileIcons/envio.png",
+  "/fileIcons/fecho-eclair.png",
+  "/fileIcons/imagem.png",
+  "/fileIcons/palavra.png",
+  "/fileIcons/pdf.png",
+  "/fileIcons/power-point.png",
+  "/fileIcons/xls.png",
+];

@@ -18,8 +18,8 @@ export const PartnersListContainer = styled.section`
     margin-bottom: 80px;
   }
   @media (min-width: 1280px) {
-    margin: 0 auto;
-    padding: 24px 32px;
+    margin: 40px auto;
+    padding: 40px 32px;
   }
 `;
 
@@ -28,17 +28,26 @@ export const List = styled.ul`
   align-self: center;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   > li {
     list-style: none;
-    width: 30%;
-    max-width: 120px;
+    width: 100%;
+    max-width: 150px;
     > img {
       width: 100%;
     }
   }
   @media (min-width: 600px) {
     max-width: 600px;
+    flex-direction: row;
     justify-content: space-evenly;
+    > li {
+      list-style: none;
+      width: 30%;
+      max-width: 120px;
+      > img {
+        width: 100%;
+      }
+    }
   }
 `;

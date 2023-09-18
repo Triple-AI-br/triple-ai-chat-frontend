@@ -40,11 +40,72 @@
       "failureInviteMessage": "Failed to invite!",
       "failureRequestMessage": "Failed to pull data!"
     },
-    "landing": {
-      "title": "Create your company's CHATGPT",
-      "subtitle": "Automate operational tasks and make your company more efficient with our intelligent copilot."
-    },
     "pages": {
+      "landing": {
+        "components": {
+          "drawerTitle": "Navigation",
+          "actionBtn": "Schedule a Demo",
+          "header": {
+            "navLinks": {
+              "home": "Home",
+              "aboutUs": "About Us",
+              "contacts": "Contacts"
+            },
+            "loginBtn": "Log In"
+          },
+          "firstSection": {
+            "title": "CREATE YOUR COMPANY'S <span>CHATGPT</span>",
+            "subtitle": "Automate operational tasks and make your company more efficient with our intelligent co-pilot."
+          },
+          "partners": {
+            "title": "Our Partners"
+          },
+          "cardsSection": {
+            "first": {
+              "title": "What's Possible?",
+              "upload": "Upload files and ask anything about your company.",
+              "createForSocialMidia": "Create various content instantly for social media.",
+              "optimize": "Optimize your processes by creating entire projects with just one command."
+            },
+            "second": {
+              "title": "Our Security and Privacy Requirements",
+              "cryptography": "Data is kept encrypted",
+              "lgpd": "Compliance with LGPD",
+              "dataBySectors": "Segment data by sectors of your company",
+              "privacy": "High standard of privacy and security"
+            },
+            "third": {
+              "title": "Upload Files and Ask Anything"
+            },
+            "fourth": {
+              "title": "Prompt Manager with hundreds of ready-to-use templates"
+            }
+          },
+          "benefits": {
+            "first": {
+              "title": "With the Best Features 🚀",
+              "subtitle": "Use our solution for knowledge management, employee onboarding, customer support, content production, among other purposes."
+            },
+            "second": {
+              "title": "Increased Productivity",
+              "subtitle": "Resources and time will be allocated so you can focus on other areas of the business, resulting in increased productivity."
+            },
+            "third": {
+              "title": "Insights",
+              "subtitle": "The company can gain valuable insights quickly, contributing to improving the overall operation of the business."
+            },
+            "fourth": {
+              "title": "Efficiency",
+              "subtitle": "Automation of tasks in Human Resources and internal support processes."
+            }
+          },
+          "footer": {
+            "copyright": "© Triple AI. All rights reserved.",
+            "designBy": "Design by Triple AI",
+            "privacyPoliticsBtn": "Privacy Policy"
+          }
+        }
+      },
       "projects": {
         "tab": "Projects",
         "title": "Your Projects",
