@@ -16,7 +16,14 @@ const Upload = ({ uploadCallback }: IUploadProps) => {
   const [isUploading, serIsUploading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string }>();
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [isUploading, serIsUploading] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+  const { id } = useParams<{ id: string }>();
 
+  const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedFiles(Array.from(event.target.files || []));
+  };
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedFiles(Array.from(event.target.files || []));
   };

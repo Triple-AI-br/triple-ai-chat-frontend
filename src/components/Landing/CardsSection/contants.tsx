@@ -4,6 +4,7 @@ import DesignServicesIcon from "@mui/icons-material/DesignServices";
 import i18n from "../../../i18n";
 
 export const possibleWorks: Array<{ icon: JSX.Element; description: string }> = [
+export const possibleWorks: Array<{ icon: JSX.Element; description: string }> = [
   {
     icon: <UploadFileIcon />,
     description: i18n.t("pages.landing.components.cardsSection.first.upload"),
@@ -18,6 +19,7 @@ export const possibleWorks: Array<{ icon: JSX.Element; description: string }> = 
   },
 ];
 
+export const securityAndPrivacy: Array<{ imageUrl: string; title: string }> = [
 export const securityAndPrivacy: Array<{ imageUrl: string; title: string }> = [
   {
     imageUrl: "/securityIcons/criptografia.png",
@@ -35,6 +37,16 @@ export const securityAndPrivacy: Array<{ imageUrl: string; title: string }> = [
     imageUrl: "/securityIcons/privacy.svg",
     title: i18n.t("pages.landing.components.cardsSection.second.privacy"),
   },
+];
+
+export const fileIcons = [
+  "/fileIcons/envio.png",
+  "/fileIcons/fecho-eclair.png",
+  "/fileIcons/imagem.png",
+  "/fileIcons/palavra.png",
+  "/fileIcons/pdf.png",
+  "/fileIcons/power-point.png",
+  "/fileIcons/xls.png",
 ];
 
 export const fileIcons = [
