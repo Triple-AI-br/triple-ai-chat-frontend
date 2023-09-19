@@ -4,15 +4,17 @@ import { useAppDispatch } from "../../redux/hooks";
 import { Box, Button, Chip, CircularProgress } from "@mui/material";
 import { actionDisplayNotification } from "../../redux/notificationSlice";
 import { useParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface IUploadProps {
   uploadCallback(_: File[], __: string[]): void;
 }
 
 const Upload = ({ uploadCallback }: IUploadProps) => {
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isUploading, serIsUploading] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string }>();
 
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +35,7 @@ const Upload = ({ uploadCallback }: IUploadProps) => {
       });
       dispatch(
         actionDisplayNotification({
-          messages: ["Uploaded file successfully!"],
+          messages: [t("global.successUploadMessage")],
           severity: "success",
         }),
       );
@@ -62,7 +64,7 @@ const Upload = ({ uploadCallback }: IUploadProps) => {
       />
       <label htmlFor="contained-button-file">
         <Button variant="outlined" color="primary" component="span">
-          Upload new Files
+          {t("pages.sources.components.uploadFilesBtn")}
         </Button>
       </label>
 

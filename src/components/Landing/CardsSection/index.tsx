@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { fileIcons, possibleWorks, securityAndPrivacy } from "./contants";
 import {
   Card,
@@ -13,11 +14,12 @@ import {
 } from "./styled";
 
 const CardsSection = () => {
+  const { t } = useTranslation();
   return (
     <CardsContainer id="about-triple-ai">
       <Row>
         <Card>
-          <h2>O que é possível fazer?</h2>
+          <h2>{t("pages.landing.components.cardsSection.first.title")}</h2>
           <WorksContainer>
             {possibleWorks.map((work, index) => (
               <div key={index}>
@@ -28,7 +30,7 @@ const CardsSection = () => {
           </WorksContainer>
         </Card>
         <Card>
-          <h2>Nossos requisitos de segurança e privacidade</h2>
+          <h2>{t("pages.landing.components.cardsSection.second.title")}</h2>
           <SecurityContainer>
             {securityAndPrivacy.map((security, index) => (
               <div key={index}>
@@ -41,7 +43,7 @@ const CardsSection = () => {
       </Row>
       <Row>
         <Card>
-          <h2>Faça upload de arquivos e pergunte qualquer coisa</h2>
+          <h2>{t("pages.landing.components.cardsSection.third.title")}</h2>
           <ScreenShotImage src="/pluginChat.png" />
           <Circle>
             <div></div>
@@ -53,7 +55,7 @@ const CardsSection = () => {
           </IconsSession>
         </Card>
         <Card>
-          <h2>Gereciador de Prompts com centenas de modelos prontos para uso</h2>
+          <h2>{t("pages.landing.components.cardsSection.fourth.title")}</h2>
           <PromptImg src="/prompts.png" />
           <DottedBackground />
         </Card>

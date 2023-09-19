@@ -16,11 +16,13 @@ import {
 import { PrivacyTerms } from "../PrivacyTerms";
 import { useNavigate } from "react-router-dom";
 import { routesManager } from "../../../routes/routesManager";
+import { useTranslation } from "react-i18next";
 
 const WPP_URL =
   "http://api.whatsapp.com/send?phone=5527981213951&text=Olá,%20gostaria%20de%20saber%20mais%20sobre%20os%20produtos%20Triple%20AI,%20e%20como%20podem%20ajudar%20a%20minha%20empresa.";
 
 const LandingPageFooter = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const handleClick = (event: React.MouseEvent<HTMLElement, MouseEvent>): void => {
@@ -47,7 +49,7 @@ const LandingPageFooter = () => {
       <TopContainer>
         <ButtonsContainer>
           <CalendlyButton
-            text="Agende uma demo"
+            text={t("pages.landing.components.actionBtn")}
             url="https://calendly.com/eduardo-tripleai/30min"
             rootElement={document.getElementById("root") as HTMLElement}
           />
@@ -90,7 +92,7 @@ const LandingPageFooter = () => {
         </SocialMidias>
         <CenterContainer>
           <CalendlyButton
-            text="Agende uma demo"
+            text={t("pages.landing.components.actionBtn")}
             url="https://calendly.com/eduardo-tripleai/30min"
             rootElement={document.getElementById("root") as HTMLElement}
           />
@@ -100,9 +102,9 @@ const LandingPageFooter = () => {
       <BottomContainer>
         <Line />
         <RightsContainer>
-          <span>© Triple AI. Todos os direitos reservados.</span>
+          <span>{t("pages.landing.components.footer.copyright")}</span>
           <div></div>
-          <span>Design por Triple AI</span>
+          <span>{t("pages.landing.components.footer.designBy")}</span>
         </RightsContainer>
       </BottomContainer>
     </FooterContainer>

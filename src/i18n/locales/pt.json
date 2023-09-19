@@ -1,0 +1,234 @@
+{
+  "translation": {
+    "global": {
+      "login": "Entrar",
+      "logout": "Sair",
+      "confirm": "Confirmar",
+      "cancel": "Cancelar",
+      "delete": "Deletar",
+      "settings": "Configurações",
+      "edit": "Editar",
+      "private": "Privado",
+      "public": "Público",
+      "loading": "Carregando",
+      "submit": "Enviar",
+      "you": "Você",
+      "noUsers": "Sem usuários",
+      "relativeTime": {
+        "future": "em %s",
+        "past": "%s atrás",
+        "s": "segundos",
+        "m": "um minuto",
+        "mm": "%d minutos",
+        "h": "uma hora",
+        "hh": "%d horas",
+        "d": "um dia",
+        "dd": "%d dias",
+        "M": "um mês",
+        "MM": "%d meses",
+        "y": "um ano",
+        "yy": "%d anos"
+      },
+      "successDeletedMessage": "Excluído com sucesso!",
+      "successUpdateMessage": "Atualizado com sucesso!",
+      "successCreateMessage": "Criado com sucesso!",
+      "successUploadMessage": "Upload com sucesso!",
+      "failureUploadMessage": "Falha ao fazer upload!",
+      "failureDeleteMessage": "Falha ao excluir!",
+      "failureUpdateMessage": "Falha ao atualizar!",
+      "failureCreateMessage": "Falha ao criar!",
+      "failureInviteMessage": "Falha ao convidar!",
+      "failureRequestMessage": "Falha na requisição!"
+    },
+    "pages": {
+      "landing": {
+        "components": {
+          "drawerTitle": "Navegação",
+          "actionBtn": "Agende uma demo",
+          "header": {
+            "navLinks": {
+              "home": "Início",
+              "aboutUs": "Sobre nós",
+              "contacts": "Contatos"
+            },
+            "loginBtn": "Entrar"
+          },
+          "firstSection": {
+            "title": "CRIE O <span>CHATGPT</span> DA SUA EMPRESA",
+            "subtitle": "Automatize tarefas operacionais e torne sua empresa mais eficiente com o nosso copiloto inteligente."
+          },
+          "partners": {
+            "title": "Nossos parceiros"
+          },
+          "cardsSection": {
+            "first": {
+              "title": "O que é possível fazer?",
+              "upload": "Faça upload de arquivos e pergunte qualquer coisa da sua empresa.",
+              "createForSocialMidia": "Crie diversos conteúdos instantaneamente para redes sociais.",
+              "optimize": "Otimize seus processos criando projetos inteiros com só um comando."
+            },
+            "second": {
+              "title": "Nossos requisitos de segurança e privacidade",
+              "cryptography": "Dados são mantidos criptografados",
+              "lgpd": "Conformidade com LGPD",
+              "dataBySectors": "Segmente dados por setores da sua empresa",
+              "privacy": "Alto padrão de privacidade e segurança"
+            },
+            "third": {
+              "title": "Faça upload de arquivos e pergunte qualquer coisa"
+            },
+            "fourth": {
+              "title": "Gereciador de Prompts com centenas de modelos prontos para uso"
+            }
+          },
+          "benefits": {
+            "first": {
+              "title": "Com as melhores funcionalidades 🚀",
+              "subtitle": "Utilize nossa solução para fins de gestão do conhecimento, onboarding de funcionários, atendimento ao cliente, produção de conteúdo, dentre outras finalidades."
+            },
+            "second": {
+              "title": "Aumento da produtividade",
+              "subtitle": "Recursos e tempo serão alocados para que você possa direcionar seu foco a outras áreas do negócio, resultando em um aumento de produtividade."
+            },
+            "third": {
+              "title": "Insights",
+              "subtitle": "A empresa poderá adquirir conhecimentos valiosos de forma rápida, o que contribui para aprimorar o funcionamento geral do negócio."
+            },
+            "fourth": {
+              "title": "Eficiência",
+              "subtitle": "Automatização de tarefas dos processos de Recursos Humanos e de suporte interno."
+            }
+          },
+          "footer": {
+            "copyright": "© Triple AI. Todos os direitos reservados.",
+            "designBy": "Design por Triple AI",
+            "privacyPoliticsBtn": "Política de privacidade"
+          }
+        }
+      },
+      "projects": {
+        "tab": "Projetos",
+        "title": "Seus projetos",
+        "listErrorMessage": "Tivemos problemas para encontrar seus projetos",
+        "noProjectsMessage": "Você ainda não tem nenhum projeto",
+        "components": {
+          "newProjectBtn": "Novo Projeto",
+          "deleteConfirmationMessage": "Tem certeza que deseja deletar o projeto {{project}}",
+          "collapse": {
+            "your":"Seus projetos",
+            "shared": "Projetos compartilhados com você"
+          },
+          "createEditModal": {
+            "editModalTitle": "Editar projeto",
+            "createModalTitle": "Criar projeto",
+            "title": "Título do Projeto",
+            "description": "Descrição",
+            "basePrompt": "Prompt Base",
+            "externalKnowledge": "Habilitar conhecimento externo do ChatGPT",
+            "public": "Público dentro da sua organização",
+            "tooltip": {
+              "basePrompt": "Define o tom e o comportamento do chatbot",
+              "externalKnowledge": "Quando desativado, o chatbot responderá apenas com base nos documentos carregados"
+            },
+            "required": {
+              "title": "O título é obrigatório",
+              "description": "A descrição é obrigatória"
+            }
+          }
+        }
+      },
+      "sources": {
+        "title": "Projeto: {{project}}",
+        "noFilesMessage": "O projeto ainda não possui arquivos. Vá em frente e faça upload de alguns",
+        "noFilesAndNoPermissionMessage": "O projeto ainda não possui arquivos. Peça ao seu administrador para fazer o upload dos documentos relevantes.",
+        "owner": "Proprietário do projeto",
+        "grantedUsersCountMessage": "{{count}} usuário(s) tem acesso ao projeto: {{project}}",
+        "components": {
+          "uploadFilesBtn": "Upload de novos arquivos",
+          "shareProjectTitle": "Compartilhamento do projeto",
+          "shareProjectBtn": "Compartilhar com outros",
+          "searchUserInputLabel": "Encontre usuários no projeto:",
+          "permissionsFor": "Permissão para: {{user}}",
+          "removeGrantedUserConfirmation": "Tem certeza que deseja remover o usuário {{user}} do projeto?",
+          "inviteModal": {
+            "title": "Adicionar novos usuários ao projeto",
+            "atLeastOneMessage": "Você precisa escolher pelo menos 1 usuário",
+            "errorOnInviteFollowingUsers": "Os seguintes usuários não foram convidados:",
+            "availableUsers": "Usuários disponíveis",
+            "usersToInvite": "Usuários para convidar",
+            "permissionsTitle": "Permissões",
+            "uploadFilesPermissionSwitch": "Fazer upload de aquivos",
+            "deleteFilesPermissionSwitch": "Apagar arquivos"
+          }
+        }
+      },
+      "prompts": {
+        "tab": "Prompts",
+        "title": "Encontre ótimos prompts",
+        "listErrorMessage": "Tivemos um problema ao encontrar seus prompts",
+        "noPromptsMessage": "Ainda não há prompts",
+        "likes": "{{likes}} curtida",
+        "plural": "s",
+        "components": {
+          "tabMenu": {
+            "latest": "Últimos prompts",
+            "top": "Mais Curtidos",
+            "likes": "Minhas Curtidas",
+            "my": "Meus Prompts"
+          },
+          "modal": {
+            "createTitle": "Criar um novo prompt",
+            "inputTitle": "Título",
+            "inputPrompt": "Prompt",
+            "public": "Torná-lo público dentro da minha empresa",
+            "copyPrompt": "Copiar prompt"
+          }
+        }
+      }
+    },
+    "privacyPolicy": {
+      "title": "Nossa Política de Privacidade",
+      "lastUpdate": "Última atualização: 31 de julho de 2023",
+      "description": "Na Triple AI, proteger os dados dos nossos clientes e usuários é essencial para a nossa missão. Nossa plataforma mantém altos padrões de segurança e privacidade de dados, garantindo a confidencialidade e integridade das informações fornecidas. A conformidade com a LGPD (Lei Geral de Proteção de Dados) e outras legislações aplicáveis sempre foi uma prioridade para nossa empresa desde o seu início, sendo nosso produtos e serviços orientados pelo princípio de \"privacy by design\".",
+      "firstClause": {
+        "title": "Coleta de Dados Pessoais",
+        "data": [
+          "Informações Fornecidas pelos Clientes: Coletamos informações pessoais fornecidas voluntariamente ao utilizar nossos serviços e interagir com a plataforma. Esses dados podem incluir nome, endereço de e-mail, cargo, empresa, número de telefone e outros detalhes relevantes.",
+          "Dados de Utilização e Interatividade: Quando você utiliza nossa plataforma, coletamos dados de utilização, como informações de acesso, atividades realizadas, consultas de pesquisa e outras interações com nossos serviços.",
+          "Cookies e Tecnologias Similares: Utilizamos cookies e tecnologias similares para aprimorar a experiência do usuário, personalizar conteúdos e coletar informações estatísticas, como tipo de dispositivo, navegador e endereço IP."
+        ]
+      },
+      "secondClause": {
+        "title": "Compromisso da Triple AI",
+        "data": [
+          "Não Utilização de Dados para Treinamento: As informações compartilhadas com a OpenAI via API, principalmente informações pessoais, não são utilizadas para treinar os modelos deles, garantindo a privacidade dos dados dos nossos clientes. Isso é algo explicitamente descrito nos termos \"API Data Privacy\", que constam no site da OpenAI. (https://openai.com/api-data-privacy).",
+          "Transparência: Comprometemo-nos a ser transparentes sobre nossas práticas de tratamento de dados e a política de privacidade da Triple AI. Estamos empenhados em fornecer informações claras e detalhadas sobre como utilizamos e protegemos as informações pessoais, que poderão sempre ser obtidas prontamente por meio de contato direto com o nosso DPO (encarregado de proteção de dados).",
+          "Segurança de Dados: Implementamos medidas de segurança técnicas e organizacionais para proteger os dados dos clientes contra acesso não autorizado, uso indevido e divulgação não autorizada."
+        ]
+      },
+      "thirdClause": {
+        "title": "Uso e Finalidade dos Dados",
+        "data": [
+          "Personalização e Aprimoramento de Serviços: As informações coletadas são utilizadas para personalizar a experiência do usuário na plataforma e aprimorar nossos serviços, oferecendo conteúdos e recursos relevantes.",
+          "Comunicação e Suporte: Utilizamos os dados pessoais para responder a solicitações, fornecer suporte técnico e compartilhar informações importantes sobre nossos serviços.",
+          "Melhorias e Análises: Realizamos análises estatísticas para aprimorar nossos recursos, identificar tendências e otimizar a usabilidade da plataforma."
+        ]
+      },
+      "fourthClause": {
+        "title": "Compartilhamento de Dados",
+        "data": [
+          "Terceiros Prestadores de Serviço: Em determinadas circunstâncias, podemos compartilhar informações pessoais com prestadores de serviço que nos auxiliam na operação da plataforma e na prestação dos serviços, como por exemplo, OpenAI e Pinecone. Conhecemos muito bem as políticas de privacidade de cada um desses prestadores de serviço, que estão tecnicamente e eticamente alinhados no sentido de garantir a proteção e privacidade de dados de dados compartilhados pela Triple AI.",
+          "Consentimento do Cliente: Não compartilharemos informações pessoais com terceiros sem o consentimento prévio dos clientes, a menos que seja necessário cumprir obrigações legais ou permitido por lei."
+        ]
+      },
+      "fifthClause": {
+        "title": "Alterações na Política de Privacidade",
+        "data": "Reservamo-nos o direito de atualizar ou modificar esta Política de Privacidade conforme necessário. As alterações serão comunicadas aos clientes por meio de nossa plataforma ou por outros meios apropriados."
+      },
+      "sixthClause": {
+        "title": "Contato e DPO (Data Protection Officer)",
+        "data": "Se tiver dúvidas, solicitações ou preocupações sobre nossa Política de Privacidade, entre em contato conosco através dos canais disponibilizados na plataforma. Nosso DPO (Data Protection Officer) pode ser contactado por meio do email fundadores@tripleai.com.br. Agradecemos por confiar na Triple AI. Estamos empenhados em proteger a privacidade e a segurança dos dados dos nossos clientes e usuários."
+      }
+    }
+  }
+}

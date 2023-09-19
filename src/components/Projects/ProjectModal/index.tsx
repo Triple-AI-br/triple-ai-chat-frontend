@@ -6,6 +6,7 @@ import { actionDisplayNotification } from "../../../redux/notificationSlice";
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { useRef } from "react";
 import { selectUserData } from "../../../redux/authenticationSlice";
+import { useTranslation } from "react-i18next";
 const { useToken } = theme;
 
 type ProjectModalProps = {
@@ -31,6 +32,7 @@ const ProjectModal = ({
   formType,
   projectToEdit,
 }: ProjectModalProps) => {
+  const { t } = useTranslation();
   const { token } = useToken();
   const dispatch = useAppDispatch();
   const userData = useAppSelector(selectUserData);
@@ -59,7 +61,9 @@ const ProjectModal = ({
       }
       dispatch(
         actionDisplayNotification({
-          messages: isEditing ? ["Project edited successfully"] : ["Project created successfully"],
+          messages: isEditing
+            ? [t("global.successUpdateMessage")]
+            : [t("global.successCreateMessage")],
           severity: "success",
         }),
       );
@@ -67,8 +71,8 @@ const ProjectModal = ({
       dispatch(
         actionDisplayNotification({
           messages: isEditing
-            ? ["Error in project editing"]
-            : [(err as { response: { data: { detail: string } } }).response.data.detail],
+            ? [t("global.failureUpdateMessage")]
+            : [t("global.failureCreateMessage")],
           severity: "error",
         }),
       );
@@ -89,7 +93,11 @@ const ProjectModal = ({
   return (
     <Modal
       open={open}
-      title={isEditing ? "Edit project" : "Create new project"}
+      title={
+        isEditing
+          ? t("pages.projects.components.createEditModal.editModalTitle")
+          : t("pages.projects.components.createEditModal.createModalTitle")
+      }
       onOk={handleConfirm}
       onCancel={handleClose}
       destroyOnClose={true}
@@ -100,7 +108,7 @@ const ProjectModal = ({
           onClick={handleClose}
           style={{ display: !isOwner ? "none" : "inline-block" }}
         >
-          Cancel
+          {t("global.cancel")}
         </Button>,
         <Button
           key="submit"
@@ -109,7 +117,7 @@ const ProjectModal = ({
           type="primary"
           style={{ display: !isOwner ? "none" : "inline-block" }}
         >
-          Submit
+          {t("global.submit")}
         </Button>,
       ]}
     >
@@ -129,40 +137,42 @@ const ProjectModal = ({
         style={{ marginTop: "20px" }}
       >
         <Form.Item
-          label="Title"
+          label={t("pages.projects.components.createEditModal.title")}
           name="title"
           rules={[
             {
               required: true,
-              message: "Project title is required!",
+              message: t("pages.projects.components.createEditModal.required.title"),
             },
           ]}
         >
           <Input maxLength={30} />
         </Form.Item>
         <Form.Item
-          label="Description"
+          label={t("pages.projects.components.createEditModal.description")}
           name="description"
           rules={[
             {
               required: true,
-              message: "Project description is required!",
+              message: t("pages.projects.components.createEditModal.required.description"),
             },
           ]}
         >
           <Input maxLength={100} />
         </Form.Item>
         <Form.Item
-          label="Base prompt"
+          label={t("pages.projects.components.createEditModal.basePrompt")}
           name="system_tone"
-          tooltip="Sets the tone and behaviour of the chatbot"
+          tooltip={t("pages.projects.components.createEditModal.tooltip.basePrompt")}
         >
           <TextArea autoSize={{ minRows: 3, maxRows: 5 }} showCount maxLength={800} />
         </Form.Item>
         <Form.Item name="internal_knowledge_only" valuePropName="checked">
           <Checkbox defaultChecked={true} style={{ display: "flex", alignItems: "center" }}>
-            Enable ChatGPT external knowledge
-            <Tooltip title="When disabled the chatbot will respond based on the uploaded documents only.">
+            {t("pages.projects.components.createEditModal.externalKnowledge")}
+            <Tooltip
+              title={t("pages.projects.components.createEditModal.tooltip.externalKnowledge")}
+            >
               <QuestionCircleOutlined
                 style={{
                   paddingLeft: "10px",
@@ -174,7 +184,7 @@ const ProjectModal = ({
           </Checkbox>
         </Form.Item>
         <Form.Item name="is_public" valuePropName="checked">
-          <Checkbox>Public within your organization</Checkbox>
+          <Checkbox>{t("pages.projects.components.createEditModal.public")}</Checkbox>
         </Form.Item>
       </Form>
     </Modal>

@@ -21,9 +21,24 @@ import {
   HomeOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
-import { Image, Breadcrumb, Layout, Menu, theme, Button, Tooltip, Typography, Grid } from "antd";
+import {
+  Image,
+  Breadcrumb,
+  Layout,
+  Menu,
+  theme,
+  Button,
+  Tooltip,
+  Typography,
+  Grid,
+  Select,
+} from "antd";
 import { useEffect, useState } from "react";
 import React from "react";
+import { languagesSupport } from "../i18n";
+import i18next from "i18next";
+import { useTranslation } from "react-i18next";
+import { setLanguageToStorage } from "../utils/setLanguageToStorage";
 
 const { Header, Content, Footer, Sider } = Layout;
 type MenuItem = Required<MenuProps>["items"][number];
@@ -34,6 +49,7 @@ interface IBaseProps {
 }
 
 const Base = ({ children, title }: IBaseProps) => {
+  const { t } = useTranslation();
   const { useBreakpoint } = Grid;
   const screenSize = useBreakpoint();
   const dispatch = useAppDispatch();
@@ -87,8 +103,8 @@ const Base = ({ children, title }: IBaseProps) => {
     } as MenuItem;
   }
   const items: MenuItem[] = [
-    getItem("Projects", "1", routesManager.getProjectsRoute(), <InboxOutlined />),
-    getItem("Prompts", "2", routesManager.getPromptsRoute(), <SnippetsOutlined />),
+    getItem(t("pages.projects.tab"), "1", routesManager.getProjectsRoute(), <InboxOutlined />),
+    getItem(t("pages.prompts.tab"), "2", routesManager.getPromptsRoute(), <SnippetsOutlined />),
   ];
   if (isAdminOrSuperUser)
     items.push(getItem("Admin", "3", routesManager.getAdminRoute(), <TeamOutlined />));
@@ -139,10 +155,9 @@ const Base = ({ children, title }: IBaseProps) => {
           </div>
         </div>
         <Menu theme="dark" defaultSelectedKeys={[initialTab]} mode="inline" items={items} />
-
         {!(screenSize.xs && collapsed) && (
           <div style={{ display: "flex", justifyContent: "center" }}>
-            <Tooltip title={collapsed ? "Logout" : ""} placement="right">
+            <Tooltip title={collapsed ? t("global.logout") : ""} placement="right">
               <Button
                 danger
                 onClick={handleLogout}
@@ -155,7 +170,7 @@ const Base = ({ children, title }: IBaseProps) => {
                 }}
                 icon={<LogoutOutlined />}
               >
-                {collapsed ? null : "Logout"}
+                {collapsed ? null : t("global.logout")}
               </Button>
             </Tooltip>
           </div>
@@ -187,11 +202,21 @@ const Base = ({ children, title }: IBaseProps) => {
             background: colorBgContainer,
             display: "flex",
             alignItems: "center",
+            justifyContent: "space-between",
           }}
         >
           <Typography.Title level={4} style={{ margin: 0 }}>
             {`${title} - ${customerData?.name}`}
           </Typography.Title>
+          <Select
+            value={i18next.language}
+            style={{ width: "200px", maxWidth: "40%" }}
+            onChange={(key) => {
+              setLanguageToStorage(key as "en" | "pt" | "es");
+              i18next.changeLanguage(key);
+            }}
+            options={languagesSupport}
+          />
         </Header>
         <Content style={{ margin: "0 32px" }}>
           <Breadcrumb
