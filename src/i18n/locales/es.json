@@ -185,6 +185,50 @@
           }
         }
       }
+    },
+    "privacyPolicy": {
+      "title": "Nuestra Política de Privacidad",
+      "lastUpdate": "Última Actualización: 31 de julio de 2023",
+      "description": "En Triple AI, proteger los datos de nuestros clientes y usuarios es fundamental para nuestra misión. Nuestra plataforma mantiene altos estándares de seguridad y privacidad de datos, garantizando la confidencialidad e integridad de la información proporcionada. El cumplimiento de la LGPD (Ley General de Protección de Datos) y otras leyes aplicables siempre ha sido una prioridad para nuestra empresa desde su inicio, y nuestros productos y servicios se rigen por el principio de 'privacidad por diseño'.",
+      "firstClause": {
+        "title": "Recopilación de Datos Personales",
+        "data": [
+          "Información Proporcionada por los Clientes: Recopilamos información personal proporcionada voluntariamente al utilizar nuestros servicios e interactuar con la plataforma. Estos datos pueden incluir nombre, dirección de correo electrónico, cargo, empresa, número de teléfono y otros detalles relevantes.",
+          "Datos de Uso e Interacción: Cuando utiliza nuestra plataforma, recopilamos datos de uso, como información de acceso, actividades realizadas, consultas de búsqueda y otras interacciones con nuestros servicios.",
+          "Cookies y Tecnologías Similares: Utilizamos cookies y tecnologías similares para mejorar la experiencia del usuario, personalizar contenidos y recopilar información estadística, como el tipo de dispositivo, navegador y dirección IP."
+        ]
+      },
+      "secondClause": {
+        "title": "Compromiso de Triple AI",
+        "data": [
+          "No Uso de Datos para Entrenamiento: La información compartida con OpenAI a través de la API, especialmente información personal, no se utiliza para entrenar sus modelos, garantizando la privacidad de los datos de nuestros clientes. Esto se describe explícitamente en los términos de 'Privacidad de Datos de API', que están disponibles en el sitio web de OpenAI. (https://openai.com/api-data-privacy).",
+          "Transparencia: Nos comprometemos a ser transparentes sobre nuestras prácticas de procesamiento de datos y la política de privacidad de Triple AI. Estamos dedicados a proporcionar información clara y detallada sobre cómo utilizamos y protegemos la información personal, que siempre se puede obtener de manera rápida a través del contacto directo con nuestro Oficial de Protección de Datos (DPO).",
+          "Seguridad de Datos: Hemos implementado medidas de seguridad técnicas y organizativas para proteger los datos de los clientes contra el acceso no autorizado, el uso indebido y la divulgación no autorizada."
+        ]
+      },
+      "thirdClause": {
+        "title": "Uso y Propósito de los Datos",
+        "data": [
+          "Personalización y Mejora de los Servicios: La información recopilada se utiliza para personalizar la experiencia del usuario en la plataforma y mejorar nuestros servicios al ofrecer contenidos y funciones relevantes.",
+          "Comunicación y Soporte: Utilizamos datos personales para responder a solicitudes, brindar soporte técnico y compartir información importante sobre nuestros servicios.",
+          "Mejoras y Análisis: Realizamos análisis estadísticos para mejorar nuestras características, identificar tendencias y optimizar la usabilidad de la plataforma."
+        ]
+      },
+      "fourthClause": {
+        "title": "Compartir Datos",
+        "data": [
+          "Proveedores de Servicios Terceros: En ciertas circunstancias, podemos compartir información personal con proveedores de servicios que nos ayudan a operar la plataforma y brindar servicios, como OpenAI y Pinecone. Conocemos bien las políticas de privacidad de cada uno de estos proveedores de servicios, que están alineados técnicamente y éticamente para garantizar la protección y privacidad de los datos compartidos por Triple AI.",
+          "Consentimiento del Cliente: No compartiremos información personal con terceros sin el consentimiento previo de los clientes, a menos que sea necesario para cumplir con obligaciones legales o esté permitido por la ley."
+        ]
+      },
+      "fifthClause": {
+        "title": "Cambios en la Política de Privacidad",
+        "data": "Nos reservamos el derecho de actualizar o modificar esta Política de Privacidad según sea necesario. Los cambios se comunicarán a los clientes a través de nuestra plataforma u otros medios apropiados."
+      },
+      "sixthClause": {
+        "title": "Contacto y Oficial de Protección de Datos (DPO)",
+        "data": "Si tiene preguntas, solicitudes o inquietudes sobre nuestra Política de Privacidad, contáctenos a través de los canales proporcionados en la plataforma. Nuestro Oficial de Protección de Datos (DPO) se puede contactar por correo electrónico en fundadores@tripleai.com.br. Gracias por confiar en Triple AI. Estamos comprometidos en proteger la privacidad y seguridad de los datos de nuestros clientes y usuarios."
+      }
     }
   }
 }
