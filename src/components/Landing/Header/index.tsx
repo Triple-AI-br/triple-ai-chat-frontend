@@ -6,6 +6,7 @@ import { Button } from "antd";
 import { useState } from "react";
 import { LandingDrawer } from "../Drawer";
 import { useTranslation } from "react-i18next";
+import { LanguageSelector } from "../LanguageSelector";
 
 const LandingHeader = () => {
   const { t } = useTranslation();
@@ -22,6 +23,7 @@ const LandingHeader = () => {
 
   return (
     <HeaderContainer bottomScroll={false}>
+      <LandingDrawer onClose={onClose} open={open} />
       <LogoImg src="/triple-ai.png" />
       <NavElements>
         <li>
@@ -34,17 +36,16 @@ const LandingHeader = () => {
           <a href="#landing-footer">{t("pages.landing.components.header.navLinks.contacts")}</a>
         </li>
       </NavElements>
-      <LandingDrawer onClose={onClose} open={open} />
       <ActionContainer style={{ display: "flex", gap: 10, alignItems: "center" }}>
         <ActionButton
           text={t("pages.landing.components.actionBtn")}
           url="https://calendly.com/eduardo-tripleai/30min"
           rootElement={document.getElementById("root") as HTMLElement}
         ></ActionButton>
-
         <Button type="link" onClick={() => navigate(routesManager.getProjectsRoute())}>
           {t("pages.landing.components.header.loginBtn")}
         </Button>
+        <LanguageSelector />
 
         <MenuIcon onClick={showDrawer} />
       </ActionContainer>

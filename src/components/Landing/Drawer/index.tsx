@@ -4,6 +4,7 @@ import { routesManager } from "../../../routes/routesManager";
 import { ActionButton } from "../Header/styled";
 import { DrawerContainer, Navigator, RightsContainer } from "./styled";
 import { useTranslation } from "react-i18next";
+import { LanguageSelector } from "../LanguageSelector";
 
 type LandingDrawerProps = {
   onClose: () => void;
@@ -22,6 +23,7 @@ const LandingDrawer: React.FC<LandingDrawerProps> = ({ onClose, open }) => {
       bodyStyle={{ position: "relative" }}
     >
       <DrawerContainer>
+        <LanguageSelector />
         <Button type="link" onClick={() => navigate(routesManager.getProjectsRoute())}>
           {t("pages.landing.components.header.loginBtn")}
         </Button>
