@@ -20,9 +20,9 @@ export const languagesSupport = [
   },
 ];
 
-const resources = {
-  en: enJson,
+export const languageResources = {
   pt: ptJson,
+  en: enJson,
   es: esJson,
 };
 
@@ -49,7 +49,7 @@ i18n.use(initReactI18next).init({
   interpolation: {
     escapeValue: false, // not needed for react!!
   },
-  resources,
+  resources: languageResources,
 });
 
 export default i18n;

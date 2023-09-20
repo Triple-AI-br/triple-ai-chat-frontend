@@ -14,6 +14,7 @@ export const HeaderContainer = styled.section<{ bottomScroll?: boolean }>`
   @media (min-width: 600px) {
     position: sticky;
     top: 0;
+    gap: 20px;
     background: rgba(248, 252, 255, 0.5);
     border-radius: 0 0 16px 16px;
     backdrop-filter: blur(6.5px);
@@ -38,10 +39,12 @@ export const NavElements = styled.ul`
   @media (min-width: 600px) {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 10px;
     list-style: none;
     > li {
       cursor: pointer;
+      display: block;
+      white-space: nowrap;
       > a {
         color: #3e4352;
         text-decoration: none;
@@ -78,9 +81,17 @@ export const ActionContainer = styled.div`
     display: none;
   }
   > svg {
+    cursor: pointer;
     display: inline-block;
   }
+  :nth-child(3) {
+    display: none;
+  }
   @media (min-width: 800px) {
+    :nth-child(3) {
+      white-space: nowrap;
+      display: flex;
+    }
     > button {
       display: inline-block;
     }

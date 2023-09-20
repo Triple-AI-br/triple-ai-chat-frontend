@@ -176,7 +176,7 @@ const Base = ({ children, title }: IBaseProps) => {
           </div>
         )}
         {screenSize.xs ? null : (
-          <Tooltip title={collapsed ? "Expand" : "Collapse"} placement="right">
+          <Tooltip title={collapsed ? t("global.expand") : t("global.collapse")} placement="right">
             <Button
               type="primary"
               onClick={toggleCollapsed}
@@ -245,7 +245,7 @@ const Base = ({ children, title }: IBaseProps) => {
             {children}
           </div>
         </Content>
-        <Footer style={{ textAlign: "center" }}>Made with ❤️ by Triple AI</Footer>
+        <Footer style={{ textAlign: "center" }}>{t("global.madeWithLove")}</Footer>
       </Layout>
     </Layout>
   );

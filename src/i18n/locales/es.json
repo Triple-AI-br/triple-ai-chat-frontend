@@ -14,6 +14,9 @@
       "submit": "Enviar",
       "you": "Tú",
       "noUsers": "No hay usuarios",
+      "collapse": "Retraer",
+      "expand": "Expandir",
+      "madeWithLove": "Hecho con ❤️ por Triple AI",
       "relativeTime": {
         "future": "en %s",
         "past": "hace %s",
@@ -182,6 +185,23 @@
             "inputPrompt": "Prompt",
             "public": "Hacerlo público dentro de mi empresa",
             "copyPrompt": "Copiar prompt"
+          }
+        }
+      },
+      "admin": {
+        "title": "Invita a tus compañeros",
+        "components": {
+          "userTable": {
+            "title": "Usuarios Actuales",
+            "active": "Activo",
+            "emailConfirmed": "Email confirmado",
+            "rowsPerPage": "Filas por página",
+            "of": "de"
+          },
+          "inviteInput": {
+            "title": "Invita Nuevos Usuarios",
+            "placeholder": "Ingrese los Emails",
+            "inviteBtn": "Invitar"
           }
         }
       }

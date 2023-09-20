@@ -14,6 +14,9 @@
       "submit": "Submit",
       "you": "You",
       "noUsers": "No users",
+      "collapse": "Collapse",
+      "expand": "Expand",
+      "madeWithLove": "Made with ❤️ by Triple AI",
       "relativeTime": {
         "future": "in %s",
         "past": "%s ago",
@@ -182,6 +185,23 @@
             "inputPrompt": "Prompt",
             "public": "Make it public within my company",
             "copyPrompt": "Copy prompt"
+          }
+        }
+      },
+      "admin": {
+        "title": "Invite your coworkers",
+        "components": {
+          "userTable": {
+            "title": "Current Users",
+            "active": "Active",
+            "emailConfirmed": "Email confirmed",
+            "rowsPerPage": "Rows per page",
+            "of": "of"
+          },
+          "inviteInput": {
+            "title": "Invite new Users",
+            "placeholder": "Input emails",
+            "inviteBtn": "Invite"
           }
         }
       }
