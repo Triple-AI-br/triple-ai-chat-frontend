@@ -46,7 +46,6 @@ const LandingHeader = () => {
           {t("pages.landing.components.header.loginBtn")}
         </Button>
         <LanguageSelector />
-
         <MenuIcon onClick={showDrawer} />
       </ActionContainer>
     </HeaderContainer>
