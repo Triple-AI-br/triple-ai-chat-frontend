@@ -8,6 +8,7 @@ import { PermissionsArray } from "../../../services/users";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { actionDisplayNotification } from "../../../redux/notificationSlice";
 import { selectUserData } from "../../../redux/authenticationSlice";
+import { useTranslation } from "react-i18next";
 
 type ProjectOwnerManager = {
   project?: IProject;
@@ -15,6 +16,7 @@ type ProjectOwnerManager = {
 };
 
 const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11 }) => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const userData = useAppSelector(selectUserData);
 
@@ -29,11 +31,11 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
 
   const confirmRemoveUserModal = (email: string) => {
     modal.confirm({
-      title: "Confirm",
+      title: t("global.confirm"),
       icon: <ExclamationCircleOutlined />,
-      content: `Are you sure you want to remove the user "${email}" from project?`,
-      okText: "Remove",
-      cancelText: "Cancel",
+      content: t("pages.sources.components.removeGrantedUserConfirmation", { user: email }),
+      okText: t("global.delete"),
+      cancelText: t("global.cancel"),
       onOk: async () => {
         try {
           if (!project?.id) return;
@@ -42,7 +44,7 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
         } catch (err) {
           dispatch(
             actionDisplayNotification({
-              messages: ["An error occurred while removing user from project."],
+              messages: [t("global.failureDeleteMessage")],
               severity: "error",
             }),
           );
@@ -56,12 +58,12 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
   const changePermissions = (grantedUser: IGrantedUsers) => {
     permissionsToApply = grantedUser.permissions;
     modal.info({
-      title: "Confirm",
+      title: t("global.confirm"),
       icon: <ExclamationCircleOutlined />,
       closable: true,
       content: (
         <PermissionContainer>
-          <h2>{`Permissions for ${grantedUser.email}`}</h2>
+          <h2>{t("pages.sources.components.permissionsFor", { user: grantedUser.email })}</h2>
           <Select
             mode="multiple"
             allowClear
@@ -69,13 +71,20 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
             defaultValue={grantedUser.permissions}
             onChange={(e) => (permissionsToApply = e)}
             options={[
-              { label: "Upload Files", value: "files:upload" },
-              { label: "Delete Files", value: "files:delete" },
+              {
+                label: t("pages.sources.components.inviteModal.uploadFilesPermissionSwitch"),
+                value: "files:upload",
+              },
+              {
+                label: t("pages.sources.components.inviteModal.deleteFilesPermissionSwitch"),
+                value: "files:delete",
+              },
             ]}
           />
         </PermissionContainer>
       ),
-      okText: "Confirm",
+      okText: t("global.confirm"),
+      cancelText: t("global.cancel"),
       onOk: async () => {
         try {
           if (permissionsToApply === grantedUser.permissions || !project?.id) return;
@@ -89,7 +98,7 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
         } catch (err) {
           dispatch(
             actionDisplayNotification({
-              messages: ["An error occurred while editing user permissions."],
+              messages: [t("global.failureUpdateMessage")],
               severity: "error",
             }),
           );
@@ -115,7 +124,7 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
     } catch (er) {
       dispatch(
         actionDisplayNotification({
-          messages: ["An error occurred while fetching granted users."],
+          messages: [t("global.failureRequestMessage")],
           severity: "warning",
         }),
       );
@@ -133,7 +142,11 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
   const ListHeader = () => {
     return (
       <Form layout="vertical">
-        <Form.Item name="user" required={false} label="Find users in project:">
+        <Form.Item
+          name="user"
+          required={false}
+          label={t("pages.sources.components.searchUserInputLabel")}
+        >
           <Space.Compact style={{ width: "100%" }}>
             <Input
               onChange={(e) => {
@@ -171,19 +184,20 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
       ) : null}
       {contextHolder}
       <ListUserContainer>
-        <h1>Project sharing</h1>
+        <h1>{t("pages.sources.components.shareProjectTitle")}</h1>
         <Button
           icon={<PlusOutlined />}
           type="primary"
           onClick={() => setOpenModal((prev) => !prev)}
           disabled={!isUserOwner}
         >
-          Share with others
+          {t("pages.sources.components.shareProjectBtn")}
         </Button>
         <Typography.Text type="secondary">
-          Project owner:{" "}
+          {t("pages.sources.owner")}
+          {": "}
           {project?.user_owner.id === userData?.id ? (
-            "You"
+            t("global.you")
           ) : (
             <Typography.Link
               href={`mailto:${project?.user_owner.email}?subject=Project: "${project?.title}" | Triple AI`}
@@ -194,13 +208,14 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
         </Typography.Text>
         <List
           style={{ width: "100%", maxHeight: "500px", overflowY: "scroll" }}
-          locale={{ emptyText: "No users." }}
+          locale={{ emptyText: t("pages.global.noUsers") }}
           header={ListHeader()}
           footer={
             <ListFooter>
-              <span>{allUsersWithAccess.length}</span> user
-              {allUsersWithAccess.length !== 1 && "s"} have access to the project{" "}
-              <span>{project?.title}</span>
+              {t("pages.sources.grantedUsersCountMessage", {
+                count: allUsersWithAccess.length,
+                project: project?.title,
+              })}
             </ListFooter>
           }
           bordered={true}
@@ -221,7 +236,7 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
                     changePermissions(item);
                   }}
                 >
-                  edit
+                  {t("global.edit")}
                 </a>,
                 <a
                   key="list-loadmore-more"
@@ -235,7 +250,7 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
                     confirmRemoveUserModal(item.email);
                   }}
                 >
-                  Remove
+                  {t("global.delete")}
                 </a>,
               ]}
             >

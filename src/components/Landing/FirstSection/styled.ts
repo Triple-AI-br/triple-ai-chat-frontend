@@ -6,7 +6,7 @@ export const FirstSectionContainer = styled.section`
   flex-direction: column;
   align-items: center;
   gap: 35px;
-  margin-bottom: 120px;
+  margin: 50px 0 80px 0;
   position: relative;
   @media (min-width: 900px) {
     flex-direction: row;
@@ -16,6 +16,10 @@ export const FirstSectionContainer = styled.section`
   }
   @media (min-width: 1280px) {
     position: relative;
+    margin-bottom: 160px;
+    width: 1280px;
+    margin: 50px auto 120px auto;
+    padding: 40px 32px;
   }
 `;
 
@@ -33,12 +37,10 @@ export const Title = styled.h1`
   text-align: center;
   margin-bottom: 0;
   width: 298px;
-  height: 249px;
   @media (min-width: 375px) {
     color: #3e4352;
     font-size: 67px;
     width: 376px;
-    height: 269px;
     flex-shrink: 0;
   }
   @media (min-width: 900px) {
@@ -47,7 +49,6 @@ export const Title = styled.h1`
   @media (min-width: 1280px) {
     text-align: start;
     width: 565px;
-    height: 130px;
   }
 `;
 
@@ -55,7 +56,6 @@ export const LeftContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 35px;
   @media (min-width: 900px) {
     align-items: flex-start;
   }
@@ -82,8 +82,9 @@ export const VectorImage = styled.img`
     top: 100px;
   }
   @media (min-width: 1280px) {
-    top: 10px;
+    top: -40px;
     width: 60%;
+    height: auto;
   }
 `;
 
@@ -96,12 +97,10 @@ export const Subtitle = styled.span`
   line-height: 30px; /* 166.667% */
   letter-spacing: 0.18px;
   width: 288px;
-  height: 62px;
   flex-shrink: 0;
   @media (min-width: 375px) {
     font-size: 18px;
     width: 377px;
-    height: 92px;
   }
   @media (min-width: 600px) {
     text-align: start;
@@ -124,7 +123,7 @@ export const ActionButton = styled(PopupButton)`
   font-size: 16px;
   line-height: 100%;
   @media (min-width: 600px) {
-    margin: 0;
+    margin: 35px 0 0 0;
   }
 `;
 
@@ -200,7 +199,7 @@ export const BrowserWindow = styled.div<{ openvideo: boolean }>`
     margin-right: 0;
   }
   @media (min-width: 1280px) {
-    width: 50%;
+    width: 60%;
   }
 `;
 

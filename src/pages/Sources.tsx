@@ -12,8 +12,10 @@ import { v4 as uuidv4 } from "uuid";
 import { Col, Divider, Row } from "antd";
 import { ProjectOwnerManager } from "../components/Projects/ProjectOwnerManager";
 import { useWindowSize } from "../utils/useWindowSize";
+import { useTranslation } from "react-i18next";
 
 const SourcesPage = () => {
+  const { t } = useTranslation();
   const { width } = useWindowSize();
   const userData = useAppSelector(selectUserData);
   const [project, setProject] = useState<IProject>();
@@ -105,7 +107,7 @@ const SourcesPage = () => {
   }, [isUserOwner, project, userData]);
 
   return (
-    <Base title={project ? `Project: ${project.title}` : "View your Data"}>
+    <Base title={project ? t("pages.sources.title", { project: project.title }) : "View your Data"}>
       {isLoading ? (
         <Box m="auto">
           <CircularProgress sx={{ color: "#999" }} />
@@ -117,13 +119,9 @@ const SourcesPage = () => {
               {accessToUpload && <Upload uploadCallback={uploadCallback} />}
               {sourcesList && !sourcesList.length ? (
                 accessToUpload ? (
-                  <Typography>
-                    👆🏻 You don&apos;t have any files yet. Go ahead and upload some.
-                  </Typography>
+                  <Typography>{t("pages.sources.noFilesMessage")}</Typography>
                 ) : (
-                  <Typography>
-                    No files uploaded yet. Ask yout admin to upload the relevant documents.
-                  </Typography>
+                  <Typography>{t("pages.sources.noFilesAndNoPermissionMessage")}</Typography>
                 )
               ) : (
                 <Box
