@@ -1,9 +1,8 @@
 import styled from "styled-components";
 import { PopupButton } from "react-calendly";
 
-export const HeaderContainer = styled.section<{ bottomScroll?: boolean }>`
+export const HeaderContainer = styled.section`
   max-width: 1280px;
-  opacity: ${(props) => (props.bottomScroll ? 0.4 : 1)};
   display: flex;
   align-items: center;
   justify-content: space-between;
