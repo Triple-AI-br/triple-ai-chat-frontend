@@ -77,7 +77,6 @@ const PromptItem = ({ prompt, removeFromPrompts }: IPromptItemProps) => {
 
   useEffect(() => {
     if (!selectedLanguage) return;
-    console.log(selectedLanguage);
     moment.defineLocale(selectedLanguage, {
       relativeTime: {
         future: t("global.relativeTime.future"),

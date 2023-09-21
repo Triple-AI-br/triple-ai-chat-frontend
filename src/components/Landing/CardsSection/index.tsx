@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { fileIcons, possibleWorks, securityAndPrivacy } from "./contants";
+import { fileIcons, possibleWorks, securityAndPrivacy } from "./constants";
 import {
   Card,
   CardsContainer,

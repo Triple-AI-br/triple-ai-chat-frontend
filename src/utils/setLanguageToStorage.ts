@@ -1,6 +1,7 @@
+const LANGUAGE = localStorage.getItem("language");
+
 const setLanguageToStorage = (lng: "pt" | "en" | "es") => {
-  const language = localStorage.getItem("language");
-  if (language === lng) return;
+  if (LANGUAGE === lng) return;
   localStorage.setItem("language", lng);
 };
 

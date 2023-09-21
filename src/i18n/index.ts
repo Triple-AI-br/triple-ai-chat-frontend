@@ -5,6 +5,8 @@ import enJson from "./locales/en.json";
 import ptJson from "./locales/pt.json";
 import esJson from "./locales/es.json";
 
+type languagesSupportType = "pt" | "es" | "en";
+
 export const languagesSupport = [
   {
     label: "English",
@@ -26,8 +28,8 @@ export const languageResources = {
   es: esJson,
 };
 
-const findLanguageByBrowser = () => {
-  const storageLanguage = localStorage.getItem("language");
+const findLanguageByBrowser = (): languagesSupportType => {
+  const storageLanguage = localStorage.getItem("language") as languagesSupportType | null;
   if (storageLanguage) {
     return storageLanguage;
   }

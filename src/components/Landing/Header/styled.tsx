@@ -30,8 +30,6 @@ export const HeaderContainer = styled.section<{ bottomScroll?: boolean }>`
 
 export const LogoImg = styled.img`
   height: 45px;
-  @media (min-width: 600px) {
-  }
 `;
 
 export const NavElements = styled.ul`
