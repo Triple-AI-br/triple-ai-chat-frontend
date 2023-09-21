@@ -101,7 +101,6 @@ const ManageGrantedUsersModal = ({
     } else {
       if (targetKeys.length === 50) return;
       if (nextTargetKeys.length > 50) {
-        console.log(nextTargetKeys.slice(0, 50));
         handleAdd(nextTargetKeys.slice(0, 50));
         return;
       }

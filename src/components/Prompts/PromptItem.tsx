@@ -12,6 +12,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { actionDisplayNotification } from "../../redux/notificationSlice";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useTranslation } from "react-i18next";
+import { LANGUAGE_LOCAL_STORAGE } from "../../utils/setLanguageToStorage";
 
 interface IPromptItemProps {
   prompt: IPrompt;
@@ -29,7 +30,7 @@ const PromptItem = ({ prompt, removeFromPrompts }: IPromptItemProps) => {
 
   const userData = useAppSelector(selectUserData);
   const userEmail = userData?.email;
-  const selectedLanguage = localStorage.getItem("language");
+  const selectedLanguage = localStorage.getItem(LANGUAGE_LOCAL_STORAGE);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

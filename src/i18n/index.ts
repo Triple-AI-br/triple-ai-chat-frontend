@@ -4,6 +4,7 @@ import { initReactI18next } from "react-i18next";
 import enJson from "./locales/en.json";
 import ptJson from "./locales/pt.json";
 import esJson from "./locales/es.json";
+import { LANGUAGE_LOCAL_STORAGE } from "../utils/setLanguageToStorage";
 
 type languagesSupportType = "pt" | "es" | "en";
 
@@ -29,7 +30,9 @@ export const languageResources = {
 };
 
 const findLanguageByBrowser = (): languagesSupportType => {
-  const storageLanguage = localStorage.getItem("language") as languagesSupportType | null;
+  const storageLanguage = localStorage.getItem(
+    LANGUAGE_LOCAL_STORAGE,
+  ) as languagesSupportType | null;
   if (storageLanguage) {
     return storageLanguage;
   }

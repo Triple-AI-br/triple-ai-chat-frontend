@@ -29,6 +29,14 @@
     "semi": ["error", "always"],
     "react/react-in-jsx-scope": "off",
     "no-mixed-spaces-and-tabs": 0,
-    "react/prop-types": "off"
+    "react/prop-types": "off",
+    "no-console": "warn",
+    "no-restricted-syntax": [
+        "error",
+        {
+            "selector": "CallExpression[callee.object.name='console'][callee.property.name!=/^(log|warn|error|info|trace)$/]",
+            "message": "Unexpected property on console object was called"
+        }
+    ]
   }
 }
