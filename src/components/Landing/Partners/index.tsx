@@ -10,7 +10,7 @@ const LandingPartners: React.FC = () => {
         <li>
           <img src="/partners/microsoft.png" alt="Microsoft Logo" />
         </li>
-        <li style={{ display: "none" }}>
+        <li>
           <img src="/partners/aws.png" alt="AWS Logo" />
         </li>
         <li>
