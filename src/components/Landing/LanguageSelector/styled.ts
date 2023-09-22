@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const SelectorContainer = styled.div<{ language: number }>`
+export const SelectorContainer = styled.div<{ $language: number }>`
   display: flex;
   align-items: center;
   gap: 20px;
@@ -11,7 +11,7 @@ export const SelectorContainer = styled.div<{ language: number }>`
     padding-bottom: 5px;
     cursor: pointer;
   }
-  > img:nth-child(${(props) => props.language}) {
+  > img:nth-child(${(props) => props.$language}) {
     border-bottom: 2px solid #367cff;
   }
   @media (min-width: 600px) {

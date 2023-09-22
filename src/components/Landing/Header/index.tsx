@@ -22,7 +22,7 @@ const LandingHeader = () => {
   };
 
   return (
-    <HeaderContainer bottomScroll={false}>
+    <HeaderContainer>
       <LandingDrawer onClose={onClose} open={open} />
       <LogoImg src="/triple-ai.png" />
       <NavElements>

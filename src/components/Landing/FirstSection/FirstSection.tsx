@@ -20,7 +20,7 @@ function FirstSection() {
   const { t } = useTranslation();
   const { width } = useWindowSize();
 
-  const [openVideo, setOpenVideo] = useState(false);
+  const [openVideo, setOpenVideo] = useState<boolean>(false);
 
   const isDesktop = width >= DESKTOP_WIDTH;
 
@@ -38,7 +38,7 @@ function FirstSection() {
           rootElement={document.getElementById("root") as HTMLElement}
         ></ActionButton>
       </LeftContainer>
-      <BrowserWindow openvideo={openVideo}>
+      <BrowserWindow $openvideo={openVideo ? 1 : 0}>
         <div />
         <div />
         <div />

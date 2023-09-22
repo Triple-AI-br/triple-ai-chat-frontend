@@ -156,6 +156,7 @@
           "inviteModal": {
             "title": "Adicionar novos usuários ao projeto",
             "atLeastOneMessage": "Você precisa escolher pelo menos 1 usuário",
+            "atLeastOnePermissionMessage": "Em projetos públicos os usuários convidados devem ter ao menos uma permissão.",
             "errorOnInviteFollowingUsers": "Os seguintes usuários não foram convidados:",
             "availableUsers": "Usuários disponíveis",
             "usersToInvite": "Usuários para convidar",
