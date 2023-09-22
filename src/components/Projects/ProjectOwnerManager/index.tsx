@@ -208,7 +208,7 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
         </Typography.Text>
         <List
           style={{ width: "100%", maxHeight: "500px", overflowY: "scroll" }}
-          locale={{ emptyText: t("pages.global.noUsers") }}
+          locale={{ emptyText: t("global.noUsers") }}
           header={ListHeader()}
           footer={
             <ListFooter>
