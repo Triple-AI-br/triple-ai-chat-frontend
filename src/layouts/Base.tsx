@@ -117,7 +117,7 @@ const Base = ({ children, title }: IBaseProps) => {
   }, [screenSize]);
 
   return (
-    <Layout style={{ minHeight: "100vh" }}>
+    <Layout hasSider>
       <CustomSnackbar />
       <Sider
         collapsible
@@ -126,6 +126,13 @@ const Base = ({ children, title }: IBaseProps) => {
         collapsedWidth={screenSize.xs ? "0" : undefined}
         onCollapse={() => {
           toggleCollapsed();
+        }}
+        style={{
+          height: "100vh",
+          position: "sticky",
+          left: 0,
+          top: 0,
+          bottom: 0,
         }}
       >
         <div
@@ -195,7 +202,7 @@ const Base = ({ children, title }: IBaseProps) => {
           </Tooltip>
         )}
       </Sider>
-      <Layout>
+      <Layout style={{ overflowY: "scroll" }}>
         <Header
           style={{
             paddingLeft: 20,
@@ -238,7 +245,6 @@ const Base = ({ children, title }: IBaseProps) => {
             style={{
               padding: 24,
               minHeight: "100%",
-              // minWidth: 250,
               background: colorBgContainer,
             }}
           >
