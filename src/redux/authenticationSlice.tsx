@@ -75,12 +75,14 @@ const authSlice = createSlice({
         state.status = "succeeded";
         const {
           authData: { access_token: accessToken },
+          userData,
           customerData,
         } = action.payload;
+        setAccessTokenToLocalStorage(accessToken);
         state.accessToken = accessToken;
         state.isAuthenticated = true;
+        state.userData = userData;
         state.customerData = customerData;
-        setAccessTokenToLocalStorage(accessToken);
       })
       .addCase(actionLogin.rejected, (state) => {
         state.error = "Failed to authenticate user";
@@ -159,8 +161,8 @@ export const actionLogin = createAsyncThunk(
     formdata.append("password", password);
     const authResponse = await axios.post(url, formdata);
     const authData: IIncomingTokenCredentials = authResponse.data;
-    const { customer } = await usersService.getMe(authData.access_token);
-    return { authData, customerData: customer };
+    const { customer, user } = await usersService.getMe(authData.access_token);
+    return { authData, customerData: customer, userData: user };
   },
 );
 
