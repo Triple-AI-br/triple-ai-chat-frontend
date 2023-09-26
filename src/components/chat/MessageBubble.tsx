@@ -59,6 +59,8 @@ const MessageBubble = ({
       }}
       border="1px solid #ccc"
       display={markdownText ? undefined : "none"}
+      paddingY={1.5}
+      paddingX={0.5}
     >
       <Box px={3} pt={0.5} pb={date_time ? 0 : 0.5}>
         <ReactMarkdown>{markdownText}</ReactMarkdown>
