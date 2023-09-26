@@ -1,4 +1,4 @@
-export * from "./Chat";
+export * from "./Chat/Chat";
 export * from "./Landing/Landing";
 export * from "./Login";
 export * from "./Sources";

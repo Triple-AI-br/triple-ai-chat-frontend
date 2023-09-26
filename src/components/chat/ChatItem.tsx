@@ -43,7 +43,9 @@ const ChatItem = ({
       px={3.5}
       py={2}
       gap={2}
+      marginBottom="5px"
       borderBottom="1px solid #e5e5e5"
+      borderRadius="4px"
       onMouseOver={() => setIsHovered(true)}
       onMouseOut={() => setIsHovered(false)}
       onClick={() => handleClick({ sessionId: id })}

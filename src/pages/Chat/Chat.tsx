@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { chatService } from "../services";
+import { chatService, projectService } from "../../services";
 import { v4 as uuidv4 } from "uuid";
-import { Spinner } from "../components/loaders";
+import { Spinner } from "../../components/loaders";
 import {
   ChatBar,
   ChatList,
@@ -10,14 +10,15 @@ import {
   IChat,
   IMessage,
   TextChat,
-} from "../components/chat";
+} from "../../components/chat";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { routesManager } from "../routes/routesManager";
-import { ICustomerData, selectCustomerData } from "../redux/authenticationSlice";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { actionDisplayNotification } from "../redux/notificationSlice";
-import { CustomSnackbar } from "../components/shared";
+import { routesManager } from "../../routes/routesManager";
+import { ICustomerData, selectCustomerData, selectUserData } from "../../redux/authenticationSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { actionDisplayNotification } from "../../redux/notificationSlice";
+import { CustomSnackbar } from "../../components/shared";
+import { LeftContainer } from "./styled";
 
 const GRAY_COLOR = "#f5f5f5";
 
@@ -30,7 +31,9 @@ const ChatPage = () => {
   const [currentMessage, setCurrentMessage] = useState("");
   const [selectedChat, setSelectedChat] = useState<number>();
   const [chats, setChats] = useState<IChat[]>();
+  const [anonymousChats, setAnonymousChats] = useState<IChat[]>();
   const customerData: ICustomerData | undefined | null = useAppSelector(selectCustomerData);
+  const userData = useAppSelector(selectUserData);
   const dispatch = useAppDispatch();
 
   const INITIAL_TEXT = `Olá, sou uma Inteligência Artificial conversacional. Fui treinada com os documentos [listados aqui](${routesManager.getSourcesRoute(
@@ -99,6 +102,30 @@ const ChatPage = () => {
       conversations.reverse();
       setChats(
         conversations.map((item) => ({
+          id: item.id,
+          email: item.user?.email,
+          title: "AI Bot",
+          subtitle: item.title,
+          date: item.created_at,
+          isSelected: false,
+          onClick: handleSelectChat,
+          onDelete: handleDelete,
+        })),
+      );
+
+      const project = await projectService.getProject(projectId);
+      // Apenas Admin, SuperUser e o dono do projeto podem ver os chats anonimos do projeto
+      if (
+        project.user_owner.id !== userData?.id &&
+        !userData?.is_admin &&
+        !userData?.is_superuser
+      ) {
+        return;
+      }
+
+      const anonymousConversations = await chatService.listAnonymousChats({ projectId });
+      setAnonymousChats(
+        anonymousConversations.map((item) => ({
           id: item.id,
           email: item.user?.email,
           title: "AI Bot",
@@ -249,13 +276,7 @@ const ChatPage = () => {
     <Box sx={{ display: "flex", height: "100vh" }}>
       <CustomSnackbar />
       {/* Left column container */}
-      <Box
-        display="flex"
-        flexDirection="column"
-        minWidth="300px"
-        maxWidth="32%"
-        borderRight="1px solid #ccc"
-      >
+      <LeftContainer>
         <LeftTopBar customerData={customerData} handleNewChat={handleNewChat} />
         <Box sx={{ overflowY: "scroll" }} height="100%">
           {chats === undefined ? (
@@ -271,12 +292,13 @@ const ChatPage = () => {
             <ChatList
               customerData={customerData}
               chats={chats}
+              anonymousChats={anonymousChats}
               handleDelete={handleDelete}
               handleSelectChat={handleSelectChat}
             />
           )}
         </Box>
-      </Box>
+      </LeftContainer>
 
       {/* Right column container */}
       <div
@@ -299,7 +321,7 @@ const ChatPage = () => {
               <Spinner />
             </Box>
           ) : selectedChat ? (
-            <Box display="flex" flexDirection="column" height="100%" sx={{ overflow: "scroll" }}>
+            <Box display="flex" flexDirection="column" height="100%" sx={{ overflowY: "scroll" }}>
               <MessageList messages={messageList} />
 
               <div ref={bottomRef} />
