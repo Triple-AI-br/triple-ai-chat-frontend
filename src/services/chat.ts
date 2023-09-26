@@ -145,14 +145,20 @@ const retrieveChat = async ({
   return response.data;
 };
 
-const listAnonymousChats = async ({ projectId }: { projectId: number }): Promise<IChatDetail[]> => {
+const listAnonymousChats = async ({ projectId }: { projectId: number }): Promise<IChatList[]> => {
   const url = `/anonymous/chats/${projectId}`;
   const response = await api.get(url);
   return response.data;
 };
 
-const getAnonymousChat = async ({ projectId, chatId }: { projectId: number; chatId: number }) => {
-  const url = `/anonymous/chats/${projectId}/${chatId}`;
+const getAnonymousChat = async ({
+  projectId,
+  sessionId,
+}: {
+  projectId: number;
+  sessionId: number;
+}): Promise<IChatDetail> => {
+  const url = `/anonymous/chats/${projectId}/${sessionId}`;
   const response = await api.get(url);
   return response.data;
 };

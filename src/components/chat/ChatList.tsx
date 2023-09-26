@@ -20,7 +20,7 @@ const ChatList = ({
 }: IChatListProps) => {
   const renderChats = () => {
     const projectChats = {
-      key: "2",
+      key: "1",
       label: "project chats",
       children: (
         <div>
@@ -42,7 +42,7 @@ const ChatList = ({
     };
 
     const anonymous = {
-      key: "1",
+      key: "2",
       label: "Widget chat historic",
       children: (
         <div>
@@ -64,7 +64,7 @@ const ChatList = ({
     };
     const panels = [projectChats];
     if (anonymousChats !== undefined) {
-      panels.push(anonymous);
+      panels.unshift(anonymous);
     }
     return panels;
   };
@@ -73,7 +73,7 @@ const ChatList = ({
     <Collapse
       style={{ backgroundColor: "#f5f5f5" }}
       items={renderChats()}
-      defaultActiveKey={["2"]}
+      defaultActiveKey={["1"]}
       bordered={false}
     />
   );
