@@ -1,10 +1,12 @@
 /* eslint-disable indent */
 import { Avatar, Box, Typography } from "@mui/material";
 import moment from "moment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Clear as DeleteIcon } from "@mui/icons-material";
 import { useAppSelector } from "../../redux/hooks";
 import { ICustomerData, selectIsSuperUser } from "../../redux/authenticationSlice";
+import { LANGUAGE_LOCAL_STORAGE } from "../../utils/setLanguageToStorage";
+import { useTranslation } from "react-i18next";
 
 interface IChatItemProps {
   id: number;
@@ -27,14 +29,39 @@ const ChatItem = ({
   onDelete: handleDelete,
   customerData,
 }: IChatItemProps) => {
+  const { t } = useTranslation();
   const [isHovered, setIsHovered] = useState(false);
-  const timeAgo = moment(date).fromNow();
+  const [cardDate, setCardDate] = useState<string>(moment(date).fromNow());
   const isSuperUser = useAppSelector(selectIsSuperUser);
   let backgroundColor: string;
+  const selectedLanguage = localStorage.getItem(LANGUAGE_LOCAL_STORAGE);
 
   if (isSelected) backgroundColor = "#eee";
   else if (isHovered) backgroundColor = "#f6f6f6";
   else backgroundColor = "#fff";
+
+  useEffect(() => {
+    if (!selectedLanguage) return;
+    moment.defineLocale(selectedLanguage, {
+      relativeTime: {
+        future: t("global.relativeTime.future"),
+        past: t("global.relativeTime.past"),
+        s: t("global.relativeTime.s"),
+        m: t("global.relativeTime.m"),
+        mm: t("global.relativeTime.mm"),
+        h: t("global.relativeTime.h"),
+        hh: t("global.relativeTime.hh"),
+        d: t("global.relativeTime.d"),
+        dd: t("global.relativeTime.dd"),
+        M: t("global.relativeTime.M"),
+        MM: t("global.relativeTime.MM"),
+        y: t("global.relativeTime.y"),
+        yy: t("global.relativeTime.yy"),
+      },
+    });
+
+    setCardDate(moment(date).fromNow());
+  }, [selectedLanguage]);
 
   //"#e0e0e0"
   return (
@@ -64,7 +91,7 @@ const ChatItem = ({
         <Box display="flex" justifyContent="space-between" width="100%">
           <Typography color="#555">AI Chatbot</Typography>
           <Typography fontSize={12} color="#999">
-            {timeAgo}
+            {cardDate}
           </Typography>
         </Box>
         {isSuperUser && email ? (

@@ -1,6 +1,7 @@
 import { Avatar, Box, Button, Typography } from "@mui/material";
 import { LibraryAdd as AddIcon } from "@mui/icons-material";
 import { ICustomerData } from "../../redux/authenticationSlice";
+import { useTranslation } from "react-i18next";
 
 // Will this trigger vercel deployment?
 interface ILeftTopBarProps {
@@ -8,6 +9,7 @@ interface ILeftTopBarProps {
   customerData?: ICustomerData | null;
 }
 const LeftTopBar = ({ handleNewChat, customerData }: ILeftTopBarProps) => {
+  const { t } = useTranslation();
   const backgroundColor = customerData?.main_color;
   const textColor = backgroundColor?.toLowerCase() === "#fff" ? "#777" : "#fff";
 
@@ -16,13 +18,14 @@ const LeftTopBar = ({ handleNewChat, customerData }: ILeftTopBarProps) => {
       display="flex"
       py={2}
       alignItems="center"
+      flexWrap="wrap"
       gap={1}
       sx={{ backgroundColor, borderBottom: "1px solid #aaa" }}
       px={2}
     >
       <Avatar src={customerData?.logo_url} sx={{ width: 80, height: 80 }} />
       <Typography color={textColor} fontWeight={600} fontSize={18} sx={{ mr: 5 }}>
-        Your conversations
+        {t("pages.chat.yourConversations")}
       </Typography>
       <Button
         onClick={handleNewChat}
@@ -36,7 +39,7 @@ const LeftTopBar = ({ handleNewChat, customerData }: ILeftTopBarProps) => {
           ":hover": { borderColor: "#ccc", color: "#ccc" },
         }}
       >
-        New
+        {t("pages.chat.components.newChatBtn")}
       </Button>
     </Box>
   );

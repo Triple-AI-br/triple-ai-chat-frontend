@@ -211,8 +211,12 @@
         "noChats": "Você não tem conversas ainda",
         "createChats": "Crie uma nova à cima 👆🏻",
         "selectAChat": "Por favor selecione uma conversa no painel à esquerda",
+        "yourConversations": "Suas conversas",
         "components": {
-          "newChatBtn": "Nova conversa",
+          "newChatBtn": "Nova",
+          "inputPlaceHolder": "Escreva aqui...",
+          "projectChats": "Conversas do projeto",
+          "anonymousChat": "Conversas anônimas",
           "notifications": {
             "deleteConfirmation": "Tem certeza que deseja apagar esta conversa?",
             "failureRequestAnonymousChats": "Falha na requisição de conversas anônimas",

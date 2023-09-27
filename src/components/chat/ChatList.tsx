@@ -2,6 +2,7 @@ import { Collapse } from "antd";
 import { ChatItem } from ".";
 import { ICustomerData } from "../../redux/authenticationSlice";
 import { IChat } from "./types";
+import { useTranslation } from "react-i18next";
 
 interface IChatListProps {
   chats: IChat[];
@@ -18,10 +19,12 @@ const ChatList = ({
   customerData,
   anonymousChats,
 }: IChatListProps) => {
+  const { t } = useTranslation();
+
   const renderChats = () => {
     const projectChats = {
       key: "1",
-      label: "project chats",
+      label: t("pages.chat.components.projectChats"),
       children: (
         <div>
           {chats.map((item) => (
@@ -43,7 +46,7 @@ const ChatList = ({
 
     const anonymous = {
       key: "2",
-      label: "Widget chat historic",
+      label: t("pages.chat.components.anonymousChat"),
       children: (
         <div>
           {anonymousChats?.map((item) => (

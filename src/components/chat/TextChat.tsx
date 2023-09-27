@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 import { TextArea } from "./TextArea";
 import { Forward as SendIcon } from "@mui/icons-material";
 import { ICustomerData } from "../../redux/authenticationSlice";
+import { useTranslation } from "react-i18next";
 
 interface ITextChatProps {
   currentMessage: string;
@@ -17,6 +18,7 @@ const TextChat = ({
   handleSendMessage,
   customerData,
 }: ITextChatProps) => {
+  const { t } = useTranslation();
   return (
     <Box
       width="100%"
@@ -34,6 +36,7 @@ const TextChat = ({
         value={currentMessage}
         onChange={handleChange}
         onKeyDown={handleEnterPressed}
+        placeholder={t("pages.chat.components.inputPlaceHolder")}
       />
       <Box
         onClick={handleSendMessage}

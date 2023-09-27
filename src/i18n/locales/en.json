@@ -205,6 +205,26 @@
             "inviteBtn": "Invite"
           }
         }
+      },
+      "chat": {
+        "initialMessage": "Hello, I am a Conversational Artificial Intelligence. I have been trained with the {{documents}} documents. You can ask me questions or request me to generate text based on the information in them.",
+        "noChats": "You have no chats yet",
+        "createChats": "Create a new one above 👆🏻",
+        "selectAChat": "Please select a conversation on the left panel",
+        "yourConversations": "Your conversations",
+        "components": {
+            "newChatBtn": "New",
+            "inputPlaceHolder": "Write here...",
+            "projectChats": "Project conversations",
+            "anonymousChat": "Anonymous conversations",
+            "notifications": {
+                "deleteConfirmation": "Are you sure you want to delete this conversation?",
+                "failureRequestAnonymousChats": "Failed to request anonymous conversations",
+                "failureRequestChats": "Failed to request conversations",
+                "waitForAIReponseToQuitChat": "Please wait for the AI response before navigating between chats",
+                "waitForAIResponseToSend": "Please wait for the AI response before sending another message"
+            }
+        }
       }
     },
     "privacyPolicy": {
