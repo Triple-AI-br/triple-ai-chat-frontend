@@ -2,53 +2,53 @@ import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { api } from "./api";
 
 interface ITimestamped {
-    id: number;
-    created_at: string;
-    updated_at: string;
+  id: number;
+  created_at: string;
+  updated_at: string;
 }
 
 interface IMessageStream {
-    delta: string;
-    finish_reason: string | null;
-    references?: string[];
+  delta: string;
+  finish_reason: string | null;
+  references?: string[];
 }
 
 export interface IConversation extends ITimestamped {
-    session_id: string;
-    project_id: number;
-    created_by: number;
-    name: string;
+  session_id: string;
+  project_id: number;
+  created_by: number;
+  name: string;
 }
 
 interface IMessage {
-    user_query: string;
-    ai_response: string;
-    date_time: string;
-    references: string[];
+  user_query: string;
+  ai_response: string;
+  date_time: string;
+  references: string[];
 }
 
 interface IChatList {
-    project_id: number;
-    title: string;
-    id: number;
-    created_at: string;
-    references: string[];
-    user?: { email: string };
+  project_id: number;
+  title: string;
+  id: number;
+  created_at: string;
+  references: string[];
+  user?: { email: string };
 }
 interface IChatDetail extends IChatList {
-    conversation: IMessage[];
+  conversation: IMessage[];
 }
 
 interface IDeleteChatResponse {
-    success: boolean;
+  success: boolean;
 }
 
 const deleteChat = async ({
   projectId,
   sessionId,
 }: {
-    projectId: number;
-    sessionId: number;
+  projectId: number;
+  sessionId: number;
 }): Promise<boolean> => {
   const url = `/projects/${projectId}/chats/${sessionId}`;
   const response = await api.delete(url);
@@ -56,11 +56,7 @@ const deleteChat = async ({
   return data.success || false;
 };
 
-const listChats = async ({
-  projectId,
-}: {
-    projectId: number;
-}): Promise<IChatList[]> => {
+const listChats = async ({ projectId }: { projectId: number }): Promise<IChatList[]> => {
   const url = `/projects/${projectId}/chats`;
   const response = await api.get(url);
   return response.data;
@@ -71,9 +67,9 @@ const sendMessage = async ({
   sessionId,
   projectId,
 }: {
-    prompt: string;
-    sessionId: number;
-    projectId: number;
+  prompt: string;
+  sessionId: number;
+  projectId: number;
 }): Promise<IChatDetail> => {
   const url = `/projects/${projectId}/chats/${sessionId}`;
   const response = await api.post(url, { prompt }, { timeout: 120_000 });
@@ -86,10 +82,10 @@ const sendMessageStream = ({
   sessionId,
   projectId,
 }: {
-    prompt: string;
-    callback(_: IMessageStream): void;
-    sessionId: number;
-    projectId: number;
+  prompt: string;
+  callback(_: IMessageStream): void;
+  sessionId: number;
+  projectId: number;
 }): Promise<void> => {
   const url = `${api.defaults.baseURL}/projects/${projectId}/chats/${sessionId}/stream`;
   // View package documentation: https://www.npmjs.com/package/@microsoft/fetch-event-source
@@ -130,11 +126,7 @@ const sendMessageStream = ({
   });
 };
 
-const createNewChat = async ({
-  projectId,
-}: {
-    projectId: number;
-}): Promise<IChatList> => {
+const createNewChat = async ({ projectId }: { projectId: number }): Promise<IChatList> => {
   const url = `/projects/${projectId}/chats`;
   const response = await api.post(url, { name: "AI Bot" });
   const data: IChatList = response.data;
@@ -145,10 +137,28 @@ const retrieveChat = async ({
   projectId,
   sessionId,
 }: {
-    projectId: number;
-    sessionId: number;
+  projectId: number;
+  sessionId: number;
 }): Promise<IChatDetail> => {
   const url = `/projects/${projectId}/chats/${sessionId}`;
+  const response = await api.get(url);
+  return response.data;
+};
+
+const listAnonymousChats = async ({ projectId }: { projectId: number }): Promise<IChatList[]> => {
+  const url = `/anonymous/chats/${projectId}`;
+  const response = await api.get(url);
+  return response.data;
+};
+
+const getAnonymousChat = async ({
+  projectId,
+  sessionId,
+}: {
+  projectId: number;
+  sessionId: number;
+}): Promise<IChatDetail> => {
+  const url = `/anonymous/chats/${projectId}/${sessionId}`;
   const response = await api.get(url);
   return response.data;
 };
@@ -160,4 +170,6 @@ export const chatService = {
   retrieveChat,
   deleteChat,
   sendMessageStream,
+  listAnonymousChats,
+  getAnonymousChat,
 };
