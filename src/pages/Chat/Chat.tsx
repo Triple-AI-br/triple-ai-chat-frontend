@@ -18,7 +18,7 @@ import { ICustomerData, selectCustomerData, selectUserData } from "../../redux/a
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { actionDisplayNotification } from "../../redux/notificationSlice";
 import { CustomSnackbar } from "../../components/shared";
-import { LeftContainer } from "./styled";
+import { LeftContainer, ScrollChats } from "./styled";
 import { useTranslation } from "react-i18next";
 
 const GRAY_COLOR = "#f5f5f5";
@@ -325,7 +325,7 @@ const ChatPage = () => {
       {/* Left column container */}
       <LeftContainer>
         <LeftTopBar customerData={customerData} handleNewChat={handleNewChat} />
-        <Box sx={{ overflowY: "scroll" }} height="100%">
+        <ScrollChats>
           {chats === undefined ? (
             <Box display="flex" justifyContent="center" pt={3}>
               <CircularProgress sx={{ color: customerData?.main_color }} />
@@ -344,7 +344,7 @@ const ChatPage = () => {
               handleSelectChat={handleSelectChat}
             />
           )}
-        </Box>
+        </ScrollChats>
       </LeftContainer>
 
       {/* Right column container */}

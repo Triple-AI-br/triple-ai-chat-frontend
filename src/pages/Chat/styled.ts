@@ -7,16 +7,38 @@ export const LeftContainer = styled.div`
   min-width: 300px;
   max-width: 32%;
   border-right: 1px solid #ccc;
-  /* Hide scrollbar for Chrome, Safari and Opera */
-  ::-webkit-scrollbar {
-    display: none;
+  overflow-y: hidden;
+`;
+
+export const ScrollChats = styled.div`
+  height: 100%;
+  overflow-y: scroll;
+  /* This will work in Chrome / Edge / Safari / Opera. Firefox doesn't support scroll styling. Hope it helps! */
+  &::-webkit-scrollbar {
+    width: 10px;
+    opacity: 0;
   }
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-  > :hover {
-    ::-webkit-scrollbar {
-      display: block !important;
+  &::-webkit-scrollbar-thumb {
+    width: 15px;
+    background-color: transparent !important;
+  }
+  &::-webkit-scrollbar-track {
+    width: 15px;
+    background-color: transparent !important;
+  }
+  &:hover {
+    &::-webkit-scrollbar {
+      width: 10px;
+      opacity: 1;
     }
-    scrollbar-width: auto; /* Firefox */
+    &::-webkit-scrollbar-thumb {
+      width: 15px;
+      background-color: gray !important;
+      border-radius: 4px;
+    }
+    &::-webkit-scrollbar-track {
+      width: 15px;
+      background-color: transparent !important;
+    }
   }
 `;

@@ -1,4 +1,4 @@
-import { Collapse } from "antd";
+import { Collapse, Typography } from "antd";
 import { ChatItem } from ".";
 import { ICustomerData } from "../../redux/authenticationSlice";
 import { IChat } from "./types";
@@ -49,19 +49,23 @@ const ChatList = ({
       label: t("pages.chat.components.anonymousChat"),
       children: (
         <div>
-          {anonymousChats?.map((item) => (
-            <ChatItem
-              customerData={customerData}
-              key={item.id}
-              email={item.email}
-              id={item.id}
-              subtitle={item.subtitle}
-              date={item.date}
-              isSelected={item.isSelected}
-              onClick={handleSelectChat}
-              onDelete={handleDelete}
-            />
-          ))}
+          {anonymousChats?.length ? (
+            anonymousChats?.map((item) => (
+              <ChatItem
+                customerData={customerData}
+                key={item.id}
+                email={item.email}
+                id={item.id}
+                subtitle={item.subtitle}
+                date={item.date}
+                isSelected={item.isSelected}
+                onClick={handleSelectChat}
+                onDelete={handleDelete}
+              />
+            ))
+          ) : (
+            <Typography.Text italic>{t("pages.chat.noChats")}</Typography.Text>
+          )}
         </div>
       ),
     };
