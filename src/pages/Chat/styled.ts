@@ -11,34 +11,6 @@ export const LeftContainer = styled.div`
 `;
 
 export const ScrollChats = styled.div`
-  height: 100%;
-  overflow-y: scroll;
-  /* This will work in Chrome / Edge / Safari / Opera. Firefox doesn't support scroll styling. Hope it helps! */
-  &::-webkit-scrollbar {
-    width: 10px;
-    opacity: 0;
-  }
-  &::-webkit-scrollbar-thumb {
-    width: 15px;
-    background-color: transparent !important;
-  }
-  &::-webkit-scrollbar-track {
-    width: 15px;
-    background-color: transparent !important;
-  }
-  &:hover {
-    &::-webkit-scrollbar {
-      width: 10px;
-      opacity: 1;
-    }
-    &::-webkit-scrollbar-thumb {
-      width: 15px;
-      background-color: gray !important;
-      border-radius: 4px;
-    }
-    &::-webkit-scrollbar-track {
-      width: 15px;
-      background-color: transparent !important;
-    }
-  }
+  height: max-content;
+  overflow-y: hidden;
 `;

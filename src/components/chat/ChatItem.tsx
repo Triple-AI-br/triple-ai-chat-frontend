@@ -17,6 +17,7 @@ interface IChatItemProps {
   onClick({ sessionId }: { sessionId: number }): void;
   onDelete({ sessionId }: { sessionId: number }): Promise<void>;
   customerData?: ICustomerData | null;
+  anonymous?: boolean;
 }
 
 const ChatItem = ({
@@ -25,9 +26,10 @@ const ChatItem = ({
   subtitle,
   date,
   isSelected,
+  customerData,
+  anonymous,
   onClick: handleClick,
   onDelete: handleDelete,
-  customerData,
 }: IChatItemProps) => {
   const { t } = useTranslation();
   const [isHovered, setIsHovered] = useState(false);
@@ -113,22 +115,24 @@ const ChatItem = ({
           >
             {subtitle}
           </Typography>
-          <DeleteIcon
-            onClick={
-              isHovered
-                ? (e) => {
-                    e.stopPropagation();
-                    handleDelete({ sessionId: id });
-                  }
-                : undefined
-            }
-            sx={{
-              cursor: isHovered ? "pointer" : undefined,
-              color: isHovered ? "#f88" : backgroundColor,
-              width: 20,
-              ml: 3,
-            }}
-          />
+          {!anonymous ? (
+            <DeleteIcon
+              onClick={
+                isHovered
+                  ? (e) => {
+                      e.stopPropagation();
+                      handleDelete({ sessionId: id });
+                    }
+                  : undefined
+              }
+              sx={{
+                cursor: isHovered ? "pointer" : undefined,
+                color: isHovered ? "#f88" : backgroundColor,
+                width: 20,
+                ml: 3,
+              }}
+            />
+          ) : null}
         </Box>
       </Box>
     </Box>
