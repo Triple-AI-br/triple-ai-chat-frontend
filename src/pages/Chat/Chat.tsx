@@ -171,6 +171,7 @@ const ChatPage = () => {
       dispatch(
         actionDisplayNotification({
           messages: [t("pages.chat.components.notifications.waitForAIReponseToQuitChat")],
+          severity: "warning",
         }),
       );
       return;
@@ -186,8 +187,19 @@ const ChatPage = () => {
         return;
       }
       if (isAnonymousChat) {
-        setAnonymousChats((prevList) => {
+        setChats((prevList) => {
           if (!prevList) return [];
+          const newValue = prevList.map((item) => {
+            return {
+              ...item,
+              isSelected: false,
+            };
+          });
+          return newValue;
+        });
+        setAnonymousChats((prevList) => {
+          if (!prevList) return undefined;
+          if (!prevList.length) return [];
           const newValue = prevList.map((item) => {
             return {
               ...item,
@@ -197,6 +209,17 @@ const ChatPage = () => {
           return newValue;
         });
       } else {
+        setAnonymousChats((prevList) => {
+          if (!prevList) return undefined;
+          if (!prevList.length) return [];
+          const newValue = prevList.map((item) => {
+            return {
+              ...item,
+              isSelected: false,
+            };
+          });
+          return newValue;
+        });
         setChats((prevList) => {
           if (!prevList) return [];
           const newValue = prevList.map((item) => {
@@ -267,6 +290,7 @@ const ChatPage = () => {
       dispatch(
         actionDisplayNotification({
           messages: [t("pages.chat.components.notifications.waitForAIResponseToSend")],
+          severity: "warning",
         }),
       );
       return;
@@ -329,11 +353,6 @@ const ChatPage = () => {
           {chats === undefined ? (
             <Box display="flex" justifyContent="center" pt={3}>
               <CircularProgress sx={{ color: customerData?.main_color }} />
-            </Box>
-          ) : chats.length === 0 ? (
-            <Box width="100%" pt={2} display="flex" flexDirection="column" alignItems="center">
-              <Typography color="#555">{t("pages.chat.noChats")}</Typography>
-              <Typography color="#555">{t("pages.chat.createChats")}</Typography>
             </Box>
           ) : (
             <ChatList
