@@ -8,9 +8,12 @@ import { PlusOutlined } from "@ant-design/icons";
 import { ProjectModal } from "../../components/Projects/ProjectModal";
 import { ProjectsCollapses } from "../../components/Projects/ProjectsCollapses";
 import { useTranslation } from "react-i18next";
+import { useAppSelector } from "../../redux/hooks";
+import { selectUserData } from "../../redux/authenticationSlice";
 
 const ProjectsPage = () => {
   const { t } = useTranslation();
+  const userData = useAppSelector(selectUserData);
   const [projects, setProjects] = useState<IProject[]>();
   const [openNewProjectModal, setOpenNewProjectModal] = useState(false);
   const [openEditProjectModal, setOpenEditProjectModal] = useState<IProject | undefined>();
@@ -21,10 +24,11 @@ const ProjectsPage = () => {
   };
 
   useEffect(() => {
+    if (!userData?.id) return;
     (async () => {
       setProjects(await fetchProjects());
     })();
-  }, []);
+  }, [userData]);
 
   const renderProjects = () => {
     switch (projects) {

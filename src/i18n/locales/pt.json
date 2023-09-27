@@ -156,6 +156,7 @@
           "inviteModal": {
             "title": "Adicionar novos usuários ao projeto",
             "atLeastOneMessage": "Você precisa escolher pelo menos 1 usuário",
+            "atLeastOnePermissionMessage": "Em projetos públicos os usuários convidados devem ter ao menos uma permissão.",
             "errorOnInviteFollowingUsers": "Os seguintes usuários não foram convidados:",
             "availableUsers": "Usuários disponíveis",
             "usersToInvite": "Usuários para convidar",
@@ -202,6 +203,26 @@
             "title": "Convide Novos Usuários",
             "placeholder": "Digite os emails",
             "inviteBtn": "Convidar"
+          }
+        }
+      },
+      "chat": {
+        "initialMessage": "Olá, sou uma Inteligência Artificial conversacional. Fui treinada com os documentos {{documents}}. Você pode me fazer perguntas ou pedir para produzir textos com base nas informações contidas neles.",
+        "noChats": "Você não tem conversas ainda",
+        "createChats": "Crie uma nova à cima 👆🏻",
+        "selectAChat": "Por favor selecione uma conversa no painel à esquerda",
+        "yourConversations": "Suas conversas",
+        "components": {
+          "newChatBtn": "Nova",
+          "inputPlaceHolder": "Escreva aqui...",
+          "projectChats": "Conversas do projeto",
+          "anonymousChat": "Conversas anônimas",
+          "notifications": {
+            "deleteConfirmation": "Tem certeza que deseja apagar esta conversa?",
+            "failureRequestAnonymousChats": "Falha na requisição de conversas anônimas",
+            "failureRequestChats": "Falha na requisição de conversas",
+            "waitForAIReponseToQuitChat": "Por favor espere pela resposta da IA antes de navegar entre conversas",
+            "waitForAIResponseToSend": "Por favor espere pela resposta da IA antes de enviar outra mensagem"
           }
         }
       }

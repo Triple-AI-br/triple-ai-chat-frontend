@@ -66,7 +66,7 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
           <h2>{t("pages.sources.components.permissionsFor", { user: grantedUser.email })}</h2>
           <Select
             mode="multiple"
-            allowClear
+            allowClear={!project?.is_public}
             placeholder="Please select"
             defaultValue={grantedUser.permissions}
             onChange={(e) => (permissionsToApply = e)}
@@ -93,6 +93,16 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
             emails: [grantedUser.email],
             permissions: permissionsToApply,
           };
+          // Se o projeto for público, o convidado precisa ter ao menos uma permissão
+          if (project.is_public && !schema.permissions?.length) {
+            dispatch(
+              actionDisplayNotification({
+                messages: [t("pages.sources.components.inviteModal.atLeastOnePermissionMessage")],
+                severity: "warning",
+              }),
+            );
+            return;
+          }
           await projectService.inviteManyUserToProject(schema);
           await setGrantedUsers();
         } catch (err) {
@@ -172,8 +182,7 @@ const ProjectOwnerManager: React.FC<ProjectOwnerManager> = ({ project, span = 11
       {project ? (
         <ManageGrantedUsersModal
           open={openModal}
-          projectId={project.id}
-          projectOwnerId={project.user_owner.id}
+          project={project}
           handleCancel={() => setOpenModal(false)}
           handleConfirm={async () => {
             setOpenModal(false);

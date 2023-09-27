@@ -127,7 +127,7 @@ export const ActionButton = styled(PopupButton)`
   }
 `;
 
-export const BrowserWindow = styled.div<{ openvideo: boolean }>`
+export const BrowserWindow = styled.div<{ $openvideo: number }>`
   max-width: 100%;
   aspect-ratio: 16 / 9;
   position: relative;
@@ -157,7 +157,7 @@ export const BrowserWindow = styled.div<{ openvideo: boolean }>`
   }
   &:hover {
     > svg {
-      display: ${(props) => (props.openvideo ? "none" : "block")};
+      display: ${(props) => (props.$openvideo === 1 ? "none" : "block")};
       opacity: 1;
     }
   }
@@ -189,10 +189,10 @@ export const BrowserWindow = styled.div<{ openvideo: boolean }>`
     background-color: #c9cbd4;
   }
   > img {
-    display: ${(props) => (props.openvideo ? "none" : "block")};
+    display: ${(props) => (props.$openvideo ? "none" : "block")};
   }
   > video {
-    display: ${(props) => (props.openvideo ? "block" : "none")};
+    display: ${(props) => (props.$openvideo ? "block" : "none")};
   }
   @media (min-width: 600px) {
     min-width: min-content;

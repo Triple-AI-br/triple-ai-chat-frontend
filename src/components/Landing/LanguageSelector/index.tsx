@@ -17,7 +17,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ callback }) => {
   };
 
   return (
-    <SelectorContainer language={language}>
+    <SelectorContainer $language={language}>
       <img
         id="pt"
         src="countryFlags/brazil.svg"

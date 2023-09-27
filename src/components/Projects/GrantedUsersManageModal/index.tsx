@@ -1,5 +1,5 @@
-import { Button, Form, Switch, Transfer } from "antd";
-import { IGrantedUsers, projectService } from "../../../services";
+import { Button, Form, Switch, Transfer, Typography } from "antd";
+import { IGrantedUsers, IProject, projectService } from "../../../services";
 import { useEffect, useState } from "react";
 import { PermissionsArray, usersService } from "../../../services/users";
 import { useAppDispatch } from "../../../redux/hooks";
@@ -7,13 +7,13 @@ import { StyledModal } from "./styled";
 import { actionDisplayNotification } from "../../../redux/notificationSlice";
 import { TransferDirection } from "antd/es/transfer";
 import { useTranslation } from "react-i18next";
+const { Text } = Typography;
 
 type ManageGrantedUsersModalProps = {
   open: boolean;
   handleConfirm?: (arg?: unknown) => void;
   handleCancel?: (arg?: unknown) => void;
-  projectId: string | number;
-  projectOwnerId: number;
+  project: IProject;
   usersInProject: IGrantedUsers[];
 };
 
@@ -24,27 +24,42 @@ export interface TransferItem {
   disabled?: boolean;
 }
 
+type Permissions = "files:upload" | "files:delete";
+
 const ManageGrantedUsersModal = ({
   handleConfirm,
   handleCancel,
   open,
-  projectId,
-  projectOwnerId,
+  project,
   usersInProject,
 }: ManageGrantedUsersModalProps) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const [filteredUserList, setFilteredFilterList] = useState<TransferItem[]>([]);
+  const [filteredUserList, setFilteredUsersList] = useState<TransferItem[]>([]);
   const [targetKeys, setTargetKeys] = useState<string[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
-  const [permissions, setPermissions] = useState({ "files:upload": false, "files:delete": false });
+  const [permissions, setPermissions] = useState({
+    "files:upload": project.is_public,
+    "files:delete": project.is_public,
+  });
+
+  const projectId = project.id;
+  const projectOwner = project.user_owner.id;
+  const isPublic = project.is_public;
+
+  const disabledSwitch =
+    isPublic && permissions["files:upload"] !== permissions["files:delete"]
+      ? permissions["files:upload"]
+        ? "files:upload"
+        : "files:delete"
+      : undefined;
 
   const onConfirm = async () => {
     try {
       if (!targetKeys.length) {
         dispatch(
           actionDisplayNotification({
-            messages: [t("pages.sources.components.inviteModal.atLeastOneMessa")],
+            messages: [t("pages.sources.components.inviteModal.atLeastOneMessage")],
             severity: "warning",
           }),
         );
@@ -88,6 +103,22 @@ const ManageGrantedUsersModal = ({
     }
   };
 
+  const handleChangePermission = (permission: Permissions, active: boolean) => {
+    if (isPublic) {
+      // Se o projeto for público, você precisa garantir que pelo menos uma das permissões seja verdadeira
+      if (!active) {
+        // Verifica se a outra permissão também está desativada
+        if (
+          (permission === "files:upload" && !permissions["files:delete"]) ||
+          (permission === "files:delete" && !permissions["files:upload"])
+        ) {
+          return;
+        }
+      }
+    }
+    setPermissions((prev) => ({ ...prev, [permission]: active }));
+  };
+
   const handleAdd = (nextTargetKeys: string[]) => {
     setTargetKeys(nextTargetKeys);
   };
@@ -119,30 +150,43 @@ const ManageGrantedUsersModal = ({
 
         const emailsAlreadyinProject = usersInProject.map((user) => user.email);
         const filterUsersAlreadyInProject = users.filter(
-          (user) => !emailsAlreadyinProject?.includes(user.email) && user.id !== projectOwnerId,
+          (user) => !emailsAlreadyinProject?.includes(user.email) && user.id !== projectOwner,
         );
         const schema = filterUsersAlreadyInProject.map((user) => ({
           key: String(user.id),
           title: user.email,
         }));
 
-        setFilteredFilterList(schema);
+        setFilteredUsersList(schema);
       } catch (er) {
-        setFilteredFilterList([]);
+        setFilteredUsersList([]);
       }
     })();
-  }, [usersInProject]);
+  }, [usersInProject, open]);
+
+  const handleClose = () => {
+    setFilteredUsersList([]);
+    setTargetKeys([]);
+    setSelectedKeys([]);
+    setPermissions({
+      "files:upload": project.is_public,
+      "files:delete": project.is_public,
+    });
+    if (handleCancel) {
+      handleCancel();
+    }
+  };
 
   return (
     <StyledModal
       open={open}
       title={t("pages.sources.components.inviteModal.title")}
       onOk={async () => await onConfirm()}
-      onCancel={handleCancel}
+      onCancel={handleClose}
       destroyOnClose={true}
-      afterClose={handleCancel}
+      afterClose={handleClose}
       footer={[
-        <Button key="back" onClick={handleCancel}>
+        <Button key="back" onClick={handleClose}>
           {t("global.cancel")}
         </Button>,
         <Button key="confirm" type="primary" onClick={async () => await onConfirm()}>
@@ -182,7 +226,9 @@ const ManageGrantedUsersModal = ({
         >
           <Switch
             checked={permissions["files:upload"]}
-            onChange={(value) => setPermissions((prev) => ({ ...prev, "files:upload": value }))}
+            disabled={disabledSwitch === "files:upload"}
+            defaultChecked={project.is_public}
+            onChange={(value) => handleChangePermission("files:upload", value)}
           />
         </Form.Item>
 
@@ -199,10 +245,17 @@ const ManageGrantedUsersModal = ({
         >
           <Switch
             checked={permissions["files:delete"]}
-            onChange={(value) => setPermissions((prev) => ({ ...prev, "files:delete": value }))}
+            disabled={disabledSwitch === "files:delete"}
+            defaultChecked={project.is_public}
+            onChange={(value) => handleChangePermission("files:delete", value)}
           />
         </Form.Item>
       </Form>
+      {isPublic && !!disabledSwitch ? (
+        <Text type="warning">
+          {t("pages.sources.components.inviteModal.atLeastOnePermissionMessage")}
+        </Text>
+      ) : undefined}
     </StyledModal>
   );
 };
