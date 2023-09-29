@@ -142,6 +142,7 @@ const ChatPage = () => {
         }
 
         const anonymousConversations = await chatService.listAnonymousChats({ projectId });
+        anonymousConversations.reverse();
         setAnonymousChats(
           anonymousConversations.map((item) => ({
             id: item.id,
