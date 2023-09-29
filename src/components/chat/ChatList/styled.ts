@@ -14,7 +14,8 @@ export const CollapseStyled = styled(Collapse)<{ $length: number }>`
     bottom: 0 !important;
   }
   .ant-collapse-item-active {
-    max-height: ${(props) => (props.$length === 1 ? "max-content" : "50%")};
+    max-height: ${(props) => (props.$length === 1 ? "100%" : "50%")};
+    padding-bottom: 40px;
     overflow-y: scroll;
     position: relative;
     /* This will work in Chrome / Edge / Safari / Opera. Firefox doesn't support scroll styling. Hope it helps! */

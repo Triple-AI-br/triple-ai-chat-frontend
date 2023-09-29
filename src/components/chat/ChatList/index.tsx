@@ -88,7 +88,6 @@ const ChatList = ({
     return panels;
   };
 
-  console.log(activeCollapses);
   return (
     <CollapseStyled
       items={renderChats()}
