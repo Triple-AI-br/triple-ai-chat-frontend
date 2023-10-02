@@ -5,6 +5,7 @@ import { IChat } from "../types";
 import { useTranslation } from "react-i18next";
 import { Box } from "@mui/material";
 import { CollapseStyled } from "./styled";
+import { useState } from "react";
 
 interface IChatListProps {
   chats: IChat[];
@@ -22,6 +23,7 @@ const ChatList = ({
   anonymousChats,
 }: IChatListProps) => {
   const { t } = useTranslation();
+  const [activeCollapses, setActiveCollapses] = useState<number>(0);
 
   const renderChats = () => {
     const projectChats = {
@@ -88,9 +90,12 @@ const ChatList = ({
 
   return (
     <CollapseStyled
-      style={{ backgroundColor: "#f5f5f5", height: "100%" }}
       items={renderChats()}
-      $length={renderChats().length}
+      $length={activeCollapses}
+      onChange={() => {
+        const activeItems = document.querySelectorAll(".ant-collapse-item-active");
+        setActiveCollapses(activeItems.length);
+      }}
       defaultActiveKey={["1", "2"]}
       bordered={false}
     />

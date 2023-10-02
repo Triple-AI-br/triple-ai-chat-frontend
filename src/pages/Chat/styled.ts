@@ -11,6 +11,6 @@ export const LeftContainer = styled.div`
 `;
 
 export const ScrollChats = styled.div`
-  height: max-content;
+  height: 100%;
   overflow-y: hidden;
 `;
