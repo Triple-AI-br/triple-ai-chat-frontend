@@ -2,9 +2,20 @@ import { Collapse } from "antd";
 import styled from "styled-components";
 
 export const CollapseStyled = styled(Collapse)<{ $length: number }>`
-  .ant-collapse-item,
+  height: 100%;
+  > .ant-collapse-item {
+    position: sticky;
+    background-color: #f5f5f5 !important;
+  }
+  > .ant-collapse-item:nth-child(1) {
+    top: 0 !important;
+  }
+  > .ant-collapse-item:nth-child(2) {
+    bottom: 0 !important;
+  }
   .ant-collapse-item-active {
     max-height: ${(props) => (props.$length === 1 ? "100%" : "50%")};
+    padding-bottom: 40px;
     overflow-y: scroll;
     position: relative;
     /* This will work in Chrome / Edge / Safari / Opera. Firefox doesn't support scroll styling. Hope it helps! */

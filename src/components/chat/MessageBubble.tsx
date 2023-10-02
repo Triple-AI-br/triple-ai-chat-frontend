@@ -62,7 +62,7 @@ const MessageBubble = ({
       paddingY={1.5}
       paddingX={0.5}
     >
-      <Box px={3} pt={0.5} pb={date_time ? 0 : 0.5}>
+      <Box px={3} pt={0.5} pb={date_time ? 0 : 0.5} paddingX={4} paddingY={1.5}>
         <ReactMarkdown>{markdownText}</ReactMarkdown>
       </Box>
       {date_time && (
