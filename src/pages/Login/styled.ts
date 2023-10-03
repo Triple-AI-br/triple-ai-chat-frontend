@@ -1,3 +1,4 @@
+import { ArrowLeftOutlined } from "@ant-design/icons";
 import { PopupButton } from "react-calendly";
 import styled, { keyframes } from "styled-components";
 
@@ -167,6 +168,7 @@ export const LeftCallToAction = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 5px;
+  width: max-content;
   h3 {
     font-size: 24px;
     color: #fff;
@@ -191,4 +193,17 @@ export const ActionButton = styled(PopupButton)`
   background: linear-gradient(180deg, rgba(255, 93, 255, 0.8) 0%, rgba(134, 156, 252, 0.8) 100%);
   width: fit-content;
   font-size: 16px;
+`;
+
+export const ArrowLeftOutlinedStyled = styled(ArrowLeftOutlined)`
+  position: absolute;
+  font-size: 25px;
+  top: 20px;
+  left: 20px;
+  color: #fff;
+  z-index: 1000;
+  cursor: pointer !important;
+  :hover {
+    opacity: 0.8;
+  }
 `;

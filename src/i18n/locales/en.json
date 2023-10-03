@@ -41,9 +41,25 @@
       "failureUpdateMessage": "Failed to update!",
       "failureCreateMessage": "Failed to create!",
       "failureInviteMessage": "Failed to invite!",
-      "failureRequestMessage": "Failed to pull data!"
+      "failureRequestMessage": "Failed to pull data!",
+      "failureToLogin": "Failed to login!"
     },
     "pages": {
+      "login": {
+        "password": "password",
+        "remember": "Remember me",
+        "forgotPassword": "Forgot my password",
+        "requestPasswordReset": "Request password reset",
+        "emailRequired": "Please input your email!",
+        "passwordRequired": "Please input your password!",
+        "correctEmail": "Enter a valid email!",
+        "components": {
+          "leftContent": {
+            "noAccess": "Don't have access?",
+            "contactUs": "Contact us!"
+          }
+        }
+      },
       "landing": {
         "components": {
           "drawerTitle": "Navigation",

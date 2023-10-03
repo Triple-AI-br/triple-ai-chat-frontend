@@ -3,6 +3,7 @@ import { RootState } from "./store";
 import axios from "axios";
 import { api } from "../services/api";
 import { usersService } from "../services/users";
+import { getAccessTokenFromStorage } from "../utils/getTokenFromStorage";
 
 const ACCESS_TOKEN_KEY = "jwt";
 const BASE_API_URL = process.env.REACT_APP_BASE_API_URL as string;
@@ -37,9 +38,7 @@ interface IState {
   customerData?: ICustomerData | null;
 }
 
-const getAccessTokenFromLocalStorage = () => localStorage.getItem(ACCESS_TOKEN_KEY);
-
-const setAccessTokenToLocalStorage = (accessToken: string, remember?: boolean) => {
+const setAccessTokenToStorage = (accessToken: string, remember?: boolean) => {
   if (remember) {
     localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
   } else {
@@ -47,7 +46,7 @@ const setAccessTokenToLocalStorage = (accessToken: string, remember?: boolean) =
   }
 };
 
-const _initialAccessToken = getAccessTokenFromLocalStorage() || "";
+const _initialAccessToken = getAccessTokenFromStorage() || "";
 
 const initialState: IState = {
   status: "idle",
@@ -61,6 +60,7 @@ const authSlice = createSlice({
     logout(state) {
       state.isAuthenticated = false;
       localStorage.removeItem(ACCESS_TOKEN_KEY);
+      sessionStorage.removeItem(ACCESS_TOKEN_KEY);
     },
     updateUserAndCustomer(
       state,
@@ -84,7 +84,7 @@ const authSlice = createSlice({
           customerData,
           remember,
         } = action.payload;
-        setAccessTokenToLocalStorage(accessToken, remember);
+        setAccessTokenToStorage(accessToken, remember);
         state.accessToken = accessToken;
         state.isAuthenticated = true;
         state.userData = userData;
@@ -108,7 +108,7 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
         state.userData = userData;
         state.customerData = customerData;
-        setAccessTokenToLocalStorage(accessToken);
+        setAccessTokenToStorage(accessToken);
       })
       .addCase(actionSwitchCustomer.rejected, (state) => {
         state.error = "Failed to switch customers";
@@ -128,7 +128,7 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
         state.userData = userData;
         state.customerData = customerData;
-        setAccessTokenToLocalStorage(accessToken);
+        setAccessTokenToStorage(accessToken);
       })
       .addCase(actionAcceptInviteOrResetPassword.rejected, (state) => {
         state.error = "Failed to authenticate user";

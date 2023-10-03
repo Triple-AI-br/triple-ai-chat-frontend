@@ -41,9 +41,25 @@
       "failureUpdateMessage": "Falha ao atualizar!",
       "failureCreateMessage": "Falha ao criar!",
       "failureInviteMessage": "Falha ao convidar!",
-      "failureRequestMessage": "Falha na requisição!"
+      "failureRequestMessage": "Falha na requisição!",
+      "failureToLogin": "Falha ao entrar!"
     },
     "pages": {
+      "login": {
+        "password": "senha",
+        "remember": "Lembre de mim",
+        "forgotPassword": "Esqueci minha senha",
+        "requestPasswordReset": "Solicitar redefinição de senha",
+        "emailRequired": "Por favor, digite seu email!",
+        "passwordRequired": "Por favor, digite sua senha!",
+        "correctEmail": "Insira um email válido!",
+        "components": {
+          "leftContent": {
+            "noAccess": "Não tem acesso?",
+            "contactUs": "Entre em contato!"
+          }
+        }
+      },
       "landing": {
         "components": {
           "drawerTitle": "Navegação",
