@@ -2,27 +2,46 @@
 import { Button, Checkbox, Form, Input } from "antd";
 import { FormContainer, Logo } from "./styled";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import { actionLogin, selectIsAuthenticated } from "../../../redux/authenticationSlice";
+import { routesManager } from "../../../routes/routesManager";
 
 type FieldType = {
-  email?: string;
-  password?: string;
+  email: string;
+  password: string;
   remember?: boolean;
 };
 
 const LoginForm: React.FC = () => {
   const [forgotPassword, setForgotPassword] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const dispatch = useAppDispatch();
 
-  const onFinish = (values: FieldType) => {
+  const onFinish = async (values: FieldType) => {
     if (forgotPassword) {
       setForgotPassword(false);
-      console.log(values);
+    } else {
+      await dispatch(actionLogin(values));
     }
   };
 
   const onFinishFailed = (errorInfo: any) => {
     console.log("Failed:", errorInfo);
   };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      const next =
+        location.state && location.state.next
+          ? location.state.next
+          : routesManager.getProjectsRoute();
+      navigate(next);
+    }
+  }, [isAuthenticated]);
 
   return (
     <FormContainer>
