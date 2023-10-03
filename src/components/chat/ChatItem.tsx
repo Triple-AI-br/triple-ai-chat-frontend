@@ -73,6 +73,7 @@ const ChatItem = ({
       py={2}
       gap={2}
       marginBottom="5px"
+      maxWidth="100%"
       borderBottom="1px solid #e5e5e5"
       borderRadius="4px"
       onMouseOver={() => setIsHovered(true)}
