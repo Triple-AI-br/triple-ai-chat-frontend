@@ -7,6 +7,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { actionLogin, selectIsAuthenticated } from "../../../redux/authenticationSlice";
 import { routesManager } from "../../../routes/routesManager";
+import { authService } from "../../../services";
+import { actionDisplayNotification } from "../../../redux/notificationSlice";
 
 type FieldType = {
   email: string;
@@ -23,6 +25,14 @@ const LoginForm: React.FC = () => {
 
   const onFinish = async (values: FieldType) => {
     if (forgotPassword) {
+      const { detail: msg } = await authService.requestPasswordReset(values.email);
+      console.log(msg);
+      dispatch(
+        actionDisplayNotification({
+          messages: [msg],
+          severity: "success",
+        }),
+      );
       setForgotPassword(false);
     } else {
       await dispatch(actionLogin(values));
