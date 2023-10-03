@@ -24,9 +24,11 @@ const LoginForm: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const [forgotPassword, setForgotPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const onFinish = async (values: FieldType) => {
     try {
+      setLoading(true);
       if (forgotPassword) {
         const msg = await authService.requestPasswordReset(values.email);
         dispatch(
@@ -46,11 +48,14 @@ const LoginForm: React.FC = () => {
           severity: "error",
         }),
       );
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     if (isAuthenticated) {
+      setLoading(false);
       const next =
         location.state && location.state.next
           ? location.state.next
@@ -82,7 +87,11 @@ const LoginForm: React.FC = () => {
             label={t("pages.login.requestPasswordReset")}
             rules={[{ type: "email", required: true, message: t("pages.login.emailRequired") }]}
           >
-            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email" />
+            <Input
+              disabled={loading}
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="Email"
+            />
           </Form.Item>
         ) : (
           <>
@@ -94,6 +103,7 @@ const LoginForm: React.FC = () => {
               ]}
             >
               <Input
+                disabled={loading}
                 prefix={<UserOutlined className="site-form-item-icon" />}
                 placeholder="email"
               />
@@ -104,6 +114,7 @@ const LoginForm: React.FC = () => {
               rules={[{ required: true, message: t("pages.login.passwordRequired") }]}
             >
               <Input.Password
+                disabled={loading}
                 prefix={<LockOutlined className="site-form-item-icon" />}
                 placeholder={t("pages.login.password")}
               />
@@ -131,6 +142,7 @@ const LoginForm: React.FC = () => {
             type="primary"
             htmlType="submit"
             className="login-form-button"
+            loading={loading}
             style={{ width: "100%" }}
           >
             {forgotPassword ? t("global.submit") : t("global.login")}
