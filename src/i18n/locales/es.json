@@ -41,9 +41,25 @@
       "failureUpdateMessage": "Error al actualizar",
       "failureCreateMessage": "Error al crear",
       "failureInviteMessage": "¡Error al invitar!",
-      "failureRequestMessage": "¡Error al obtener los datos!"
+      "failureRequestMessage": "¡Error al obtener los datos!",
+      "failureToLogin": "¡Failed al Iniciar sesión!"
     },
     "pages": {
+      "login": {
+        "password": "contraseña",
+        "remember": "Recuérdame",
+        "forgotPassword": "Olvidé mi contraseña",
+        "requestPasswordReset": "Solicitar restablecimiento de contraseña",
+        "emailRequired": "¡Por favor, ingrese su correo electrónico!",
+        "passwordRequired": "¡Por favor, ingrese su contraseña!",
+        "correctEmail": "¡Ingrese un correo electrónico válido!",
+        "components": {
+          "leftContent": {
+            "noAccess": "¿No tienes acceso?",
+            "contactUs": "¡Contáctanos!"
+          }
+        }
+      },
       "landing": {
         "components": {
           "drawerTitle": "Navegación",

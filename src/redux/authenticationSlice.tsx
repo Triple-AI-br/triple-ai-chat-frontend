@@ -3,6 +3,7 @@ import { RootState } from "./store";
 import axios from "axios";
 import { api } from "../services/api";
 import { usersService } from "../services/users";
+import { getAccessTokenFromStorage } from "../utils/getTokenFromStorage";
 
 const ACCESS_TOKEN_KEY = "jwt";
 const BASE_API_URL = process.env.REACT_APP_BASE_API_URL as string;
@@ -37,12 +38,15 @@ interface IState {
   customerData?: ICustomerData | null;
 }
 
-const getAccessTokenFromLocalStorage = () => localStorage.getItem(ACCESS_TOKEN_KEY);
+const setAccessTokenToStorage = (accessToken: string, remember?: boolean) => {
+  if (remember) {
+    localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+  } else {
+    sessionStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+  }
+};
 
-const setAccessTokenToLocalStorage = (accessToken: string) =>
-  localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
-
-const _initialAccessToken = getAccessTokenFromLocalStorage() || "";
+const _initialAccessToken = getAccessTokenFromStorage() || "";
 
 const initialState: IState = {
   status: "idle",
@@ -56,6 +60,7 @@ const authSlice = createSlice({
     logout(state) {
       state.isAuthenticated = false;
       localStorage.removeItem(ACCESS_TOKEN_KEY);
+      sessionStorage.removeItem(ACCESS_TOKEN_KEY);
     },
     updateUserAndCustomer(
       state,
@@ -77,8 +82,9 @@ const authSlice = createSlice({
           authData: { access_token: accessToken },
           userData,
           customerData,
+          remember,
         } = action.payload;
-        setAccessTokenToLocalStorage(accessToken);
+        setAccessTokenToStorage(accessToken, remember);
         state.accessToken = accessToken;
         state.isAuthenticated = true;
         state.userData = userData;
@@ -102,7 +108,7 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
         state.userData = userData;
         state.customerData = customerData;
-        setAccessTokenToLocalStorage(accessToken);
+        setAccessTokenToStorage(accessToken);
       })
       .addCase(actionSwitchCustomer.rejected, (state) => {
         state.error = "Failed to switch customers";
@@ -122,7 +128,7 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
         state.userData = userData;
         state.customerData = customerData;
-        setAccessTokenToLocalStorage(accessToken);
+        setAccessTokenToStorage(accessToken);
       })
       .addCase(actionAcceptInviteOrResetPassword.rejected, (state) => {
         state.error = "Failed to authenticate user";
@@ -158,7 +164,15 @@ export const actionUpdateAuthenticationStatus = createAsyncThunk("auth/refresh",
 
 export const actionLogin = createAsyncThunk(
   "auth/login",
-  async ({ email, password }: { email: string; password: string }) => {
+  async ({
+    email,
+    password,
+    remember,
+  }: {
+    email: string;
+    password: string;
+    remember?: boolean;
+  }) => {
     const url = `${BASE_API_URL}/api/v1/login/access-token`;
     const formdata = new FormData();
     formdata.append("username", email);
@@ -166,7 +180,7 @@ export const actionLogin = createAsyncThunk(
     const authResponse = await axios.post(url, formdata);
     const authData: IIncomingTokenCredentials = authResponse.data;
     const { customer, user } = await usersService.getMe(authData.access_token);
-    return { authData, customerData: customer, userData: user };
+    return { authData, customerData: customer, userData: user, remember };
   },
 );
 
