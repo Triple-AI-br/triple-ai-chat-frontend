@@ -30,10 +30,10 @@ const LoginForm: React.FC = () => {
     try {
       setLoading(true);
       if (forgotPassword) {
-        const msg = await authService.requestPasswordReset(values.email);
+        await authService.requestPasswordReset(values.email);
         dispatch(
           actionDisplayNotification({
-            messages: [msg.detail],
+            messages: [t("pages.login.requestPasswordResetMessage")],
             severity: "success",
           }),
         );
@@ -82,16 +82,27 @@ const LoginForm: React.FC = () => {
       >
         <Logo alt="logo" src="/triple-ai.png" />
         {forgotPassword ? (
-          <Form.Item<FieldType>
-            name="email"
-            label={t("pages.login.requestPasswordReset")}
-            rules={[{ type: "email", required: true, message: t("pages.login.emailRequired") }]}
-          >
-            <Input
-              disabled={loading}
-              prefix={<UserOutlined className="site-form-item-icon" />}
-              placeholder="Email"
-            />
+          <Form.Item noStyle>
+            <Form.Item<FieldType>
+              name="email"
+              label={t("pages.login.requestPasswordReset")}
+              rules={[{ type: "email", required: true, message: t("pages.login.emailRequired") }]}
+            >
+              <Input
+                disabled={loading}
+                prefix={<UserOutlined className="site-form-item-icon" />}
+                placeholder="Email"
+              />
+            </Form.Item>
+            <Form.Item>
+              <a
+                className="login-form-forgot"
+                style={{ display: "inline-block" }}
+                onClick={() => setForgotPassword(false)}
+              >
+                {t("pages.login.iAlreadyHaveAnAccount")}
+              </a>
+            </Form.Item>
           </Form.Item>
         ) : (
           <>

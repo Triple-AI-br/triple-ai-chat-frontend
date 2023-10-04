@@ -53,6 +53,8 @@
         "emailRequired": "¡Por favor, ingrese su correo electrónico!",
         "passwordRequired": "¡Por favor, ingrese su contraseña!",
         "correctEmail": "¡Ingrese un correo electrónico válido!",
+        "incorrectEmailOrPassword": "¡Correo electrónico o contraseña incorrectos!",
+        "requestPasswordResetMessage": "Si este correo electrónico está registrado en nuestro sistema, recibirás un correo electrónico de recuperación.",
         "components": {
           "leftContent": {
             "noAccess": "¿No tienes acceso?",
@@ -132,6 +134,7 @@
         "noProjectsMessage": "Aún no tienes proyectos",
         "components": {
           "newProjectBtn": "Nuevo Proyecto",
+          "projectsCounter": "Proyectos de la empresa: {{using}}/{{limit}}",
           "deleteConfirmationMessage": "¿Estás seguro de que deseas eliminar el proyecto {{project}}?",
           "collapse": {
             "your": "Tus Proyectos",
@@ -145,6 +148,10 @@
             "basePrompt": "Prompt Base",
             "externalKnowledge": "Habilitar conocimiento externo de ChatGPT",
             "public": "Público dentro de tu organización",
+            "limitReachedOfProjects": {
+              "title": "Límite de Proyectos Alcanzado",
+              "description": "Se ha alcanzado el límite de {{projects}} proyectos asignados para {{customer}}. Considere reutilizar proyectos antiguos o eliminarlos para dejar espacio para nuevos."
+            },
             "tooltip": {
               "basePrompt": "Define el tono y el comportamiento del chatbot",
               "externalKnowledge": "Cuando está deshabilitado, el chatbot responderá solo en función de los documentos cargados."
