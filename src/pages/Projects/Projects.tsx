@@ -115,7 +115,7 @@ const ProjectsPage = () => {
           <Button
             type="primary"
             loading={loading}
-            // disabled={projectLimitReached}
+            disabled={projectLimitReached}
             icon={<PlusOutlined />}
             onClick={async () => {
               if (!customerData) return;
