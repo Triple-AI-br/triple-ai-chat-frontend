@@ -53,6 +53,8 @@
         "emailRequired": "Please input your email!",
         "passwordRequired": "Please input your password!",
         "correctEmail": "Enter a valid email!",
+        "incorrectEmailOrPassword": "Incorrect email or password!",
+        "requestPasswordResetMessage": "If this email is registered within our system, you'll get a recovery email.",
         "components": {
           "leftContent": {
             "noAccess": "Don't have access?",
@@ -132,6 +134,7 @@
         "noProjectsMessage": "You don't have any projects yet",
         "components": {
           "newProjectBtn": "New Project",
+          "projectsCounter": "Company Projects: {{using}}/{{limit}}",
           "deleteConfirmationMessage": "Are you sure you want to delete project {{project}}",
           "collapse": {
             "your":"Your Projects",
@@ -145,6 +148,10 @@
             "basePrompt": "Base Prompt",
             "externalKnowledge": "Enable ChatGPT external knowledge",
             "public": "Public within your organization",
+            "limitReachedOfProjects": {
+              "title": "Project Limit Reached",
+              "description": "The limit of {{projects}} projects allocated for {{customer}} has been reached. Consider reusing old projects or deleting them to make room for new ones."
+            },
             "tooltip": {
               "basePrompt": "Sets the tone and behaviour of the chatbot",
               "externalKnowledge": "When disabled the chatbot will respond based on the uploaded documents only."

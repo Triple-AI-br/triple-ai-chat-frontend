@@ -4,6 +4,8 @@ import axios from "axios";
 import { api } from "../services/api";
 import { usersService } from "../services/users";
 import { getAccessTokenFromStorage } from "../utils/getTokenFromStorage";
+import { customerService } from "../services";
+import i18n from "../i18n";
 
 const ACCESS_TOKEN_KEY = "jwt";
 const BASE_API_URL = process.env.REACT_APP_BASE_API_URL as string;
@@ -22,6 +24,12 @@ export interface ICustomerData {
   name: string;
   main_color: string;
   logo_url: string;
+  limit_queries_per_month: number;
+  current_number_of_queries: number;
+  limit_number_of_projects: number;
+  current_number_of_projects: number;
+  limit_size_in_gb: number;
+  current_size_in_bytes: number;
 }
 
 export interface IIncomingTokenCredentials {
@@ -91,7 +99,7 @@ const authSlice = createSlice({
         state.customerData = customerData;
       })
       .addCase(actionLogin.rejected, (state) => {
-        state.error = "Failed to authenticate user";
+        state.error = i18n.t("pages.login.incorrectEmailOrPassword");
       })
       .addCase(actionSwitchCustomer.pending, (state) => {
         state.status = "loading";
@@ -149,6 +157,10 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.userData = null;
         state.customerData = null;
+      })
+      .addCase(actionUpdateCustomerInfo.fulfilled, (state, action) => {
+        const { customerData } = action.payload;
+        state.customerData = customerData;
       });
   },
 });
@@ -192,6 +204,14 @@ export const actionSwitchCustomer = createAsyncThunk(
     const authData: IIncomingTokenCredentials = response.data;
     const { customer, user } = await usersService.getMe(authData.access_token);
     return { authData, customerData: customer, userData: user };
+  },
+);
+
+export const actionUpdateCustomerInfo = createAsyncThunk(
+  "auth/updateCustomerInfo",
+  async (customer_id: number) => {
+    const customer = await customerService.getCustomer(customer_id);
+    return { customerData: customer };
   },
 );
 

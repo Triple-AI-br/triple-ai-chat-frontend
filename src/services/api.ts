@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getAccessTokenFromStorage as getAccessTokenFromStorage } from "../utils/getTokenFromStorage";
+import { getAccessTokenFromStorage } from "../utils/getTokenFromStorage";
 
 const BASE_API_URL = process.env.REACT_APP_BASE_API_URL as string;
 
