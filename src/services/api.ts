@@ -1,8 +1,9 @@
 import axios from "axios";
+import { getAccessTokenFromStorage } from "../utils/getTokenFromStorage";
 
 const BASE_API_URL = process.env.REACT_APP_BASE_API_URL as string;
 
-const accessToken = localStorage.getItem("jwt");
+const accessToken = getAccessTokenFromStorage();
 
 const api = axios.create({
   baseURL: `${BASE_API_URL}/api/v1`,
@@ -11,7 +12,7 @@ const api = axios.create({
 
 // Make sure to use latest value of access token upon every request
 api.interceptors.request.use((config) => {
-  const accessToken = localStorage.getItem("jwt");
+  const accessToken = getAccessTokenFromStorage();
   config.headers.Authorization = `Bearer ${accessToken}`;
   return config;
 });

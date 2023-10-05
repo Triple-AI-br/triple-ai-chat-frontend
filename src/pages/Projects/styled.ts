@@ -4,6 +4,6 @@ export const TabTopContainer = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   margin-bottom: 20px;
 `;

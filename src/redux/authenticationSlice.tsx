@@ -3,6 +3,9 @@ import { RootState } from "./store";
 import axios from "axios";
 import { api } from "../services/api";
 import { usersService } from "../services/users";
+import { getAccessTokenFromStorage } from "../utils/getTokenFromStorage";
+import { customerService } from "../services";
+import i18n from "../i18n";
 
 const ACCESS_TOKEN_KEY = "jwt";
 const BASE_API_URL = process.env.REACT_APP_BASE_API_URL as string;
@@ -21,6 +24,12 @@ export interface ICustomerData {
   name: string;
   main_color: string;
   logo_url: string;
+  limit_queries_per_month: number;
+  current_number_of_queries: number;
+  limit_number_of_projects: number;
+  current_number_of_projects: number;
+  limit_size_in_gb: number;
+  current_size_in_bytes: number;
 }
 
 export interface IIncomingTokenCredentials {
@@ -37,12 +46,15 @@ interface IState {
   customerData?: ICustomerData | null;
 }
 
-const getAccessTokenFromLocalStorage = () => localStorage.getItem(ACCESS_TOKEN_KEY);
+const setAccessTokenToStorage = (accessToken: string, remember?: boolean) => {
+  if (remember) {
+    localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+  } else {
+    sessionStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+  }
+};
 
-const setAccessTokenToLocalStorage = (accessToken: string) =>
-  localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
-
-const _initialAccessToken = getAccessTokenFromLocalStorage() || "";
+const _initialAccessToken = getAccessTokenFromStorage() || "";
 
 const initialState: IState = {
   status: "idle",
@@ -56,6 +68,7 @@ const authSlice = createSlice({
     logout(state) {
       state.isAuthenticated = false;
       localStorage.removeItem(ACCESS_TOKEN_KEY);
+      sessionStorage.removeItem(ACCESS_TOKEN_KEY);
     },
     updateUserAndCustomer(
       state,
@@ -77,15 +90,16 @@ const authSlice = createSlice({
           authData: { access_token: accessToken },
           userData,
           customerData,
+          remember,
         } = action.payload;
-        setAccessTokenToLocalStorage(accessToken);
+        setAccessTokenToStorage(accessToken, remember);
         state.accessToken = accessToken;
         state.isAuthenticated = true;
         state.userData = userData;
         state.customerData = customerData;
       })
       .addCase(actionLogin.rejected, (state) => {
-        state.error = "Failed to authenticate user";
+        state.error = i18n.t("pages.login.incorrectEmailOrPassword");
       })
       .addCase(actionSwitchCustomer.pending, (state) => {
         state.status = "loading";
@@ -102,7 +116,7 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
         state.userData = userData;
         state.customerData = customerData;
-        setAccessTokenToLocalStorage(accessToken);
+        setAccessTokenToStorage(accessToken);
       })
       .addCase(actionSwitchCustomer.rejected, (state) => {
         state.error = "Failed to switch customers";
@@ -122,7 +136,7 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
         state.userData = userData;
         state.customerData = customerData;
-        setAccessTokenToLocalStorage(accessToken);
+        setAccessTokenToStorage(accessToken);
       })
       .addCase(actionAcceptInviteOrResetPassword.rejected, (state) => {
         state.error = "Failed to authenticate user";
@@ -143,6 +157,10 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.userData = null;
         state.customerData = null;
+      })
+      .addCase(actionUpdateCustomerInfo.fulfilled, (state, action) => {
+        const { customerData } = action.payload;
+        state.customerData = customerData;
       });
   },
 });
@@ -158,7 +176,15 @@ export const actionUpdateAuthenticationStatus = createAsyncThunk("auth/refresh",
 
 export const actionLogin = createAsyncThunk(
   "auth/login",
-  async ({ email, password }: { email: string; password: string }) => {
+  async ({
+    email,
+    password,
+    remember,
+  }: {
+    email: string;
+    password: string;
+    remember?: boolean;
+  }) => {
     const url = `${BASE_API_URL}/api/v1/login/access-token`;
     const formdata = new FormData();
     formdata.append("username", email);
@@ -166,7 +192,7 @@ export const actionLogin = createAsyncThunk(
     const authResponse = await axios.post(url, formdata);
     const authData: IIncomingTokenCredentials = authResponse.data;
     const { customer, user } = await usersService.getMe(authData.access_token);
-    return { authData, customerData: customer, userData: user };
+    return { authData, customerData: customer, userData: user, remember };
   },
 );
 
@@ -178,6 +204,14 @@ export const actionSwitchCustomer = createAsyncThunk(
     const authData: IIncomingTokenCredentials = response.data;
     const { customer, user } = await usersService.getMe(authData.access_token);
     return { authData, customerData: customer, userData: user };
+  },
+);
+
+export const actionUpdateCustomerInfo = createAsyncThunk(
+  "auth/updateCustomerInfo",
+  async (customer_id: number) => {
+    const customer = await customerService.getCustomer(customer_id);
+    return { customerData: customer };
   },
 );
 

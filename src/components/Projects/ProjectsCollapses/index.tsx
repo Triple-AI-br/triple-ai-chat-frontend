@@ -7,7 +7,11 @@ import { CardsContainer, StyledCollapse } from "./styled";
 import { WarningOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { actionDisplayNotification } from "../../../redux/notificationSlice";
-import { selectUserData } from "../../../redux/authenticationSlice";
+import {
+  actionUpdateCustomerInfo,
+  selectCustomerData,
+  selectUserData,
+} from "../../../redux/authenticationSlice";
 import { useTranslation } from "react-i18next";
 const { useToken } = theme;
 
@@ -25,10 +29,12 @@ const ProjectsCollapses: React.FC<ProjectsCollapsesProps> = ({
   const { token } = useToken();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const userData = useAppSelector(selectUserData);
+  const customerData = useAppSelector(selectCustomerData);
+
   const [myProjects, setMyProjects] = useState<IProject[]>([]);
   const [sharedProjects, setSharedProjects] = useState<IProject[]>([]);
   const [modal, contextHolder] = Modal.useModal();
-  const userData = useAppSelector(selectUserData);
 
   const confirmRemoveProjectModal = (id: number | string, title: string) => {
     modal.confirm({
@@ -44,6 +50,7 @@ const ProjectsCollapses: React.FC<ProjectsCollapsesProps> = ({
         try {
           await projectService.deleteProject(id);
           setProjects();
+          if (customerData) await dispatch(actionUpdateCustomerInfo(customerData.id));
           dispatch(
             actionDisplayNotification({
               messages: [t("global.successDeletedMessage")],
