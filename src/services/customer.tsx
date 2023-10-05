@@ -5,7 +5,7 @@ export type CreateCustomerParams = {
   name: string;
   main_color: string;
   logo_url: string;
-  active: true;
+  is_active: true;
   limit_queries_per_month: number;
   limit_number_of_projects: number;
   limit_size_in_gb: number;
