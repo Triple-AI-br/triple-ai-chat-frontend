@@ -147,7 +147,7 @@ const NewCustomerModal: React.FC<NewCustomerModalProps> = ({
             />
           </Form.Item>
           <Form.Item<FormType>
-            name="active"
+            name="is_active"
             style={{ display: "inline-block", width: "calc(50% - 12px)" }}
             valuePropName="checked"
           >
