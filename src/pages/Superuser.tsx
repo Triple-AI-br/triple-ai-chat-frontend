@@ -6,7 +6,6 @@ import {
   SelectChangeEvent,
   Select,
   Typography,
-  Button,
 } from "@mui/material";
 import { Base } from "../layouts/Base";
 import { useEffect, useState } from "react";
@@ -18,19 +17,17 @@ import {
 } from "../redux/authenticationSlice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { actionDisplayNotification } from "../redux/notificationSlice";
+import { Button } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import { NewCustomerModal } from "../components/SuperUser/NewCustomerModal";
 
 const SuperuserPage = () => {
   const initialCustomer = useAppSelector(selectCustomerData);
-  const [customerId, setCustomerId] = useState(initialCustomer?.id || 0);
-  const [customerOptions, setCustomerOptions] = useState<ICustomerData[]>([]);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    (async () => {
-      const _customers = await customerService.getAllCustomers();
-      setCustomerOptions(_customers);
-    })();
-  }, []);
+  const [customerId, setCustomerId] = useState(initialCustomer?.id || 0);
+  const [customerOptions, setCustomerOptions] = useState<ICustomerData[]>([]);
+  const [openCreateCustomerModal, setOpenCreateCustomerModal] = useState<boolean>(false);
 
   const handleChange = (event: SelectChangeEvent) => {
     setCustomerId(parseInt(event.target.value));
@@ -42,16 +39,38 @@ const SuperuserPage = () => {
       actionDisplayNotification({
         messages: ["Customer successfully changed"],
         severity: "success",
-      })
+      }),
     );
   };
+
+  useEffect(() => {
+    (async () => {
+      if (openCreateCustomerModal) return;
+      const _customers = await customerService.getAllCustomers();
+      setCustomerOptions(_customers);
+    })();
+  }, [openCreateCustomerModal]);
 
   return (
     <Base title="Super User">
       <Box display="flex" flexDirection="column" gap={2}>
-        <Typography component="h2" variant="h5">
-                    Switch Customers
-        </Typography>
+        <NewCustomerModal
+          open={openCreateCustomerModal}
+          cancelCallback={() => setOpenCreateCustomerModal((prev) => !prev)}
+          confirmCallback={() => setOpenCreateCustomerModal(false)}
+        />
+        <Box display="flex" flexDirection="row" gap={2}>
+          <Typography component="h2" variant="h5">
+            Switch Customers
+          </Typography>
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={() => setOpenCreateCustomerModal((prev) => !prev)}
+          >
+            New customer
+          </Button>
+        </Box>
         <Box
           display="flex"
           gap={3}
@@ -72,7 +91,7 @@ const SuperuserPage = () => {
               onChange={handleChange}
               // sx={{ backgroundColor: "white" }}
             >
-              {customerOptions.map(item => (
+              {customerOptions.map((item) => (
                 <MenuItem key={item.id} value={item.id}>
                   {item.name}
                 </MenuItem>
@@ -81,13 +100,10 @@ const SuperuserPage = () => {
           </FormControl>
           <Button
             onClick={handleSubmit}
-            variant="contained"
-            disabled={
-              !initialCustomer ||
-                            initialCustomer.id === customerId
-            }
+            type="primary"
+            disabled={!initialCustomer || initialCustomer.id === customerId}
           >
-                        Save
+            Save
           </Button>
         </Box>
       </Box>
