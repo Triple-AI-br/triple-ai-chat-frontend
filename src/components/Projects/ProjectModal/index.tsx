@@ -57,7 +57,6 @@ const ProjectModal = ({
   const handleOk = async (e: FormValues) => {
     try {
       if (!customerData) return;
-      await dispatch(actionUpdateCustomerInfo(customerData?.id));
       const schema = {
         title: e.title,
         description: e.description,
@@ -83,6 +82,7 @@ const ProjectModal = ({
           severity: "success",
         }),
       );
+      await dispatch(actionUpdateCustomerInfo(customerData?.id));
     } catch (err) {
       dispatch(
         actionDisplayNotification({
