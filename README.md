@@ -61,7 +61,7 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 - Tem acesso à todos os projetos públicos e os de propriedade dele;
 - Realizar upload e deleção de arquivos em todos os projetos públicos e os de propriedade dele;
 - Pode deletar, editar e convidar membros em todos os projetos que aparecem para ele;
-- Pode criar novos Customers;
+- Pode criar, editar e deletar Customers;
 
 **User**:
 

@@ -114,7 +114,7 @@ const CustomerModal: React.FC<CustomerModalProps> = ({
       onCancel={handleClose}
       onOk={confirmCallback}
       destroyOnClose={true}
-      title="Create new customer"
+      title={isEditing ? "Edit Customer" : "Create new customer"}
       footer={[
         <Button loading={isSubmiting} key="back" onClick={handleClose}>
           Cancel
