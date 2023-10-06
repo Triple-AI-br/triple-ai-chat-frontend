@@ -1,38 +1,83 @@
 import { Button, Checkbox, ColorPicker, Form, FormInstance, Input, InputNumber, Modal } from "antd";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CreateCustomerParams as FormType, customerService } from "../../../services";
 import { useAppDispatch } from "../../../redux/hooks";
 import { actionDisplayNotification } from "../../../redux/notificationSlice";
 import axios from "axios";
+import { ICustomerData } from "../../../redux/authenticationSlice";
 
-type NewCustomerModalProps = {
+type CustomerModalProps = {
   open: boolean;
+  editCustomer?: ICustomerData;
   confirmCallback?: () => void;
   cancelCallback?: () => void;
 };
 
-const defaultInitialValues = {
-  limit_queries_per_month: 50,
-  limit_number_of_projects: 3,
-  limit_size_in_gb: 5,
-  limit_number_of_users: 10,
-};
-
-const NewCustomerModal: React.FC<NewCustomerModalProps> = ({
+const CustomerModal: React.FC<CustomerModalProps> = ({
   open,
+  editCustomer,
   confirmCallback,
   cancelCallback,
 }) => {
   const formRef = useRef<FormInstance>(null);
   const dispatch = useAppDispatch();
   const [isSubmiting, setIsSubmiting] = useState(false);
-  const [color, setColor] = useState<string>("#ffffff");
+  const [color, setColor] = useState<string>(editCustomer?.main_color || "#1890FF");
+
+  const isEditing = !!editCustomer;
+  const today = new Date().getDate();
+  const defaultInitialValues = {
+    limit_queries_per_month: 100,
+    limit_number_of_projects: 10,
+    limit_size_in_gb: 5,
+    limit_number_of_users: 10,
+    renewal_day: today > 28 ? 28 : today,
+    is_active: true,
+    ...(editCustomer || {}),
+  };
 
   const postNewCustomer = async (payload: FormType) => {
+    payload.main_color = color;
+    const createdCustomer = await customerService.createCustomer(payload);
+    return createdCustomer;
+  };
+
+  const updateCustomer = async (payload: FormType) => {
+    if (!editCustomer) return;
+    payload.main_color = color;
+    await customerService.updateCustomer(payload, editCustomer.id);
+  };
+
+  useEffect(() => {
+    if (editCustomer) {
+      setColor(editCustomer.main_color);
+    }
+  }, [editCustomer]);
+
+  const handleConfirm = async (e: FormType) => {
     try {
-      payload.main_color = color;
-      const createdCustomer = await customerService.createCustomer(payload);
-      return createdCustomer;
+      setIsSubmiting(true);
+      if (isEditing) {
+        await updateCustomer(e);
+        dispatch(
+          actionDisplayNotification({
+            messages: ["Customer has been successfully updated!"],
+            severity: "success",
+          }),
+        );
+      } else {
+        await postNewCustomer(e);
+        dispatch(
+          actionDisplayNotification({
+            messages: ["Customer has been successfully created!"],
+            severity: "success",
+          }),
+        );
+      }
+      if (confirmCallback) {
+        confirmCallback();
+      }
+      formRef.current?.resetFields();
     } catch (err) {
       if (axios.isAxiosError(err)) {
         if (err?.response?.data.detail[0].msg) {
@@ -49,23 +94,6 @@ const NewCustomerModal: React.FC<NewCustomerModalProps> = ({
         actionDisplayNotification({
           messages: ["An unexpected error occurred!"],
           severity: "error",
-        }),
-      );
-    }
-  };
-
-  const handleConfirm = async (e: FormType) => {
-    try {
-      setIsSubmiting(true);
-      await postNewCustomer(e);
-      if (confirmCallback) {
-        confirmCallback();
-      }
-      formRef.current?.resetFields();
-      dispatch(
-        actionDisplayNotification({
-          messages: ["Customer has been successfully created!"],
-          severity: "success",
         }),
       );
     } finally {
@@ -85,6 +113,7 @@ const NewCustomerModal: React.FC<NewCustomerModalProps> = ({
       open={open}
       onCancel={handleClose}
       onOk={confirmCallback}
+      destroyOnClose={true}
       title="Create new customer"
       footer={[
         <Button loading={isSubmiting} key="back" onClick={handleClose}>
@@ -126,7 +155,7 @@ const NewCustomerModal: React.FC<NewCustomerModalProps> = ({
           rules={[{ required: true, message: "Please enter the logo URL" }]}
         >
           <Input
-            maxLength={2083}
+            maxLength={10_000}
             placeholder="https://media.licdn.com/dms/image/C4E0BAQGlvQpq2iT-MQ/company-logo"
           />
         </Form.Item>
@@ -134,6 +163,7 @@ const NewCustomerModal: React.FC<NewCustomerModalProps> = ({
           <Form.Item<FormType>
             name="main_color"
             label="Main color"
+            initialValue={color}
             style={{ display: "inline-block", width: "calc(50% - 12px)" }}
             rules={[{ required: true, message: "Please select a main color" }]}
           >
@@ -141,7 +171,6 @@ const NewCustomerModal: React.FC<NewCustomerModalProps> = ({
               onChangeComplete={(color) => setColor(color.toHexString())}
               value={color}
               disabledAlpha
-              defaultValue="#fff"
               size="small"
               showText
             />
@@ -202,4 +231,4 @@ const NewCustomerModal: React.FC<NewCustomerModalProps> = ({
   );
 };
 
-export { NewCustomerModal };
+export { CustomerModal };

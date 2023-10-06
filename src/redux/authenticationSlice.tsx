@@ -24,6 +24,7 @@ export interface ICustomerData {
   name: string;
   main_color: string;
   logo_url: string;
+  is_active: boolean;
   limit_queries_per_month: number;
   current_number_of_queries: number;
   limit_number_of_projects: number;
