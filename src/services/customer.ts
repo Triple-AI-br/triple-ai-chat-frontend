@@ -5,7 +5,7 @@ export type CreateCustomerParams = {
   name: string;
   main_color: string;
   logo_url: string;
-  is_active: true;
+  is_active: boolean;
   limit_queries_per_month: number;
   limit_number_of_projects: number;
   limit_size_in_gb: number;
@@ -31,4 +31,25 @@ const createCustomer = async (payload: CreateCustomerParams): Promise<ICustomerD
   return res.data;
 };
 
-export const customerService = { getCustomer, getAllCustomers, createCustomer };
+const deleteCustomer = async (id: number): Promise<ICustomerData> => {
+  const url = `/customers/${id}`;
+  const res = await api.delete(url);
+  return res.data;
+};
+
+const updateCustomer = async (
+  payload: CreateCustomerParams,
+  id: number,
+): Promise<ICustomerData> => {
+  const url = `/customers/${id}`;
+  const res = await api.patch(url, payload);
+  return res.data;
+};
+
+export const customerService = {
+  getCustomer,
+  getAllCustomers,
+  createCustomer,
+  deleteCustomer,
+  updateCustomer,
+};
