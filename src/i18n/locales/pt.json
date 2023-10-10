@@ -237,7 +237,7 @@
         "selectAChat": "Por favor selecione uma conversa no painel à esquerda",
         "yourConversations": "Suas conversas",
         "components": {
-          "newChatBtn": "Nova",
+          "newChatBtn": "Nova conversa",
           "inputPlaceHolder": "Escreva aqui...",
           "projectChats": "Conversas do projeto",
           "anonymousChat": "Conversas anônimas",

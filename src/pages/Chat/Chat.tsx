@@ -2,24 +2,17 @@ import { useEffect, useRef, useState } from "react";
 import { chatService, projectService } from "../../services";
 import { v4 as uuidv4 } from "uuid";
 import { Spinner } from "../../components/loaders";
-import {
-  ChatBar,
-  ChatList,
-  LeftTopBar,
-  MessageList,
-  IChat,
-  IMessage,
-  TextChat,
-} from "../../components/chat";
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { ChatBar, MessageList, IChat, IMessage, TextChat } from "../../components/chat";
+import { Box, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { routesManager } from "../../routes/routesManager";
 import { ICustomerData, selectCustomerData, selectUserData } from "../../redux/authenticationSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { actionDisplayNotification } from "../../redux/notificationSlice";
 import { CustomSnackbar } from "../../components/shared";
-import { LeftContainer, ScrollChats } from "./styled";
 import { useTranslation } from "react-i18next";
+import { Layout } from "antd";
+import { DrawerChat } from "../../components/chat/DrawerChat";
 
 const GRAY_COLOR = "#f5f5f5";
 
@@ -345,10 +338,18 @@ const ChatPage = () => {
 
   return (
     // Main container
-    <Box sx={{ display: "flex", height: "100vh" }}>
+    <Layout>
       <CustomSnackbar />
+      <DrawerChat
+        chats={chats}
+        customerData={customerData}
+        handleNewChat={handleNewChat}
+        anonymousChats={anonymousChats}
+        handleDelete={handleDelete}
+        handleSelectChat={handleSelectChat}
+      />
       {/* Left column container */}
-      <LeftContainer>
+      {/* <LeftContainer>
         <LeftTopBar customerData={customerData} handleNewChat={handleNewChat} />
         <ScrollChats>
           {chats === undefined ? (
@@ -365,7 +366,7 @@ const ChatPage = () => {
             />
           )}
         </ScrollChats>
-      </LeftContainer>
+      </LeftContainer> */}
 
       {/* Right column container */}
       <div
@@ -417,7 +418,7 @@ const ChatPage = () => {
           )}
         </div>
       </div>
-    </Box>
+    </Layout>
   );
 };
 

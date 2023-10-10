@@ -9,7 +9,4 @@ export const LeftContainer = styled.div`
   overflow-y: hidden;
 `;
 
-export const ScrollChats = styled.div`
-  height: 100%;
-  overflow-y: hidden;
-`;
+export const ScrollChats = styled.div``;

@@ -55,3 +55,5 @@ export const CollapseStyled = styled(Collapse)<{ $length: number }>`
     }
   }
 `;
+
+export const ChatsScroll = styled.div``;

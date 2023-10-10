@@ -1,12 +1,14 @@
 /* eslint-disable indent */
-import { Avatar, Box, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { Clear as DeleteIcon } from "@mui/icons-material";
-import { useAppSelector } from "../../redux/hooks";
-import { ICustomerData, selectIsSuperUser } from "../../redux/authenticationSlice";
-import { LANGUAGE_LOCAL_STORAGE } from "../../utils/setLanguageToStorage";
+import { useAppSelector } from "../../../redux/hooks";
+import { selectIsSuperUser } from "../../../redux/authenticationSlice";
+import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
+import { LANGUAGE_LOCAL_STORAGE } from "../../../utils/setLanguageToStorage";
 import { useTranslation } from "react-i18next";
+import { ChatCard } from "./styled";
 
 interface IChatItemProps {
   id: number;
@@ -16,7 +18,6 @@ interface IChatItemProps {
   isSelected: boolean;
   onClick({ sessionId }: { sessionId: number }): void;
   onDelete({ sessionId }: { sessionId: number }): Promise<void>;
-  customerData?: ICustomerData | null;
   anonymous?: boolean;
 }
 
@@ -26,21 +27,14 @@ const ChatItem = ({
   subtitle,
   date,
   isSelected,
-  customerData,
   anonymous,
   onClick: handleClick,
   onDelete: handleDelete,
 }: IChatItemProps) => {
   const { t } = useTranslation();
-  const [isHovered, setIsHovered] = useState(false);
   const [cardDate, setCardDate] = useState<string>(moment(date).fromNow());
   const isSuperUser = useAppSelector(selectIsSuperUser);
-  let backgroundColor: string;
   const selectedLanguage = localStorage.getItem(LANGUAGE_LOCAL_STORAGE);
-
-  if (isSelected) backgroundColor = "#eee";
-  else if (isHovered) backgroundColor = "#f6f6f6";
-  else backgroundColor = "#fff";
 
   useEffect(() => {
     if (!selectedLanguage) return;
@@ -67,29 +61,8 @@ const ChatItem = ({
 
   //"#e0e0e0"
   return (
-    <Box
-      display="flex"
-      px={3.5}
-      py={2}
-      gap={2}
-      marginBottom="5px"
-      maxWidth="100%"
-      borderBottom="1px solid #e5e5e5"
-      borderRadius="4px"
-      onMouseOver={() => setIsHovered(true)}
-      onMouseOut={() => setIsHovered(false)}
-      onClick={() => handleClick({ sessionId: id })}
-      sx={{ backgroundColor, cursor: "pointer" }}
-    >
-      <Avatar
-        src={customerData?.logo_url}
-        sx={{
-          backgroundColor: customerData?.main_color,
-          width: 45,
-          height: 45,
-          border: "1px solid #e5e5e5",
-        }}
-      />
+    <ChatCard onClick={() => handleClick({ sessionId: id })} $isSelected={isSelected ? 1 : 0}>
+      <ChatBubbleOutlineOutlinedIcon />
       <Box display="flex" flexDirection="column" gap={0} width="100%">
         <Box display="flex" justifyContent="space-between" width="100%">
           <Typography color="#555">AI Chatbot</Typography>
@@ -118,17 +91,13 @@ const ChatItem = ({
           </Typography>
           {!anonymous ? (
             <DeleteIcon
-              onClick={
-                isHovered
-                  ? (e) => {
-                      e.stopPropagation();
-                      handleDelete({ sessionId: id });
-                    }
-                  : undefined
-              }
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDelete({ sessionId: id });
+              }}
               sx={{
-                cursor: isHovered ? "pointer" : undefined,
-                color: isHovered ? "#f88" : backgroundColor,
+                cursor: "pointer",
+                color: "#f88",
                 width: 20,
                 ml: 3,
               }}
@@ -136,7 +105,7 @@ const ChatItem = ({
           ) : null}
         </Box>
       </Box>
-    </Box>
+    </ChatCard>
   );
 };
 
