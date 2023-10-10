@@ -174,6 +174,7 @@ const SuperuserPage = () => {
                   title={item.name}
                   description={<ColorPicker value={item.color} showText disabled />}
                 />
+                <Typography.Text>ID: {String(item.id).padStart(2, "0")}</Typography.Text>
                 {!item.is_active ? (
                   <Typography.Text type="warning">Inactive customer</Typography.Text>
                 ) : null}
