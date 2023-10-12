@@ -1,4 +1,4 @@
-import { Menu, MenuProps, Typography } from "antd";
+import { Collapse, CollapseProps, Typography } from "antd";
 import { ChatItem } from "../ChatItem";
 import { IChat } from "../types";
 import { useTranslation } from "react-i18next";
@@ -16,36 +16,57 @@ interface IChatListProps {
 const ChatList = ({ chats, handleSelectChat, handleDelete, anonymousChats }: IChatListProps) => {
   const { t } = useTranslation();
 
-  const items2: MenuProps["items"] = [
+  const anonymousItems: CollapseProps["items"] = [
     {
-      key: "sub1",
-      icon: <HistoryOutlined />,
-      label: t("pages.chat.components.anonymousChat"),
-      children: anonymousChats?.length
-        ? anonymousChats?.map((chat, index) => {
-            const subKey = index * 4 + 1;
-            return {
-              key: subKey,
-              label: chat.title,
-            };
-          })
-        : [
-            {
-              key: 0,
-              label: <Typography.Text color="#555">{t("pages.chat.noChats")}</Typography.Text>,
-            },
-          ],
+      key: "1",
+      label: (
+        <Typography.Text>
+          {t("pages.chat.components.anonymousChat")}
+          <HistoryOutlined style={{ marginLeft: "10px" }} />
+        </Typography.Text>
+      ),
+
+      children: anonymousChats?.length ? (
+        anonymousChats?.map((chat) => {
+          return (
+            <ChatItem
+              key={chat.id}
+              email={chat.email}
+              anonymous={true}
+              id={chat.id}
+              subtitle={chat.subtitle}
+              date={chat.date}
+              isSelected={chat.isSelected}
+              onClick={handleSelectChat}
+              onDelete={handleDelete}
+            />
+          );
+        })
+      ) : (
+        <Typography.Text color="#555">{t("pages.chat.noChats")}</Typography.Text>
+      ),
     },
   ];
 
   return (
     <>
-      <Menu
+      {/* <Menu
         mode="inline"
-        defaultSelectedKeys={["1"]}
-        defaultOpenKeys={["1"]}
-        style={{ height: "100%" }}
-        items={items2}
+        selectable={false}
+        style={{
+          position: "sticky",
+          top: 0,
+          backgroundColor: "#FFF",
+          zIndex: 10,
+          borderRight: "none",
+        }}
+        items={anonymousItems}
+      /> */}
+      <Collapse
+        bordered={false}
+        // expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
+        style={{ backgroundColor: "#FFF", zIndex: 10, position: "sticky", top: 0 }}
+        items={anonymousItems}
       />
       <ChatsScroll>
         {chats.length ? (

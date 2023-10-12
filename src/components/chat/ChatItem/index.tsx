@@ -1,14 +1,10 @@
 /* eslint-disable indent */
-import { Box, Typography } from "@mui/material";
-import moment from "moment";
-import { useEffect, useState } from "react";
-import { Clear as DeleteIcon } from "@mui/icons-material";
-import { useAppSelector } from "../../../redux/hooks";
-import { selectIsSuperUser } from "../../../redux/authenticationSlice";
 import ChatBubbleOutlineOutlinedIcon from "@mui/icons-material/ChatBubbleOutlineOutlined";
-import { LANGUAGE_LOCAL_STORAGE } from "../../../utils/setLanguageToStorage";
-import { useTranslation } from "react-i18next";
-import { ChatCard } from "./styled";
+import { ChatCard, ChatTitle } from "./styled";
+import { DeleteOutlined } from "@ant-design/icons";
+import { Typography } from "antd";
+import { useAppSelector } from "../../../redux/hooks";
+import { selectUserData } from "../../../redux/authenticationSlice";
 
 interface IChatItemProps {
   id: number;
@@ -23,88 +19,43 @@ interface IChatItemProps {
 
 const ChatItem = ({
   id,
-  email,
   subtitle,
-  date,
   isSelected,
   anonymous,
+  email,
   onClick: handleClick,
   onDelete: handleDelete,
 }: IChatItemProps) => {
-  const { t } = useTranslation();
-  const [cardDate, setCardDate] = useState<string>(moment(date).fromNow());
-  const isSuperUser = useAppSelector(selectIsSuperUser);
-  const selectedLanguage = localStorage.getItem(LANGUAGE_LOCAL_STORAGE);
-
-  useEffect(() => {
-    if (!selectedLanguage) return;
-    moment.defineLocale(selectedLanguage, {
-      relativeTime: {
-        future: t("global.relativeTime.future"),
-        past: t("global.relativeTime.past"),
-        s: t("global.relativeTime.s"),
-        m: t("global.relativeTime.m"),
-        mm: t("global.relativeTime.mm"),
-        h: t("global.relativeTime.h"),
-        hh: t("global.relativeTime.hh"),
-        d: t("global.relativeTime.d"),
-        dd: t("global.relativeTime.dd"),
-        M: t("global.relativeTime.M"),
-        MM: t("global.relativeTime.MM"),
-        y: t("global.relativeTime.y"),
-        yy: t("global.relativeTime.yy"),
-      },
-    });
-
-    setCardDate(moment(date).fromNow());
-  }, [selectedLanguage]);
-
-  //"#e0e0e0"
+  const userData = useAppSelector(selectUserData);
+  const isSuperUser = userData && userData.is_superuser;
   return (
-    <ChatCard onClick={() => handleClick({ sessionId: id })} $isSelected={isSelected ? 1 : 0}>
-      <ChatBubbleOutlineOutlinedIcon />
-      <Box display="flex" flexDirection="column" gap={0} width="100%">
-        <Box display="flex" justifyContent="space-between" width="100%">
-          <Typography color="#555">AI Chatbot</Typography>
-          <Typography fontSize={12} color="#999">
-            {cardDate}
-          </Typography>
-        </Box>
-        {isSuperUser && email ? (
-          <Typography fontWeight={600} fontSize={14} color="#888">
-            {email}
-          </Typography>
-        ) : null}
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography
-            sx={{
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-            fontSize={14}
-            color="#888"
-          >
-            {subtitle}
-          </Typography>
-          {!anonymous ? (
-            <DeleteIcon
-              onClick={(e) => {
-                e.stopPropagation();
-                handleDelete({ sessionId: id });
-              }}
-              sx={{
-                cursor: "pointer",
-                color: "#f88",
-                width: 20,
-                ml: 3,
-              }}
-            />
-          ) : null}
-        </Box>
-      </Box>
+    <ChatCard
+      onClick={() => handleClick({ sessionId: id })}
+      $isSelected={isSelected ? 1 : 0}
+      $isSuperUser={isSuperUser ? 1 : 0}
+    >
+      <ChatBubbleOutlineOutlinedIcon style={{ color: "#3E4352", width: "16px", height: "16px" }} />
+      <ChatTitle $isSelected={isSelected ? 1 : 0} $isSuperUser={isSuperUser ? 1 : 0}>
+        {subtitle}
+        <div className="grandient"></div>
+      </ChatTitle>
+      {!anonymous && isSelected ? (
+        <DeleteOutlined
+          className="delete_btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDelete({ sessionId: id });
+          }}
+          style={{
+            cursor: "pointer",
+            color: "#3E4352",
+            width: 20,
+          }}
+        />
+      ) : null}
+      {isSuperUser ? (
+        <Typography.Link style={{ display: "block", width: "100%" }}>{email}</Typography.Link>
+      ) : null}
     </ChatCard>
   );
 };

@@ -1,12 +1,31 @@
 import styled from "styled-components";
 
-export const LeftContainer = styled.div`
-  display: flex;
-  background-color: #f5f5f5;
-  flex-direction: column;
-  width: 360px;
-  border-right: 1px solid #ccc;
-  overflow-y: hidden;
+export const ScrollChats = styled.div`
+  width: 100%;
+  height: 100%;
+  max-height: calc(100% - 190px);
+  border-bottom: 1px solid rgba(124, 124, 124, 20%);
+  overflow-y: scroll;
+  @media (min-width: 800px) {
+    max-height: calc(100% - 140px);
+  }
 `;
 
-export const ScrollChats = styled.div``;
+export const HistoricContainer = styled.section`
+  width: 100%;
+  height: calc(100vh - 0px);
+  overflow-y: scroll;
+  background-color: #f8fcff;
+  position: relative;
+`;
+
+export const MainMessagesContainer = styled.div`
+  width: 100%;
+  height: calc(100% - 70px);
+  max-width: 880px;
+  padding: 0 16px;
+  position: relative;
+  @media (min-width: 800px) {
+    margin: 0 auto;
+  }
+`;

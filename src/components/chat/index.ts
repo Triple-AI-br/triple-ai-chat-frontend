@@ -7,4 +7,4 @@ export * from "./UserMessageBubble";
 export * from "./BotMessageBubble";
 export * from "./MessageList";
 export * from "./types";
-export * from "./TextChat";
+export * from "./TextChat/TextChat";

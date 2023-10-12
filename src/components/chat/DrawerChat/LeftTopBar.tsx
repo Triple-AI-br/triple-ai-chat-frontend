@@ -17,6 +17,7 @@ const LeftTopBar = ({ customerData }: ILeftTopBarProps) => {
   return (
     <LeftTopBarContainer $customerColor={backgroundColor}>
       <ArrowLeftOutlined
+        className="back_icon"
         onClick={() => navigate(-1)}
         style={{ color: textColor, cursor: "pointer", fontSize: "20px" }}
       />
