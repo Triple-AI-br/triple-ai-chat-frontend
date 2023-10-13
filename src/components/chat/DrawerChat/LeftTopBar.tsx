@@ -5,7 +5,6 @@ import { Avatar, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 import { getHexContrastColor } from "../../../utils/getContrastColor";
 
-// Will this trigger vercel deployment?
 interface ILeftTopBarProps {
   customerData?: ICustomerData | null;
 }
