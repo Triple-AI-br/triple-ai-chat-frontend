@@ -12,11 +12,6 @@ import {
   selectCustomerData,
   selectUserData,
 } from "../../../redux/authenticationSlice";
-import {
-  actionUpdateCustomerInfo,
-  selectCustomerData,
-  selectUserData,
-} from "../../../redux/authenticationSlice";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 const { useToken } = theme;
