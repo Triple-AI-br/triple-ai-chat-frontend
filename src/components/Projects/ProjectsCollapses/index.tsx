@@ -12,6 +12,11 @@ import {
   selectCustomerData,
   selectUserData,
 } from "../../../redux/authenticationSlice";
+import {
+  actionUpdateCustomerInfo,
+  selectCustomerData,
+  selectUserData,
+} from "../../../redux/authenticationSlice";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 const { useToken } = theme;
@@ -52,6 +57,7 @@ const ProjectsCollapses: React.FC<ProjectsCollapsesProps> = ({
         try {
           await projectService.deleteProject(id);
           setProjects();
+          if (customerData) await dispatch(actionUpdateCustomerInfo(customerData.id));
           if (customerData) await dispatch(actionUpdateCustomerInfo(customerData.id));
           dispatch(
             actionDisplayNotification({
