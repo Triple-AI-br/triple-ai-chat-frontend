@@ -50,6 +50,7 @@
         "remember": "Remember me",
         "forgotPassword": "Forgot my password",
         "requestPasswordReset": "Request password reset",
+        "iAlreadyHaveAnAccount": "I already have an account",
         "emailRequired": "Please input your email!",
         "passwordRequired": "Please input your password!",
         "correctEmail": "Enter a valid email!",
@@ -236,10 +237,14 @@
         "selectAChat": "Please select a conversation on the left panel",
         "yourConversations": "Your conversations",
         "components": {
-            "newChatBtn": "New",
+            "newChatBtn": "New chat",
             "inputPlaceHolder": "Write here...",
             "projectChats": "Project conversations",
             "anonymousChat": "Anonymous conversations",
+            "projectSettings": "Project settings",
+            "prompts": {
+              "somePrompts": "Some prompts from your team"
+            },
             "notifications": {
                 "deleteConfirmation": "Are you sure you want to delete this conversation?",
                 "failureRequestAnonymousChats": "Failed to request anonymous conversations",

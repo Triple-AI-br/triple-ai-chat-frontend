@@ -3,13 +3,13 @@ import { UserMessageBubble } from "./UserMessageBubble";
 import { IMessage } from "./types";
 
 interface IMessageListProps {
-    messages: IMessage[];
+  messages: IMessage[];
 }
 
 const MessageList = ({ messages }: IMessageListProps) => {
   return (
     <>
-      {messages.map(message =>
+      {messages.map((message) =>
         message.type === "bot" ? (
           <BotMessageBubble
             key={`bot_${message.id}`}
@@ -22,8 +22,9 @@ const MessageList = ({ messages }: IMessageListProps) => {
             markdownText={message.text}
             date_time={message.date_time}
           />
-        )
+        ),
       )}
+      <div style={{ width: "100%", height: "120px", backgroundColor: "#f8fcff" }}></div>
     </>
   );
 };

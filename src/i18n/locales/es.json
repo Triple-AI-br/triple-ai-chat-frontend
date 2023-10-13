@@ -51,6 +51,7 @@
         "forgotPassword": "Olvidé mi contraseña",
         "requestPasswordReset": "Solicitar restablecimiento de contraseña",
         "emailRequired": "¡Por favor, ingrese su correo electrónico!",
+        "iAlreadyHaveAnAccount": "Ya tengo una cuenta",
         "passwordRequired": "¡Por favor, ingrese su contraseña!",
         "correctEmail": "¡Ingrese un correo electrónico válido!",
         "incorrectEmailOrPassword": "¡Correo electrónico o contraseña incorrectos!",
@@ -240,6 +241,10 @@
             "inputPlaceHolder": "Escribe aquí...",
             "projectChats": "Conversaciones del proyecto",
             "anonymousChat": "Conversaciones anónimas",
+              "projectSettings": "Configuración del proyecto",
+              "prompts": {
+                "somePrompts": "Algunos prompts de tu equipo"
+              },            
             "notifications": {
                 "deleteConfirmation": "¿Estás seguro de que quieres borrar esta conversación?",
                 "failureRequestAnonymousChats": "Fallo en la solicitud de conversaciones anónimas",
