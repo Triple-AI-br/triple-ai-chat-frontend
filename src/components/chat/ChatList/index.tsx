@@ -2,8 +2,6 @@ import { Collapse, CollapseProps, Typography } from "antd";
 import { ChatItem } from "../ChatItem";
 import { IChat } from "../types";
 import { useTranslation } from "react-i18next";
-import { Box } from "@mui/material";
-import { ChatsScroll } from "./styled";
 import { HistoryOutlined } from "@ant-design/icons";
 
 interface IChatListProps {
@@ -20,7 +18,7 @@ const ChatList = ({ chats, handleSelectChat, handleDelete, anonymousChats }: ICh
     {
       key: "1",
       label: (
-        <Typography.Text>
+        <Typography.Text style={{ display: "block", whiteSpace: "nowrap" }}>
           {t("pages.chat.components.anonymousChat")}
           <HistoryOutlined style={{ marginLeft: "10px" }} />
         </Typography.Text>
@@ -50,25 +48,21 @@ const ChatList = ({ chats, handleSelectChat, handleDelete, anonymousChats }: ICh
 
   return (
     <>
-      {/* <Menu
-        mode="inline"
-        selectable={false}
-        style={{
-          position: "sticky",
-          top: 0,
-          backgroundColor: "#FFF",
-          zIndex: 10,
-          borderRight: "none",
-        }}
-        items={anonymousItems}
-      /> */}
-      <Collapse
-        bordered={false}
-        // expandIcon={({ isActive }) => <CaretRightOutlined rotate={isActive ? 90 : 0} />}
-        style={{ backgroundColor: "#FFF", zIndex: 10, position: "sticky", top: 0 }}
-        items={anonymousItems}
-      />
-      <ChatsScroll>
+      {anonymousChats !== undefined ? (
+        <Collapse
+          bordered={false}
+          style={{
+            backgroundColor: "#FFF",
+            zIndex: 10,
+            position: "sticky",
+            top: 0,
+            maxHeight: "100%",
+            overflowY: "scroll",
+          }}
+          items={anonymousItems}
+        />
+      ) : null}
+      <div>
         {chats.length ? (
           chats.map((item) => (
             <ChatItem
@@ -83,12 +77,12 @@ const ChatList = ({ chats, handleSelectChat, handleDelete, anonymousChats }: ICh
             />
           ))
         ) : (
-          <Box width="100%" pt={2} display="flex" flexDirection="column" alignItems="center">
+          <div style={{ width: "100%", textAlign: "center" }}>
             <Typography color="#555">{t("pages.chat.noChats")}</Typography>
             <Typography color="#555">{t("pages.chat.createChats")}</Typography>
-          </Box>
+          </div>
         )}
-      </ChatsScroll>
+      </div>
     </>
   );
 };

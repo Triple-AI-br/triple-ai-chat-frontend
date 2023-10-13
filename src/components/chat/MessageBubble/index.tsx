@@ -1,11 +1,10 @@
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
-import { Box, IconButton } from "@mui/material";
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import moment from "moment";
-import { Avatar, Typography } from "antd";
-import { BubbleContainer, BubbleContent } from "./styled";
+import { Avatar, Button, Typography } from "antd";
+import { BubbleContainer, BubbleContent, MessageBox, ReferenceContainer } from "./styled";
 interface IMessageBubbleProps {
   markdownText: string;
   float?: "left" | "right";
@@ -54,60 +53,66 @@ const MessageBubble = ({ references, float, markdownText, date_time }: IMessageB
             }}
           />
         ) : null}
-        <Box px={3} pt={0.5} pb={date_time ? 0 : 0.5} paddingX={4} paddingY={1.5}>
+        <MessageBox>
           <ReactMarkdown>{markdownText}</ReactMarkdown>
-        </Box>
+        </MessageBox>
         {references && references.length ? (
-          <Box
-            bgcolor="#f0f0f0"
-            px={3}
-            py={1}
-            display="flex"
-            flexDirection="column"
-            gap={0.5}
-            sx={{
-              borderBottomRightRadius: float === "left" ? 20 : 0,
-              borderBottomLeftRadius: float === "left" ? 0 : 20,
-            }}
-          >
-            <Box
+          <ReferenceContainer>
+            <div
               onClick={() => setShowReferences((prev) => !prev)}
-              sx={{ cursor: "pointer" }}
-              width="100%"
-              display="flex"
-              justifyContent="space-between"
+              style={{
+                cursor: "pointer",
+                width: "100%",
+                display: "flex",
+                justifyContent: "space-between",
+              }}
             >
               <Typography color="#606060" style={{ color: "606060" }}>
                 {showReferences ? "Hide Sources" : "View Sources"}{" "}
                 {showReferences ? `(${activeStep + 1}/${maxSteps})` : null}
               </Typography>
               <InfoOutlinedIcon fontSize="small" sx={{ color: "#999" }} />
-            </Box>
+            </div>
 
             {references && references.length && showReferences ? (
-              <Box display="flex" justifyContent="space-between" gap={2} alignItems="center">
-                <IconButton onClick={handleClickLeft} disabled={isLeftDisabled}>
-                  <KeyboardArrowLeft
-                    sx={{
-                      color: isLeftDisabled ? "#ccc" : "#888",
-                      cursor: "pointer",
-                    }}
-                  />
-                </IconButton>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  gap: "5px",
+                  alignItems: "center",
+                }}
+              >
+                <Button
+                  icon={
+                    <KeyboardArrowLeft
+                      sx={{
+                        color: isLeftDisabled ? "#ccc" : "#888",
+                        cursor: "pointer",
+                      }}
+                    />
+                  }
+                  onClick={handleClickLeft}
+                  disabled={isLeftDisabled}
+                ></Button>
                 <Typography.Text strong color="#888">
                   {references?.[activeStep]}
                 </Typography.Text>
-                <IconButton onClick={handleClickRight} disabled={isRightDisabled}>
-                  <KeyboardArrowRight
-                    sx={{
-                      color: isRightDisabled ? "#ccc" : "#888",
-                      cursor: "pointer",
-                    }}
-                  />
-                </IconButton>
-              </Box>
+                <Button
+                  icon={
+                    <KeyboardArrowRight
+                      sx={{
+                        color: isRightDisabled ? "#ccc" : "#888",
+                        cursor: "pointer",
+                      }}
+                    />
+                  }
+                  onClick={handleClickRight}
+                  disabled={isRightDisabled}
+                ></Button>
+              </div>
             ) : null}
-          </Box>
+          </ReferenceContainer>
         ) : null}
         {date_time && (
           <Typography.Text className="message_time" type="secondary" style={{ fontSize: 12 }}>

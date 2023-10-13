@@ -17,6 +17,7 @@ import { Content } from "antd/es/layout/layout";
 import { HistoricContainer, MainMessagesContainer } from "./styled";
 import { useWindowSize } from "../../utils/useWindowSize";
 import { NoChatContent } from "../../components/chat/NoChatContent";
+import { TextChatContainer } from "../../components/chat/TextChat/styled";
 
 const DESKTOP_SIZE = 800;
 
@@ -32,6 +33,7 @@ const ChatPage = () => {
   const [chats, setChats] = useState<IChat[]>();
   const [anonymousChats, setAnonymousChats] = useState<IChat[]>();
   const [project, setProject] = useState<IProject>();
+  const [newMessagePrompt, setNewMessagePrompt] = useState<string>();
   const { width } = useWindowSize();
 
   const isDesktop = width >= DESKTOP_SIZE;
@@ -134,8 +136,13 @@ const ChatPage = () => {
   };
 
   // Send message
-  const handleSendMessage = async () => {
-    if (!selectedChat || currentMessage === "" || isLoadingAiResponse || isLoadingMessages) {
+  const handleSendMessage = async (prompt?: string) => {
+    if (
+      !selectedChat ||
+      (currentMessage === "" && !prompt) ||
+      isLoadingAiResponse ||
+      isLoadingMessages
+    ) {
       dispatch(
         actionDisplayNotification({
           messages: [t("pages.chat.components.notifications.waitForAIResponseToSend")],
@@ -144,12 +151,13 @@ const ChatPage = () => {
       );
       return;
     }
+    const message = prompt || currentMessage;
     setIsLoadingAiResponse(true);
     const newUserMessage: IMessage = {
       id: uuidv4(),
       type: "user",
       date_time: Date(),
-      text: currentMessage,
+      text: message,
     };
     const newAiResponse: IMessage = {
       id: uuidv4(),
@@ -161,7 +169,7 @@ const ChatPage = () => {
     setMessageList((prevMessageList) => [...prevMessageList, newUserMessage, newAiResponse]);
     try {
       await chatService.sendMessageStream({
-        prompt: currentMessage,
+        prompt: message,
         projectId,
         sessionId: selectedChat,
         callback(data) {
@@ -359,6 +367,23 @@ const ChatPage = () => {
     }
   }, [isDesktop]);
 
+  //create new chat if user select a prompt
+  useEffect(() => {
+    if (newMessagePrompt) {
+      handleNewChat();
+    }
+  }, [newMessagePrompt]);
+
+  // Send prompt to new message after loading messages
+  useEffect(() => {
+    (async () => {
+      if (newMessagePrompt && !isLoadingMessages) {
+        await handleSendMessage(newMessagePrompt);
+        setNewMessagePrompt(undefined);
+      }
+    })();
+  }, [isLoadingMessages]);
+
   return (
     // Main container
     <Layout>
@@ -404,10 +429,16 @@ const ChatPage = () => {
                 </MainMessagesContainer>
               </HistoricContainer>
             ) : (
-              <NoChatContent project={project} setCollapsed={setCollapsed} isDesktop={isDesktop} />
+              <NoChatContent
+                setNewMessagePrompt={setNewMessagePrompt}
+                project={project}
+                setCollapsed={setCollapsed}
+                isDesktop={isDesktop}
+              />
             )}
           </div>
 
+          <TextChatContainer />
           {!isLoadingMessages && selectedChat && !isAnonymousChat ? (
             <TextChat
               customerData={customerData}

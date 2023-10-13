@@ -241,6 +241,10 @@
           "inputPlaceHolder": "Escreva aqui...",
           "projectChats": "Conversas do projeto",
           "anonymousChat": "Conversas anônimas",
+          "projectSettings": "Configurações do Projeto",
+          "prompts": {
+            "somePrompts": "Alguns prompts da sua equipe"
+          },
           "notifications": {
             "deleteConfirmation": "Tem certeza que deseja apagar esta conversa?",
             "failureRequestAnonymousChats": "Falha na requisição de conversas anônimas",

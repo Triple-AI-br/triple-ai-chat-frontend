@@ -6,6 +6,35 @@ export const ScrollChats = styled.div`
   max-height: calc(100% - 190px);
   border-bottom: 1px solid rgba(124, 124, 124, 20%);
   overflow-y: scroll;
+
+  /* Hide scrollbar of anonymous chats for IE, Edge and Firefox */
+  > ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+
+  /* ===== Chats Scrollbar CSS ===== */
+  /* Firefox */
+  & {
+    scrollbar-width: thin;
+    scrollbar-color: #545454 #ffffff;
+  }
+
+  /* Chrome, Edge, and Safari */
+  &::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #808080;
+    border-radius: 10px;
+    border: 3px solid #ffffff;
+  }
   @media (min-width: 800px) {
     max-height: calc(100% - 140px);
   }
@@ -14,7 +43,7 @@ export const ScrollChats = styled.div`
 export const HistoricContainer = styled.section`
   width: 100%;
   height: calc(100vh - 0px);
-  overflow-y: scroll;
+  overflow-y: auto;
   background-color: #f8fcff;
   position: relative;
 `;

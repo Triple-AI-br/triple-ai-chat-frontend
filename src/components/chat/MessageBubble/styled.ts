@@ -33,9 +33,20 @@ export const BubbleContent = styled.div<{ $owner: "bot" | "user" }>`
   }
   @media (min-width: 800px) {
     margin-left: ${(props) => (props.$owner === "user" ? "none" : "55px")};
-    padding: 5px 3px;
     > .bot_avatar {
       display: block;
     }
   }
+`;
+
+export const ReferenceContainer = styled.div`
+  border-radius: 18px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  padding: 10px 20px;
+  background-color: #f5f5f5;
+`;
+
+export const MessageBox = styled.div`
+  padding: 15px 25px 15px 30px;
 `;

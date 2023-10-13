@@ -1,12 +1,11 @@
 import { LeftTopBar } from "./LeftTopBar";
 import { ScrollChats } from "../../../pages/Chat/styled";
-import { Box, CircularProgress } from "@mui/material";
 import { ChatList } from "../ChatList";
 import { IChat } from "../types";
 import { ICustomerData } from "../../../redux/authenticationSlice";
 import Sider from "antd/es/layout/Sider";
 import { Button, Select, Typography } from "antd";
-import { LeftOutlined, PlusOutlined, RightOutlined, SettingOutlined } from "@ant-design/icons";
+import { LoadingOutlined, PlusOutlined, RightOutlined, SettingOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import { Footer } from "./styled";
 import { useNavigate } from "react-router-dom";
@@ -84,9 +83,9 @@ const DrawerChat: React.FC<DrawerChatProps> = ({
         ) : null}
         <ScrollChats>
           {chats === undefined ? (
-            <Box display="flex" justifyContent="center" pt={3}>
-              <CircularProgress sx={{ color: customerData?.main_color }} />
-            </Box>
+            <div style={{ display: "flex", justifyContent: "center", paddingTop: "10px" }}>
+              <LoadingOutlined style={{ color: customerData?.main_color }} />
+            </div>
           ) : (
             <ChatList
               chats={chats}
@@ -107,7 +106,7 @@ const DrawerChat: React.FC<DrawerChatProps> = ({
             }
           >
             <SettingOutlined style={{ color: "#3E4352", fontSize: "16px" }} />
-            <Typography.Text>Configuração do projeto</Typography.Text>
+            <Typography.Text>{t("pages.chat.components.projectSettings")}</Typography.Text>
           </div>
           <div className="card">
             <Typography.Text
@@ -128,13 +127,13 @@ const DrawerChat: React.FC<DrawerChatProps> = ({
             shape="circle"
             style={{
               color: "black",
-              border: "1px solid darkgray",
+              border: "1px solid darkgrey",
               background: "white",
               position: "absolute",
               top: 52,
-              right: 0,
+              right: collapsed ? 0 : -10,
             }}
-            icon={collapsed ? <RightOutlined size={1} /> : <LeftOutlined size={1} />}
+            icon={<RightOutlined size={1} />}
             size="small"
           />
         )}

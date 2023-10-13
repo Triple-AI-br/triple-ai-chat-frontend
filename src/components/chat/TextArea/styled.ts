@@ -13,7 +13,8 @@ export const TypeTextArea = styled.div`
   position: relative;
   textarea {
     width: 100%;
-    height: 50px;
+    min-height: 50px;
+    max-height: 200px;
     border: none;
     resize: none;
     color: #3e4352;
@@ -24,6 +25,28 @@ export const TypeTextArea = styled.div`
     font-size: 14px;
     padding: 15px 45px 15px 20px;
     line-height: 1;
+    /* ===== Chats Scrollbar CSS ===== */
+    /* Firefox */
+    & {
+      scrollbar-width: thin;
+      scrollbar-color: #545454 #ffffff;
+    }
+
+    /* Chrome, Edge, and Safari */
+    &::-webkit-scrollbar {
+      width: 12px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #ffffff;
+      border-radius: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: #808080;
+      border-radius: 10px;
+      border: 3px solid #ffffff;
+    }
     &:focus {
       border: 1px solid rgba(0, 0, 0, 0.1);
       outline: none;
@@ -33,14 +56,14 @@ export const TypeTextArea = styled.div`
     }
   }
   > .send_icon {
-    width: 55px;
-    height: 55px;
+    width: 50px;
+    height: 50px;
     position: absolute;
     color: red;
     display: flex;
     align-items: center;
     justify-content: center;
-    right: 0;
+    right: 5px;
     bottom: 0;
     svg {
       font-size: 30px;

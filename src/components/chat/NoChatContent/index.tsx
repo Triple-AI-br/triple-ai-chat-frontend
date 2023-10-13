@@ -11,9 +11,15 @@ type NoChatContentProps = {
   project?: IProject;
   isDesktop: boolean;
   setCollapsed: React.Dispatch<React.SetStateAction<boolean>>;
+  setNewMessagePrompt: React.Dispatch<React.SetStateAction<string | undefined>>;
 };
 
-const NoChatContent: React.FC<NoChatContentProps> = ({ project, setCollapsed, isDesktop }) => {
+const NoChatContent: React.FC<NoChatContentProps> = ({
+  project,
+  setCollapsed,
+  isDesktop,
+  setNewMessagePrompt,
+}) => {
   const { t } = useTranslation();
   const [prompts, setPrompts] = useState<IPrompt[]>([]);
 
@@ -23,6 +29,7 @@ const NoChatContent: React.FC<NoChatContentProps> = ({ project, setCollapsed, is
       setPrompts(topPrompts);
     })();
   }, []);
+
   return (
     <>
       <ChatBar project={project} setCollapsed={setCollapsed} isDesktop={isDesktop} />
@@ -31,13 +38,13 @@ const NoChatContent: React.FC<NoChatContentProps> = ({ project, setCollapsed, is
         {prompts.length ? (
           <PromptsContainer>
             <Typography.Text>
-              <AppstoreOutlined style={{ fontSize: "50px" }} />
+              <AppstoreOutlined />
             </Typography.Text>
-            <Typography.Text style={{ fontSize: "16px" }}>
-              Alguns prompts da sua equipe
+            <Typography.Text className="initial_text">
+              {t("pages.chat.components.prompts.somePrompts")}
             </Typography.Text>
             {prompts.slice(0, 3).map((prompt) => (
-              <PromptCard key={prompt.id}>
+              <PromptCard key={prompt.id} onClick={() => setNewMessagePrompt(prompt.prompt)}>
                 <Typography.Title className="prompt_title" level={5}>
                   {prompt.title}
                 </Typography.Title>
