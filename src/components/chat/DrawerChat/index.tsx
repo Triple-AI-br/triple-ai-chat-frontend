@@ -5,7 +5,7 @@ import { IChat } from "../types";
 import { ICustomerData } from "../../../redux/authenticationSlice";
 import Sider from "antd/es/layout/Sider";
 import { Button, Select, Typography } from "antd";
-import { LoadingOutlined, PlusOutlined, RightOutlined, SettingOutlined } from "@ant-design/icons";
+import { LoadingOutlined, PlusOutlined, LeftOutlined, SettingOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import { Footer } from "./styled";
 import { useNavigate } from "react-router-dom";
@@ -133,7 +133,7 @@ const DrawerChat: React.FC<DrawerChatProps> = ({
               top: 52,
               right: collapsed ? 0 : -10,
             }}
-            icon={<RightOutlined size={1} />}
+            icon={<LeftOutlined size={1} />}
             size="small"
           />
         )}
