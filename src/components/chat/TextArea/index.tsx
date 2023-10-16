@@ -23,11 +23,8 @@ const TextAreaComponent: React.FC<TextAreaComponentProps> = ({
   const { t } = useTranslation();
 
   const chatInput = document.querySelector("#chat-input") as HTMLTextAreaElement | null;
-  const initialInputHeight = 50;
 
   chatInput?.addEventListener("input", () => {
-    chatInput.style.height = `${initialInputHeight}px`;
-
     chatInput.style.height = `${chatInput.scrollHeight}px`;
   });
 

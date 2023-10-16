@@ -10,7 +10,7 @@ export const TextChatContainer = styled.div`
   position: absolute;
   bottom: 0;
   background: rgb(248, 252, 255);
-  padding: 50px 10px 20px 10px;
+  padding: 40px 20px 20px 20px;
   background: linear-gradient(
     0deg,
     rgba(248, 252, 255, 1) 0%,

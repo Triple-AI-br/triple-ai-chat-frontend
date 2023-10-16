@@ -37,7 +37,7 @@ const ChatItem = ({
       <ChatBubbleOutlineOutlinedIcon style={{ color: "#3E4352", width: "16px", height: "16px" }} />
       <ChatTitle $isSelected={isSelected ? 1 : 0} $isSuperUser={isSuperUser ? 1 : 0}>
         {subtitle}
-        <div className="grandient"></div>
+        <div className="gradient"></div>
       </ChatTitle>
       {!anonymous && isSelected ? (
         <DeleteOutlined
