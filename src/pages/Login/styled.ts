@@ -34,64 +34,52 @@ export const LoginPageBackground = styled.main`
   justify-content: center;
 `;
 
-export const CircleOne = styled.div`
+export const BaseCircle = styled.div`
   position: fixed;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.2);
+`;
+
+export const CircleOne = styled(BaseCircle)`
   top: 100px;
   left: 10px;
   width: 100px;
   height: 100px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.2);
 `;
 
-export const CircleTwo = styled.div`
-  position: fixed;
+export const CircleTwo = styled(BaseCircle)`
   bottom: -100px;
   left: -50px;
   width: 500px;
   height: 500px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.2);
 `;
 
-export const CircleThree = styled.div`
-  position: fixed;
+export const CircleThree = styled(BaseCircle)`
   bottom: -400px;
   left: 200px;
   width: 900px;
   height: 900px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.2);
 `;
 
-export const CircleFour = styled.div`
-  position: fixed;
+export const CircleFour = styled(BaseCircle)`
   top: -100px;
   right: -50px;
   width: 300px;
   height: 300px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.2);
 `;
 
-export const CircleFive = styled.div`
-  position: fixed;
+export const CircleFive = styled(BaseCircle)`
   top: 500px;
   right: 50px;
   width: 100px;
   height: 100px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.2);
 `;
 
-export const CircleSix = styled.div`
-  position: fixed;
+export const CircleSix = styled(BaseCircle)`
   bottom: 80px;
   right: 50px;
   width: 200px;
   height: 200px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.2);
 `;
 
 export const Content = styled.section`
