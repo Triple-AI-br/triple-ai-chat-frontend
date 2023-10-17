@@ -13,6 +13,7 @@ import {
   selectUserData,
 } from "../../../redux/authenticationSlice";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 const { useToken } = theme;
 
 type ProjectsCollapsesProps = {
@@ -29,6 +30,7 @@ const ProjectsCollapses: React.FC<ProjectsCollapsesProps> = ({
   const { token } = useToken();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const userData = useAppSelector(selectUserData);
   const customerData = useAppSelector(selectCustomerData);
 
@@ -50,6 +52,7 @@ const ProjectsCollapses: React.FC<ProjectsCollapsesProps> = ({
         try {
           await projectService.deleteProject(id);
           setProjects();
+          if (customerData) await dispatch(actionUpdateCustomerInfo(customerData.id));
           if (customerData) await dispatch(actionUpdateCustomerInfo(customerData.id));
           dispatch(
             actionDisplayNotification({
@@ -102,14 +105,7 @@ const ProjectsCollapses: React.FC<ProjectsCollapsesProps> = ({
                       project={project}
                       onEdit={openEditModal}
                       confirmRemoveProjectModal={confirmRemoveProjectModal}
-                      onClick={() =>
-                        window.open(
-                          `${process.env.REACT_APP_BASE_FRONT_URL}${routesManager.getChatRoute(
-                            project.id,
-                          )}`,
-                          "_blank",
-                        )
-                      }
+                      onClick={() => navigate(routesManager.getChatRoute(project.id))}
                     />
                   );
                 })}
@@ -138,14 +134,7 @@ const ProjectsCollapses: React.FC<ProjectsCollapsesProps> = ({
                       project={project}
                       onEdit={openEditModal}
                       confirmRemoveProjectModal={confirmRemoveProjectModal}
-                      onClick={() =>
-                        window.open(
-                          `${process.env.REACT_APP_BASE_FRONT_URL}${routesManager.getChatRoute(
-                            project.id,
-                          )}`,
-                          "_blank",
-                        )
-                      }
+                      onClick={() => navigate(routesManager.getChatRoute(project.id))}
                     />
                   );
                 })}

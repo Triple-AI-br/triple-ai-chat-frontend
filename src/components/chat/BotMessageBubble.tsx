@@ -1,23 +1,12 @@
 import { MessageBubble } from "./MessageBubble";
 
 interface IUserMessageBubbleProps {
-    markdownText: string;
-    references?: string[];
+  markdownText: string;
+  references?: string[];
 }
 
-const BotMessageBubble = ({
-  markdownText,
-  references,
-}: IUserMessageBubbleProps) => {
-  return (
-    <MessageBubble
-      float="left"
-      backgroundColor="#fff"
-      markdownText={markdownText}
-      borderBottomLeftRadius={0}
-      references={references}
-    />
-  );
+const BotMessageBubble = ({ markdownText, references }: IUserMessageBubbleProps) => {
+  return <MessageBubble float="left" markdownText={markdownText} references={references} />;
 };
 
 export { BotMessageBubble };
