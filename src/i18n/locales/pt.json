@@ -138,7 +138,7 @@
           "projectsCounter": "Projetos da empresa: {{using}}/{{limit}}",
           "deleteConfirmationMessage": "Tem certeza que deseja deletar o projeto {{project}}",
           "collapse": {
-            "your":"Seus projetos",
+            "your": "Seus projetos",
             "shared": "Projetos compartilhados com você"
           },
           "createEditModal": {
@@ -198,6 +198,9 @@
         "likes": "{{likes}} curtida",
         "plural": "s",
         "components": {
+          "floatButton": {
+            "tooltip": "Criar novo prompt"
+          },
           "tabMenu": {
             "latest": "Últimos prompts",
             "top": "Mais Curtidos",

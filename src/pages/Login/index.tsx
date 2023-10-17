@@ -2,6 +2,12 @@ import { useTranslation } from "react-i18next";
 import {
   ActionButton,
   ArrowLeftOutlinedStyled,
+  CircleFive,
+  CircleFour,
+  CircleOne,
+  CircleSix,
+  CircleThree,
+  CircleTwo,
   Circles,
   Content,
   LeftCallToAction,
@@ -36,6 +42,12 @@ const LoginPage: React.FC = () => {
 
   return (
     <LoginPageBackground>
+      <CircleOne />
+      <CircleTwo />
+      <CircleThree />
+      <CircleFour />
+      <CircleFive />
+      <CircleSix />
       <CustomSnackbar />
       <Content>
         <LeftVisualContainer>
