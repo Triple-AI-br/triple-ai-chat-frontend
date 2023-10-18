@@ -198,6 +198,9 @@
         "likes": "{{likes}} me gusta",
         "plural": "",
         "components": {
+          "floatButton": {
+            "tooltip": "Crear nuevo prompt"
+          },
           "tabMenu": {
             "latest": "Últimos prompts",
             "top": "Más Gustados",
@@ -237,21 +240,21 @@
         "selectAChat": "Por favor, selecciona una conversación en el panel izquierdo",
         "yourConversations": "Tus conversaciones",
         "components": {
-            "newChatBtn": "Nueva",
-            "inputPlaceHolder": "Escribe aquí...",
-            "projectChats": "Conversaciones del proyecto",
-            "anonymousChat": "Conversaciones anónimas",
-              "projectSettings": "Configuración del proyecto",
-              "prompts": {
-                "somePrompts": "Algunos prompts de tu equipo"
-              },            
-            "notifications": {
-                "deleteConfirmation": "¿Estás seguro de que quieres borrar esta conversación?",
-                "failureRequestAnonymousChats": "Fallo en la solicitud de conversaciones anónimas",
-                "failureRequestChats": "Fallo en la solicitud de conversaciones",
-                "waitForAIReponseToQuitChat": "Por favor, espera la respuesta de la IA antes de navegar entre conversaciones",
-                "waitForAIResponseToSend": "Por favor, espera la respuesta de la IA antes de enviar otro mensaje"
-            }
+          "newChatBtn": "Nueva",
+          "inputPlaceHolder": "Escribe aquí...",
+          "projectChats": "Conversaciones del proyecto",
+          "anonymousChat": "Conversaciones anónimas",
+          "projectSettings": "Configuración del proyecto",
+          "prompts": {
+            "somePrompts": "Algunos prompts de tu equipo"
+          },
+          "notifications": {
+            "deleteConfirmation": "¿Estás seguro de que quieres borrar esta conversación?",
+            "failureRequestAnonymousChats": "Fallo en la solicitud de conversaciones anónimas",
+            "failureRequestChats": "Fallo en la solicitud de conversaciones",
+            "waitForAIReponseToQuitChat": "Por favor, espera la respuesta de la IA antes de navegar entre conversaciones",
+            "waitForAIResponseToSend": "Por favor, espera la respuesta de la IA antes de enviar otro mensaje"
+          }
         }
       }
     },

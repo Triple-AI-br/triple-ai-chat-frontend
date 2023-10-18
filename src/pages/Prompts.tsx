@@ -3,7 +3,6 @@ import {
   Button,
   Checkbox,
   CircularProgress,
-  Fab,
   FormControlLabel,
   Modal,
   Tab,
@@ -15,12 +14,13 @@ import { Base } from "../layouts/Base";
 import { useEffect, useRef, useState } from "react";
 import { IPrompt, IPromptCreate, promptsService } from "../services/prompts";
 import { PromptItem } from "../components/Prompts";
-import AddIcon from "@mui/icons-material/Add";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { useAppDispatch } from "../redux/hooks";
 import { actionDisplayNotification } from "../redux/notificationSlice";
 import { useTranslation } from "react-i18next";
+import { FloatButton } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 
 const PromptsPage = () => {
   const { t } = useTranslation();
@@ -78,14 +78,13 @@ const PromptsPage = () => {
   return (
     <Base title={t("pages.prompts.title")}>
       <Box display="flex" flexDirection="column" gap={3} alignItems="center">
-        <Fab
-          color="primary"
-          aria-label="add"
-          sx={{ position: "absolute", bottom: 20, right: 20 }}
+        <FloatButton
           onClick={handleOpen}
-        >
-          <AddIcon />
-        </Fab>
+          icon={<PlusOutlined />}
+          type="primary"
+          style={{ width: 50, height: 50 }} // right: 24, bottom: 24
+          tooltip={t("pages.prompts.components.floatButton.tooltip")}
+        />
         <Modal open={open} onClose={handleClose} keepMounted>
           <Box
             width="60%"
