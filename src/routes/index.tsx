@@ -11,21 +11,16 @@ import {
   AdminPage,
   PromptsPage,
   SuperuserPage,
+  SearchPage,
 } from "../pages";
 import { PrivateRoute, PublicRoute } from "../components/shared";
 
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route
-        path={routesManager.getLandingRoute()}
-        element={<LandingPage />}
-      />
+      <Route path={routesManager.getLandingRoute()} element={<LandingPage />} />
 
-      <Route
-        path={routesManager.getConfirmEmailRoute()}
-        element={<ConfirmEmailPage />}
-      />
+      <Route path={routesManager.getConfirmEmailRoute()} element={<ConfirmEmailPage />} />
 
       <Route
         path={routesManager.getAcceptInvitationRoute()}
@@ -51,32 +46,13 @@ const AppRoutes = () => {
         element={
           <PrivateRoute>
             <Routes>
-              <Route
-                path={routesManager.getChatRoute()}
-                element={<ChatPage />}
-              />
-              <Route
-                path={routesManager.getProjectsRoute()}
-                element={<ProjectsPage />}
-              />
-              <Route
-                path={routesManager.getSourcesRoute()}
-                element={<SourcesPage />}
-              />
-
-              <Route
-                path={routesManager.getAdminRoute()}
-                element={<AdminPage />}
-              />
-
-              <Route
-                path={routesManager.getPromptsRoute()}
-                element={<PromptsPage />}
-              />
-              <Route
-                path={routesManager.getSuperuserRoute()}
-                element={<SuperuserPage />}
-              />
+              <Route path={routesManager.getChatRoute()} element={<ChatPage />} />
+              <Route path={routesManager.getProjectsRoute()} element={<ProjectsPage />} />
+              <Route path={routesManager.getSourcesRoute()} element={<SourcesPage />} />
+              <Route path={routesManager.getAdminRoute()} element={<AdminPage />} />
+              <Route path={routesManager.getPromptsRoute()} element={<PromptsPage />} />
+              <Route path={routesManager.getSuperuserRoute()} element={<SuperuserPage />} />
+              <Route path={routesManager.getSearchRoute()} element={<SearchPage />} />
             </Routes>
           </PrivateRoute>
         }
