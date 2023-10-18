@@ -35,7 +35,7 @@ const ManageGrantedUsersModal = ({
 }: ManageGrantedUsersModalProps) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const [filteredUserList, setFilteredFilterList] = useState<TransferItem[]>([]);
+  const [filteredUserList, setFilteredUsersList] = useState<TransferItem[]>([]);
   const [targetKeys, setTargetKeys] = useState<string[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   const [permissions, setPermissions] = useState({
@@ -59,7 +59,7 @@ const ManageGrantedUsersModal = ({
       if (!targetKeys.length) {
         dispatch(
           actionDisplayNotification({
-            messages: [t("pages.sources.components.inviteModal.atLeastOneMessa")],
+            messages: [t("pages.sources.components.inviteModal.atLeastOneMessage")],
             severity: "warning",
           }),
         );
@@ -157,23 +157,36 @@ const ManageGrantedUsersModal = ({
           title: user.email,
         }));
 
-        setFilteredFilterList(schema);
+        setFilteredUsersList(schema);
       } catch (er) {
-        setFilteredFilterList([]);
+        setFilteredUsersList([]);
       }
     })();
-  }, [usersInProject]);
+  }, [usersInProject, open]);
+
+  const handleClose = () => {
+    setFilteredUsersList([]);
+    setTargetKeys([]);
+    setSelectedKeys([]);
+    setPermissions({
+      "files:upload": project.is_public,
+      "files:delete": project.is_public,
+    });
+    if (handleCancel) {
+      handleCancel();
+    }
+  };
 
   return (
     <StyledModal
       open={open}
       title={t("pages.sources.components.inviteModal.title")}
       onOk={async () => await onConfirm()}
-      onCancel={handleCancel}
+      onCancel={handleClose}
       destroyOnClose={true}
-      afterClose={handleCancel}
+      afterClose={handleClose}
       footer={[
-        <Button key="back" onClick={handleCancel}>
+        <Button key="back" onClick={handleClose}>
           {t("global.cancel")}
         </Button>,
         <Button key="confirm" type="primary" onClick={async () => await onConfirm()}>

@@ -41,9 +41,28 @@
       "failureUpdateMessage": "Falha ao atualizar!",
       "failureCreateMessage": "Falha ao criar!",
       "failureInviteMessage": "Falha ao convidar!",
-      "failureRequestMessage": "Falha na requisição!"
+      "failureRequestMessage": "Falha na requisição!",
+      "failureToLogin": "Falha ao entrar!"
     },
     "pages": {
+      "login": {
+        "password": "senha",
+        "remember": "Mantenha-me logado",
+        "forgotPassword": "Esqueci minha senha",
+        "iAlreadyHaveAnAccount": "Eu já tenho uma conta",
+        "requestPasswordReset": "Solicitar redefinição de senha",
+        "emailRequired": "Por favor, digite seu email!",
+        "passwordRequired": "Por favor, digite sua senha!",
+        "correctEmail": "Insira um email válido!",
+        "incorrectEmailOrPassword": "Email ou senha incorreto!",
+        "requestPasswordResetMessage": "Se este email esta registrado em nosso sistema. Você receberá um email de recuperação!",
+        "components": {
+          "leftContent": {
+            "noAccess": "Não tem acesso?",
+            "contactUs": "Entre em contato!"
+          }
+        }
+      },
       "landing": {
         "components": {
           "drawerTitle": "Navegação",
@@ -116,9 +135,10 @@
         "noProjectsMessage": "Você ainda não tem nenhum projeto",
         "components": {
           "newProjectBtn": "Novo Projeto",
+          "projectsCounter": "Projetos da empresa: {{using}}/{{limit}}",
           "deleteConfirmationMessage": "Tem certeza que deseja deletar o projeto {{project}}",
           "collapse": {
-            "your":"Seus projetos",
+            "your": "Seus projetos",
             "shared": "Projetos compartilhados com você"
           },
           "createEditModal": {
@@ -129,6 +149,10 @@
             "basePrompt": "Prompt Base",
             "externalKnowledge": "Habilitar conhecimento externo do ChatGPT",
             "public": "Público dentro da sua organização",
+            "limitReachedOfProjects": {
+              "title": "Limite de Projetos Atingido",
+              "description": "O limite de {{projects}} projetos reservado para {{customer}} foi atingido. Considere reutilizar projetos antigos ou excluí-los para abrir espaço para novos."
+            },
             "tooltip": {
               "basePrompt": "Define o tom e o comportamento do chatbot",
               "externalKnowledge": "Quando desativado, o chatbot responderá apenas com base nos documentos carregados"
@@ -174,6 +198,9 @@
         "likes": "{{likes}} curtida",
         "plural": "s",
         "components": {
+          "floatButton": {
+            "tooltip": "Criar novo prompt"
+          },
           "tabMenu": {
             "latest": "Últimos prompts",
             "top": "Mais Curtidos",
@@ -203,6 +230,30 @@
             "title": "Convide Novos Usuários",
             "placeholder": "Digite os emails",
             "inviteBtn": "Convidar"
+          }
+        }
+      },
+      "chat": {
+        "initialMessage": "Olá, sou uma Inteligência Artificial conversacional. Fui treinada com os documentos {{documents}}. Você pode me fazer perguntas ou pedir para produzir textos com base nas informações contidas neles.",
+        "noChats": "Você não tem conversas ainda",
+        "createChats": "Crie uma nova à cima 👆🏻",
+        "selectAChat": "Por favor selecione uma conversa no painel à esquerda",
+        "yourConversations": "Suas conversas",
+        "components": {
+          "newChatBtn": "Nova conversa",
+          "inputPlaceHolder": "Escreva aqui...",
+          "projectChats": "Conversas do projeto",
+          "anonymousChat": "Conversas anônimas",
+          "projectSettings": "Configurações do Projeto",
+          "prompts": {
+            "somePrompts": "Alguns prompts da sua equipe"
+          },
+          "notifications": {
+            "deleteConfirmation": "Tem certeza que deseja apagar esta conversa?",
+            "failureRequestAnonymousChats": "Falha na requisição de conversas anônimas",
+            "failureRequestChats": "Falha na requisição de conversas",
+            "waitForAIReponseToQuitChat": "Por favor espere pela resposta da IA antes de navegar entre conversas",
+            "waitForAIResponseToSend": "Por favor espere pela resposta da IA antes de enviar outra mensagem"
           }
         }
       }

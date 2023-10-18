@@ -4,8 +4,12 @@ import { IProject, projectService } from "../../../services";
 import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { actionDisplayNotification } from "../../../redux/notificationSlice";
 import { QuestionCircleOutlined } from "@ant-design/icons";
-import { useRef } from "react";
-import { selectUserData } from "../../../redux/authenticationSlice";
+import { useEffect, useRef } from "react";
+import {
+  actionUpdateCustomerInfo,
+  selectCustomerData,
+  selectUserData,
+} from "../../../redux/authenticationSlice";
 import { useTranslation } from "react-i18next";
 const { useToken } = theme;
 
@@ -36,8 +40,18 @@ const ProjectModal = ({
   const { token } = useToken();
   const dispatch = useAppDispatch();
   const userData = useAppSelector(selectUserData);
+  const customerData = useAppSelector(selectCustomerData);
   const isEditing = formType === "edit";
   const formRef = useRef<FormInstance>(null);
+  const defaultBasePrompt =
+    "Seja conciso e direto ao ponto." +
+    "\nResponda com base apenas nas informações que eu vou te passar aqui abaixo." +
+    "\nSe o contexto fornecido não possuir a informação necessária, responda que não sabe.";
+
+  const projectLimitReached =
+    customerData &&
+    customerData.current_number_of_projects >= customerData.limit_number_of_projects &&
+    !isEditing;
 
   const isOwner =
     isEditing && projectToEdit
@@ -46,6 +60,7 @@ const ProjectModal = ({
 
   const handleOk = async (e: FormValues) => {
     try {
+      if (!customerData) return;
       const schema = {
         title: e.title,
         description: e.description,
@@ -57,6 +72,10 @@ const ProjectModal = ({
         if (!projectToEdit) return;
         await projectService.editProject({ project_id: projectToEdit.id, project: schema });
       } else {
+        if (customerData.current_number_of_projects >= customerData.limit_number_of_projects) {
+          handleClose();
+          return;
+        }
         await projectService.createProject(schema);
       }
       dispatch(
@@ -67,6 +86,7 @@ const ProjectModal = ({
           severity: "success",
         }),
       );
+      await dispatch(actionUpdateCustomerInfo(customerData?.id));
     } catch (err) {
       dispatch(
         actionDisplayNotification({
@@ -83,12 +103,31 @@ const ProjectModal = ({
     }
   };
 
+  const warning = () => {
+    Modal.warning({
+      title: t("pages.projects.components.createEditModal.limitReachedOfProjects.title"),
+      content: t("pages.projects.components.createEditModal.limitReachedOfProjects.description", {
+        customer: customerData?.name,
+        projects: customerData?.limit_number_of_projects,
+      }),
+      onOk: handleClose,
+    });
+  };
+
   const handleClose = () => {
     formRef.current?.resetFields();
     if (handleCancel) {
       handleCancel();
     }
   };
+
+  useEffect(() => {
+    if (projectLimitReached) warning();
+  }, [projectLimitReached]);
+
+  if (projectLimitReached) {
+    return <></>;
+  }
 
   return (
     <Modal
@@ -165,7 +204,12 @@ const ProjectModal = ({
           name="system_tone"
           tooltip={t("pages.projects.components.createEditModal.tooltip.basePrompt")}
         >
-          <TextArea autoSize={{ minRows: 3, maxRows: 5 }} showCount maxLength={800} />
+          <TextArea
+            defaultValue={defaultBasePrompt}
+            autoSize={{ minRows: 3, maxRows: 6 }}
+            showCount
+            maxLength={800}
+          />
         </Form.Item>
         <Form.Item name="internal_knowledge_only" valuePropName="checked">
           <Checkbox defaultChecked={true} style={{ display: "flex", alignItems: "center" }}>

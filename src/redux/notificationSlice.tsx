@@ -3,16 +3,16 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 
 interface INotification {
-    messages: string[];
-    autoHideDuration?: number;
-    severity?: AlertColor;
-    anchorOrigin?: SnackbarOrigin;
-    variant?: AlertProps["variant"];
+  messages: string[];
+  autoHideDuration?: number;
+  severity?: AlertColor;
+  anchorOrigin?: SnackbarOrigin;
+  variant?: AlertProps["variant"];
 }
 
 interface INotificationState {
-    notification?: INotification;
-    isOpen: boolean;
+  notification?: INotification;
+  isOpen: boolean;
 }
 
 const initialState: INotificationState = { isOpen: false };
@@ -39,10 +39,8 @@ const notificationSlice = createSlice({
   },
 });
 
-export const selectNotification = (state: RootState) =>
-  state.notification.notification;
-export const selectIsNotificationOpen = (state: RootState) =>
-  state.notification.isOpen;
+export const selectNotification = (state: RootState) => state.notification.notification;
+export const selectIsNotificationOpen = (state: RootState) => state.notification.isOpen;
 export const {
   dismissNotification: actionDismissNotification,
   displayNotification: actionDisplayNotification,
