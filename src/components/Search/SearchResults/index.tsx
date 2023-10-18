@@ -12,8 +12,7 @@ const SearchResults = ({ results }: { results: ISearchResult[] | undefined }) =>
         <Empty description={t("global.searchNoResult")} image={Empty.PRESENTED_IMAGE_SIMPLE} />
       ) : (
         results.map((r) => {
-          const id = `${r.file_name} ${r.page}`;
-          return <SearchItem key={id} {...r} />;
+          return <SearchItem key={r.id} {...r} />;
         })
       )}
     </>

@@ -1,4 +1,4 @@
-import { Typography } from "antd";
+import { Card, Skeleton, Typography } from "antd";
 import { Base } from "../../layouts/Base";
 import { SearchOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
@@ -33,7 +33,8 @@ const SearchPage = () => {
     (async () => {
       setIsLoading(true);
       const res = await searchService.searchSnippets({ projectId, q, limit: 25 });
-      res.reverse();
+      // Order by descending score
+      res.sort((a, b) => (a.score < b.score ? 1 : a.score > b.score ? -1 : 0));
       setResults(res);
       setIsLoading(false);
     })();
@@ -53,7 +54,21 @@ const SearchPage = () => {
           autoFocus
           defaultValue={q ?? ""}
         />
-        <SearchResults results={results} />
+        {isLoading ? (
+          <>
+            <Card style={{ width: "85%" }}>
+              <Skeleton active />
+            </Card>
+            <Card style={{ width: "85%" }}>
+              <Skeleton active />
+            </Card>
+            <Card style={{ width: "85%" }}>
+              <Skeleton active />
+            </Card>
+          </>
+        ) : (
+          <SearchResults results={results} />
+        )}
       </Container>
     </Base>
   );

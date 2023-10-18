@@ -1,6 +1,7 @@
 import { api } from "./api";
 
 export interface ISearchResult {
+  id: string;
   file_name: string;
   page: number;
   text: string;
