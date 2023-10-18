@@ -1,7 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { routesManager } from "../../../routes/routesManager";
 import { Tooltip, Typography } from "antd";
-import { DeleteOutlined, EditOutlined, LockOutlined, SettingOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  LockOutlined,
+  SettingOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 import { CardContainer, TitleContainer } from "./styled";
 import { IProject } from "../../../services";
 import { useAppSelector } from "../../../redux/hooks";
@@ -55,6 +61,18 @@ const ProjectsItem = ({ project, onClick, onEdit, confirmRemoveProjectModal }: I
                   onClick={(e) => {
                     e.stopPropagation();
                     confirmRemoveProjectModal(id, title);
+                  }}
+                />
+              </Tooltip>,
+            ]
+          : []),
+        ...(isSuperUser
+          ? [
+              <Tooltip title={t("global.search")} key="search" placement="bottom">
+                <SearchOutlined
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(routesManager.getSearchRoute(id));
                   }}
                 />
               </Tooltip>,
