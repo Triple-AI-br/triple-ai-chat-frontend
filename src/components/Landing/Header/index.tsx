@@ -54,7 +54,7 @@ const LandingHeader = () => {
         <ButtonContainer>
           <ActionButton
             text={t("pages.landing.components.actionBtn")}
-            url="https://calendly.com/eduardo-tripleai/30min"
+            url="https://calendly.com/eduardotripleai/30min"
             rootElement={document.getElementById("root") as HTMLElement}
           ></ActionButton>
           <Button type="link" onClick={() => navigate(routesManager.getProjectsRoute())}>

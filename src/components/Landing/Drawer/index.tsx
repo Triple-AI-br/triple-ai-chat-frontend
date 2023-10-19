@@ -29,7 +29,7 @@ const LandingDrawer: React.FC<LandingDrawerProps> = ({ onClose, open }) => {
         </Button>
         <ActionButton
           text={t("pages.landing.components.actionBtn")}
-          url="https://calendly.com/eduardo-tripleai/30min"
+          url="https://calendly.com/eduardotripleai/30min"
           rootElement={document.getElementById("root") as HTMLElement}
         ></ActionButton>
         <Navigator>

@@ -15,7 +15,6 @@ import {
   LoginPageBackground,
 } from "./styled";
 import { LoginForm } from "../../components/Login/Form";
-import { CustomSnackbar } from "../../components/shared";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { actionDisplayNotification } from "../../redux/notificationSlice";
@@ -48,7 +47,6 @@ const LoginPage: React.FC = () => {
       <CircleFour />
       <CircleFive />
       <CircleSix />
-      <CustomSnackbar />
       <Content>
         <LeftVisualContainer>
           <ArrowLeftOutlinedStyled onClick={() => navigate(routesManager.getLandingRoute())} />
