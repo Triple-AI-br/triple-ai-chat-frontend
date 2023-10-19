@@ -16,35 +16,40 @@ const ChatList = ({ chats, handleSelectChat, handleDelete, anonymousChats }: ICh
   const { t } = useTranslation();
 
   // Função para obter a categoria da data
-  function getCategoriaDaData(data: string) {
-    const dataConversa = moment(data);
-    const hoje = moment();
-    const ontem = moment().subtract(1, "days");
-    const seteDiasAtras = moment().subtract(7, "days");
-    const trintaDiasAtras = moment().subtract(30, "days");
-    const primeiroDiaMesPassado = moment().subtract(1, "months").startOf("month");
-    const ultimoDiaMesPassado = moment().subtract(1, "months").endOf("month");
-    const primeiroDiaMesRetrasado = moment().subtract(2, "months").startOf("month");
-    const ultimoDiaMesRetrasado = moment().subtract(2, "months").endOf("month");
+  function getDataCategory(data: string) {
+    const formatterDate = moment(data);
+    const today = moment();
+    const yesterday = moment().subtract(1, "days");
+    const sevenDaysAgo = moment().subtract(7, "days");
+    const thirtyDaysAgo = moment().subtract(30, "days");
+    const firstDayOfLastMonth = moment().subtract(1, "months").startOf("month");
+    const lastDayOfLastMonth = moment().subtract(1, "months").endOf("month");
+    const firstDayOfTheMonthBeforeLast = moment().subtract(2, "months").startOf("month");
+    const lastDayOfTheMonthBeforeLast = moment().subtract(2, "months").endOf("month");
 
-    if (dataConversa.isSame(hoje, "day")) {
-      return "Hoje";
-    } else if (dataConversa.isSame(ontem, "day")) {
-      return "Ontem";
-    } else if (dataConversa.isAfter(seteDiasAtras)) {
-      return "Últimos 7 dias";
-    } else if (dataConversa.isAfter(trintaDiasAtras)) {
-      return "Últimos 30 dias";
-    } else if (dataConversa.isBetween(primeiroDiaMesPassado, ultimoDiaMesPassado, "day", "[]")) {
-      return "Mês passado";
+    if (formatterDate.isSame(today, "day")) {
+      return t("pages.chat.components.timestamp.today");
+    } else if (formatterDate.isSame(yesterday, "day")) {
+      return t("pages.chat.components.timestamp.yesterday");
+    } else if (formatterDate.isAfter(sevenDaysAgo)) {
+      return t("pages.chat.components.timestamp.sevenDaysAgo");
+    } else if (formatterDate.isAfter(thirtyDaysAgo)) {
+      return t("pages.chat.components.timestamp.thirtyDaysAgo");
+    } else if (formatterDate.isBetween(firstDayOfLastMonth, lastDayOfLastMonth, "day", "[]")) {
+      return t("pages.chat.components.timestamp.lastMonth");
     } else if (
-      dataConversa.isBetween(primeiroDiaMesRetrasado, ultimoDiaMesRetrasado, "day", "[]")
+      formatterDate.isBetween(
+        firstDayOfTheMonthBeforeLast,
+        lastDayOfTheMonthBeforeLast,
+        "day",
+        "[]",
+      )
     ) {
-      return "Mês retrasado";
+      return t("pages.chat.components.timestamp.monthBeforeLast");
     }
 
     // Se não se encaixar em nenhuma categoria, retorna a própria data
-    return "";
+    return t("pages.chat.components.timestamp.moreThanSixtyDaysAgo");
   }
 
   const anonymousItems: CollapseProps["items"] = [
@@ -59,8 +64,8 @@ const ChatList = ({ chats, handleSelectChat, handleDelete, anonymousChats }: ICh
 
       children: anonymousChats?.length ? (
         anonymousChats?.map((chat, idx) => {
-          const date = getCategoriaDaData(chat.date);
-          if (idx === 0 || getCategoriaDaData(anonymousChats[idx - 1].date) !== date) {
+          const date = getDataCategory(chat.date);
+          if (idx === 0 || getDataCategory(anonymousChats[idx - 1].date) !== date) {
             return (
               <>
                 <Typography.Text type="secondary" style={{ fontSize: "12px" }}>
@@ -120,8 +125,8 @@ const ChatList = ({ chats, handleSelectChat, handleDelete, anonymousChats }: ICh
       <div>
         {chats.length ? (
           chats.map((item, index) => {
-            const date = getCategoriaDaData(item.date);
-            if (index === 0 || getCategoriaDaData(chats[index - 1].date) !== date) {
+            const date = getDataCategory(item.date);
+            if (index === 0 || getDataCategory(chats[index - 1].date) !== date) {
               return (
                 <>
                   <Typography.Text type="secondary" style={{ fontSize: "12px" }}>
