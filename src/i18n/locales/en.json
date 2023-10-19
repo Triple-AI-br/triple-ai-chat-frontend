@@ -1,6 +1,8 @@
 {
   "translation": {
     "global": {
+      "similarity": "Similarity",
+      "more": "More",
       "login": "Login",
       "logout": "Logout",
       "confirm": "Confirm",
@@ -12,6 +14,8 @@
       "public": "Public",
       "loading": "Loading",
       "submit": "Submit",
+      "search": "Search",
+      "searchNoResult": "Your search did not return any results",
       "you": "You",
       "noUsers": "No users",
       "collapse": "Collapse",
@@ -45,6 +49,9 @@
       "failureToLogin": "Failed to login!"
     },
     "pages": {
+      "search": {
+        "searchDocuments": "Search your documents"
+      },
       "login": {
         "password": "password",
         "remember": "Remember me",

@@ -1,6 +1,8 @@
 {
   "translation": {
     "global": {
+      "similarity": "Similitud",
+      "more": "Más",
       "login": "Iniciar sesión",
       "logout": "Cerrar sesión",
       "confirm": "Confirmar",
@@ -12,6 +14,8 @@
       "public": "Público",
       "loading": "Cargando",
       "submit": "Enviar",
+      "search": "Buscar",
+      "searchNoResult": "Tu búsqueda no arrojó resultados",
       "you": "Tú",
       "noUsers": "No hay usuarios",
       "collapse": "Retraer",
@@ -45,6 +49,9 @@
       "failureToLogin": "¡Failed al Iniciar sesión!"
     },
     "pages": {
+      "search": {
+        "searchDocuments": "Busca tus documentos"
+      },
       "login": {
         "password": "contraseña",
         "remember": "Recuérdame",

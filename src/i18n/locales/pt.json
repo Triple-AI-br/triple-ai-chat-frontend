@@ -1,6 +1,8 @@
 {
   "translation": {
     "global": {
+      "similarity": "Similaridade",
+      "more": "Mais",
       "login": "Entrar",
       "logout": "Sair",
       "confirm": "Confirmar",
@@ -12,6 +14,8 @@
       "public": "Público",
       "loading": "Carregando",
       "submit": "Enviar",
+      "search": "Pesquisar",
+      "searchNoResult": "Sua busca não retornou resultados",
       "you": "Você",
       "noUsers": "Sem usuários",
       "collapse": "Retrair",
@@ -45,6 +49,9 @@
       "failureToLogin": "Falha ao entrar!"
     },
     "pages": {
+      "search": {
+        "searchDocuments": "Pesquise seus documentos"
+      },
       "login": {
         "password": "senha",
         "remember": "Mantenha-me logado",

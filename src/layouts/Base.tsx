@@ -44,7 +44,7 @@ const { Header, Content, Footer, Sider } = Layout;
 type MenuItem = Required<MenuProps>["items"][number];
 
 interface IBaseProps {
-  children: JSX.Element;
+  children: React.ReactNode;
   title: string;
 }
 
