@@ -9,7 +9,6 @@ import { routesManager } from "../../routes/routesManager";
 import { ICustomerData, selectCustomerData, selectUserData } from "../../redux/authenticationSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { actionDisplayNotification } from "../../redux/notificationSlice";
-import { CustomSnackbar } from "../../components/shared";
 import { useTranslation } from "react-i18next";
 import { Layout } from "antd";
 import { DrawerChat } from "../../components/chat/DrawerChat";
@@ -391,7 +390,6 @@ const ChatPage = () => {
   return (
     // Main container
     <Layout style={{ height: "100svh" }}>
-      <CustomSnackbar />
       <DrawerChat
         chats={chats}
         customerData={customerData}
