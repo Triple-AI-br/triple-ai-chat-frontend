@@ -13,7 +13,6 @@ export const PartnersListContainer = styled.section`
     font-size: 24px;
   }
   @media (min-width: 600px) {
-    background-color: #fff;
     gap: 40px;
     margin-bottom: 80px;
   }

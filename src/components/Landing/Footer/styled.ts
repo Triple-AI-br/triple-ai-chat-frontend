@@ -108,6 +108,7 @@ export const RightsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
   gap: 15px;
   > span {
     color: #1b1b1b59;

@@ -69,7 +69,7 @@ const LoginPage: React.FC = () => {
             <span>{t("pages.login.components.leftContent.contactUs")}</span>
             <ActionButton
               text={t("pages.landing.components.actionBtn")}
-              url="https://calendly.com/eduardo-tripleai/30min"
+              url="https://calendly.com/eduardotripleai/30min"
               rootElement={document.getElementById("root") as HTMLElement}
             ></ActionButton>
           </LeftCallToAction>

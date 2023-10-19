@@ -26,7 +26,7 @@ export const LoginPageBackground = styled.main`
     rgba(0, 212, 255, 1) 100%
   );
   width: 100vw;
-  height: 100vh;
+  height: 100svh;
   overflow: hidden;
   padding: 32px;
   display: flex;
