@@ -36,7 +36,7 @@ export const NavElements = styled.ul`
   @media (min-width: 600px) {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 20px;
     list-style: none;
     > li {
       cursor: pointer;
@@ -44,9 +44,16 @@ export const NavElements = styled.ul`
       white-space: nowrap;
       > a {
         color: #3e4352;
+        font-size: 14px;
         text-decoration: none;
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
+  }
+  @media (min-width: 1280px) {
+    font-size: 16px;
   }
 `;
 
@@ -81,11 +88,11 @@ export const ActionContainer = styled.div`
     cursor: pointer;
     display: inline-block;
   }
-  :nth-child(3) {
+  div:nth-child(2) {
     display: none;
   }
   @media (min-width: 800px) {
-    :nth-child(3) {
+    div:nth-child(2) {
       white-space: nowrap;
       display: flex;
     }
@@ -95,5 +102,19 @@ export const ActionContainer = styled.div`
     > svg {
       display: none;
     }
+  }
+`;
+
+export const ButtonContainer = styled.div`
+  display: none;
+  @media (min-width: 800px) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  @media (min-width: 1280px) {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 `;

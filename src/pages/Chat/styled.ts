@@ -42,7 +42,7 @@ export const ScrollChats = styled.div`
 
 export const HistoricContainer = styled.section`
   width: 100%;
-  height: calc(100vh - 0px);
+  height: calc(100svh - 0px);
   overflow-y: auto;
   background-color: #f8fcff;
   position: relative;

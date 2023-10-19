@@ -1,24 +1,34 @@
-import { Container, ExamplesContainer, MessageList, StaticMessage } from "./styled";
+import { useTranslation } from "react-i18next";
+import {
+  Container,
+  ExamplesContainer,
+  MessageList,
+  SendMessageIllustration,
+  StaticMessage,
+} from "./styled";
+import TypewriterComponent from "typewriter-effect";
 
 const ExamplesUsage: React.FC = () => {
+  const { t } = useTranslation();
+  const userParagraph = t("pages.landing.components.examples.prompts", {
+    returnObjects: true,
+  }) as string[];
   return (
     <Container>
       <ExamplesContainer>
-        <StaticMessage>Olá, você pode me ajudar a</StaticMessage>
         <MessageList>
-          <li>
-            <span>Listar os benefícios do contrato assinado ontem?</span>
-          </li>
-          <li>
-            <span>Responder um email sobre novos projetos?</span>
-          </li>
-          <li>
-            <span>Criar um conteúdo para mídias sociais?</span>
-          </li>
-          <li>
-            <span>Calcular o crescimento do nosso faturamento deste ano?</span>
-          </li>
+          <StaticMessage>{t("pages.landing.components.examples.canYouHelpWith")}</StaticMessage>
+          <TypewriterComponent
+            options={{
+              strings: userParagraph,
+              autoStart: true,
+              loop: true,
+              deleteSpeed: 15,
+              delay: 20,
+            }}
+          />
         </MessageList>
+        <SendMessageIllustration src="/send_message_illustration.svg" alt="illustration" />
       </ExamplesContainer>
     </Container>
   );

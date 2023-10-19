@@ -82,6 +82,16 @@
           "partners": {
             "title": "Nossos parceiros"
           },
+          "examples": {
+            "canYouHelpWith": "Olá! 👋 você pode me ajudar a...",
+            "prompts": [
+              "Criar um modelo de email de vendas para captação de novos clientes?",
+              "Criar uma descrição de vaga para um Ciêntista de Dados Senior?",
+              "Pesquisar e apresentar as 5 tendências emergentes mais promissoras no setor de IA generativa?",
+              "Resumir em bullet points os principais pontos sobre a minha empresa? Me responda em inglês",
+              "Criar um texto para uma postagem no Instagram voltado à captação de novos colaboradores talentosos?"
+            ]
+          },
           "cardsSection": {
             "first": {
               "title": "O que é possível fazer?",

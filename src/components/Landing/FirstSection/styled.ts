@@ -38,8 +38,6 @@ export const Title = styled.h1`
   margin-bottom: 0;
   width: 298px;
   @media (min-width: 375px) {
-    color: #3e4352;
-    font-size: 67px;
     width: 376px;
     flex-shrink: 0;
   }
@@ -47,6 +45,7 @@ export const Title = styled.h1`
     text-align: start;
   }
   @media (min-width: 1280px) {
+    font-size: 67px;
     text-align: start;
     width: 565px;
   }

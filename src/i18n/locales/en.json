@@ -82,6 +82,16 @@
           "partners": {
             "title": "Our Partners"
           },
+          "examples": {
+            "canYouHelpWith": "Hello! 👋 can you help me with...",
+            "prompts": [
+              "Create a sales email template for acquiring new clients?",
+              "Create a job description for a Senior Data Scientist?",
+              "Research and present the top 5 most promising emerging trends in the generative AI sector?",
+              "Summarize the key points about my company in bullet points. Respond to me in English.",
+              "Compose a text for an Instagram post aimed at attracting new talented collaborators?"
+            ]         
+          },
           "cardsSection": {
             "first": {
               "title": "What's Possible?",

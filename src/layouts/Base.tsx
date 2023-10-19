@@ -128,7 +128,7 @@ const Base = ({ children, title }: IBaseProps) => {
           toggleCollapsed();
         }}
         style={{
-          height: "100vh",
+          height: "100svh",
           position: "sticky",
           left: 0,
           top: 0,
