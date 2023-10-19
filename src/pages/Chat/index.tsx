@@ -92,6 +92,7 @@ const ChatPage = () => {
           id: newChat.id,
           date: newChat.created_at,
           isSelected: true,
+          email: userData?.email,
           subtitle: t("pages.chat.components.newChatBtn"),
           title: newChat.title,
         },
@@ -151,7 +152,10 @@ const ChatPage = () => {
       );
       return;
     }
-    const message = prompt || currentMessage;
+    let message = currentMessage;
+    if (!!prompt && typeof prompt === "string") {
+      message = prompt;
+    }
     setIsLoadingAiResponse(true);
     const newUserMessage: IMessage = {
       id: uuidv4(),

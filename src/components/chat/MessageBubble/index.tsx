@@ -1,10 +1,12 @@
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import moment from "moment";
 import { Avatar, Button, Typography } from "antd";
 import { BubbleContainer, BubbleContent, MessageBox, ReferenceContainer } from "./styled";
+import { useTranslation } from "react-i18next";
+import { LANGUAGE_LOCAL_STORAGE } from "../../../utils/setLanguageToStorage";
 interface IMessageBubbleProps {
   markdownText: string;
   float?: "left" | "right";
@@ -15,6 +17,8 @@ interface IMessageBubbleProps {
 const MessageBubble = ({ references, float, markdownText, date_time }: IMessageBubbleProps) => {
   const [activeStep, setActiveStep] = useState(0);
   const [showReferences, setShowReferences] = useState(false);
+  const selectedLanguage = localStorage.getItem(LANGUAGE_LOCAL_STORAGE);
+  const { t } = useTranslation();
 
   const maxSteps = references?.length || 0;
   const isLeftDisabled = activeStep === 0;
@@ -34,6 +38,27 @@ const MessageBubble = ({ references, float, markdownText, date_time }: IMessageB
       return prevActiveStep + 1;
     });
   };
+
+  useEffect(() => {
+    if (!selectedLanguage) return;
+    moment.defineLocale(selectedLanguage, {
+      relativeTime: {
+        future: t("global.relativeTime.future"),
+        past: t("global.relativeTime.past"),
+        s: t("global.relativeTime.s"),
+        m: t("global.relativeTime.m"),
+        mm: t("global.relativeTime.mm"),
+        h: t("global.relativeTime.h"),
+        hh: t("global.relativeTime.hh"),
+        d: t("global.relativeTime.d"),
+        dd: t("global.relativeTime.dd"),
+        M: t("global.relativeTime.M"),
+        MM: t("global.relativeTime.MM"),
+        y: t("global.relativeTime.y"),
+        yy: t("global.relativeTime.yy"),
+      },
+    });
+  }, [selectedLanguage]);
 
   return (
     <BubbleContainer>
