@@ -28,6 +28,7 @@ function LandingPage() {
   });
 
   hiddenElements.forEach((el) => observer.observe(el));
+
   return (
     <ScrollPage>
       <LandingHeader />
