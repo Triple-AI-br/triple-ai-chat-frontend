@@ -34,7 +34,7 @@ function FirstSection() {
         <Subtitle>{t("pages.landing.components.firstSection.subtitle")}</Subtitle>
         <ActionButton
           text={t("pages.landing.components.actionBtn")}
-          url="https://calendly.com/eduardo-tripleai/30min"
+          url="https://calendly.com/eduardotripleai/30min"
           rootElement={document.getElementById("root") as HTMLElement}
         ></ActionButton>
       </LeftContainer>

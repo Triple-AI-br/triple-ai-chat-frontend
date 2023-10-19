@@ -8,7 +8,6 @@ import {
   selectIsAdminOrSuperUser,
   selectIsSuperUser as selectIsSuperuser,
 } from "../redux/authenticationSlice";
-import { CustomSnackbar } from "../components/shared";
 
 import {
   InboxOutlined,
@@ -118,7 +117,6 @@ const Base = ({ children, title }: IBaseProps) => {
 
   return (
     <Layout hasSider>
-      <CustomSnackbar />
       <Sider
         collapsible
         collapsed={collapsed}

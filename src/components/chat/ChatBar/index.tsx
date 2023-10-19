@@ -1,13 +1,13 @@
-import { Box } from "@mui/material";
 import { Select, Typography } from "antd";
-import { languagesSupport } from "../../i18n";
-import { setLanguageToStorage } from "../../utils/setLanguageToStorage";
+import { languagesSupport } from "../../../i18n";
+import { setLanguageToStorage } from "../../../utils/setLanguageToStorage";
 import i18next from "i18next";
-import { IProject } from "../../services";
+import { IProject } from "../../../services";
 import { MenuFoldOutlined } from "@ant-design/icons";
-import { IChat } from "./types";
-import { useAppSelector } from "../../redux/hooks";
-import { selectUserData } from "../../redux/authenticationSlice";
+import { IChat } from "../types";
+import { useAppSelector } from "../../../redux/hooks";
+import { selectUserData } from "../../../redux/authenticationSlice";
+import { ChatBarContainer, InfoContainer } from "./styled";
 
 type ChatBarProps = {
   isDesktop: boolean;
@@ -20,30 +20,25 @@ const ChatBar: React.FC<ChatBarProps> = ({ isDesktop, setCollapsed, project, loa
   const userData = useAppSelector(selectUserData);
   const isSuperUser = userData && userData.is_superuser;
   return (
-    <Box
-      px={isDesktop ? 5 : 2}
-      py={2}
-      sx={{ backgroundColor: "#fff", height: "60px", position: "sticky", top: 0, zIndex: 1000 }}
-      display="flex"
-      alignItems="center"
-      justifyContent="space-between"
-    >
+    <ChatBarContainer>
       {!isDesktop ? (
         <MenuFoldOutlined
           onClick={() => setCollapsed((prev) => !prev)}
           style={{ fontSize: "20px" }}
         />
       ) : null}
-      {loadedChat && isSuperUser ? (
-        <Typography.Text type="secondary">{loadedChat.email}</Typography.Text>
-      ) : null}
-      <Typography color="#777" style={{ margin: "0 auto" }}>
-        {project?.title}
-      </Typography>
+      <InfoContainer>
+        <Typography color="#777">{project?.title}</Typography>
+        {loadedChat && isSuperUser ? (
+          <Typography.Text type="secondary">{loadedChat.email}</Typography.Text>
+        ) : (
+          <div></div>
+        )}
+      </InfoContainer>
       {isDesktop ? (
         <Select
           value={i18next.language}
-          style={{ width: "200px", maxWidth: "40%" }}
+          style={{ width: "40%", maxWidth: "200px" }}
           onChange={(key) => {
             setLanguageToStorage(key as "en" | "pt" | "es");
             i18next.changeLanguage(key);
@@ -51,7 +46,7 @@ const ChatBar: React.FC<ChatBarProps> = ({ isDesktop, setCollapsed, project, loa
           options={languagesSupport}
         />
       ) : null}
-    </Box>
+    </ChatBarContainer>
   );
 };
 export { ChatBar };

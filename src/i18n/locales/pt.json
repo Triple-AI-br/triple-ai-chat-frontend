@@ -265,6 +265,15 @@
           "prompts": {
             "somePrompts": "Alguns prompts da sua equipe"
           },
+          "timestamp": {
+            "today": "Hoje",
+            "yesterday": "Ontem",
+            "sevenDaysAgo": "Últimos 7 dias",
+            "thirtyDaysAgo": "Últimos 30 dias",
+            "lastMonth": "Mês passado",
+            "monthBeforeLast": "Mês retrasado",
+            "moreThanSixtyDaysAgo": "Mais de 60 dias"
+          },
           "notifications": {
             "deleteConfirmation": "Tem certeza que deseja apagar esta conversa?",
             "failureRequestAnonymousChats": "Falha na requisição de conversas anônimas",

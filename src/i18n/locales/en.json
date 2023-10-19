@@ -265,6 +265,15 @@
           "prompts": {
             "somePrompts": "Some prompts from your team"
           },
+          "timestamp": {
+            "today": "Today",
+            "yesterday": "Yesterday",
+            "sevenDaysAgo": "Last 7 days",
+            "thirtyDaysAgo": "Last 30 days",
+            "lastMonth": "Last month",
+            "monthBeforeLast": "Month before last",
+            "moreThanSixtyDaysAgo": "More than 60 days ago"
+          },
           "notifications": {
             "deleteConfirmation": "Are you sure you want to delete this conversation?",
             "failureRequestAnonymousChats": "Failed to request anonymous conversations",
