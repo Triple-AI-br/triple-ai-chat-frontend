@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const NoChatContainer = styled.section`
   width: 100%;
-  height: calc(100vh - 60px);
+  height: calc(100svh - 60px);
   background-color: #f8fcff;
   display: flex;
   flex-direction: column;

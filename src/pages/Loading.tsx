@@ -9,7 +9,7 @@ const LoadingPage = () => {
         justifyContent: "center",
         alignItems: "center",
         width: "100vw",
-        height: "100vh",
+        height: "100svh",
         gap: "1rem",
       }}
     >

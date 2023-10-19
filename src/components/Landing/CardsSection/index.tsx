@@ -15,10 +15,11 @@ import {
 
 const CardsSection = () => {
   const { t } = useTranslation();
+
   return (
     <CardsContainer id="about-triple-ai">
       <Row>
-        <Card>
+        <Card className="hidden hidden_left delay">
           <h2>{t("pages.landing.components.cardsSection.first.title")}</h2>
           <WorksContainer>
             {possibleWorks.map((work, index) => (
@@ -29,7 +30,7 @@ const CardsSection = () => {
             ))}
           </WorksContainer>
         </Card>
-        <Card>
+        <Card className="hidden hidden_right delay">
           <h2>{t("pages.landing.components.cardsSection.second.title")}</h2>
           <SecurityContainer>
             {securityAndPrivacy.map((security, index) => (
@@ -42,7 +43,7 @@ const CardsSection = () => {
         </Card>
       </Row>
       <Row>
-        <Card>
+        <Card className="hidden hidden_left delay">
           <h2>{t("pages.landing.components.cardsSection.third.title")}</h2>
           <ScreenShotImage src="/pluginChat.png" />
           <Circle>
@@ -54,7 +55,7 @@ const CardsSection = () => {
             ))}
           </IconsSession>
         </Card>
-        <Card>
+        <Card className="hidden hidden_right delay">
           <h2>{t("pages.landing.components.cardsSection.fourth.title")}</h2>
           <PromptImg src="/prompts.png" />
           <DottedBackground />

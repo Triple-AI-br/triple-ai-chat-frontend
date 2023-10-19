@@ -12,7 +12,7 @@ export const ScrollPage = styled.section`
   }
 
   @media (min-width: 940px) {
-    min-height: calc(100vh - 341px);
+    min-height: calc(100svh - 341px);
     padding: 24px 120px;
     overflow: visible;
   }

@@ -386,7 +386,7 @@ const ChatPage = () => {
 
   return (
     // Main container
-    <Layout>
+    <Layout style={{ height: "100svh" }}>
       <CustomSnackbar />
       <DrawerChat
         chats={chats}
@@ -401,8 +401,8 @@ const ChatPage = () => {
         isDesktop={isDesktop}
       />
 
-      <Layout>
-        <Content style={{ position: "relative", overflow: "hidden", height: "100vh" }}>
+      <Layout style={{ height: "100svh" }}>
+        <Content style={{ position: "relative", overflow: "hidden", height: "100%" }}>
           <div
             style={{
               height: "100%",

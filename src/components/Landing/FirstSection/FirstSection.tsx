@@ -38,7 +38,7 @@ function FirstSection() {
           rootElement={document.getElementById("root") as HTMLElement}
         ></ActionButton>
       </LeftContainer>
-      <BrowserWindow $openvideo={openVideo ? 1 : 0}>
+      <BrowserWindow $openvideo={openVideo ? 1 : 0} className="hidden hidden_right">
         <div />
         <div />
         <div />
