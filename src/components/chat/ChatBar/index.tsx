@@ -24,7 +24,7 @@ const ChatBar: React.FC<ChatBarProps> = ({ isDesktop, setCollapsed, project, loa
       {!isDesktop ? (
         <MenuFoldOutlined
           onClick={() => setCollapsed((prev) => !prev)}
-          style={{ fontSize: "20px" }}
+          style={{ fontSize: "30px", width: "30px", height: "30px", color: "#3e4352" }}
         />
       ) : null}
       <InfoContainer>

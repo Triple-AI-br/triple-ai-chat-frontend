@@ -41,7 +41,7 @@ const MessageBubble = ({ references, float, markdownText, date_time }: IMessageB
 
   useEffect(() => {
     if (!selectedLanguage) return;
-    moment.defineLocale(selectedLanguage, {
+    moment.updateLocale(selectedLanguage, {
       relativeTime: {
         future: t("global.relativeTime.future"),
         past: t("global.relativeTime.past"),
