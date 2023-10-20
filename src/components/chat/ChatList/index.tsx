@@ -17,7 +17,7 @@ const ChatList = ({ chats, handleSelectChat, handleDelete, anonymousChats }: ICh
 
   // Função para obter a categoria da data
   function getDataCategory(data: string) {
-    const formatterDate = moment(data);
+    const formatterDate = moment(data, true);
     const today = moment();
     const yesterday = moment().subtract(1, "days");
     const sevenDaysAgo = moment().subtract(7, "days");
@@ -67,12 +67,11 @@ const ChatList = ({ chats, handleSelectChat, handleDelete, anonymousChats }: ICh
           const date = getDataCategory(chat.date);
           if (idx === 0 || getDataCategory(anonymousChats[idx - 1].date) !== date) {
             return (
-              <>
+              <div key={chat.id}>
                 <Typography.Text type="secondary" style={{ fontSize: "12px" }}>
                   {date}
                 </Typography.Text>
                 <ChatItem
-                  key={chat.id}
                   email={chat.email}
                   anonymous={true}
                   id={chat.id}
@@ -82,7 +81,7 @@ const ChatList = ({ chats, handleSelectChat, handleDelete, anonymousChats }: ICh
                   onClick={handleSelectChat}
                   onDelete={handleDelete}
                 />
-              </>
+              </div>
             );
           } else {
             return (
@@ -128,7 +127,7 @@ const ChatList = ({ chats, handleSelectChat, handleDelete, anonymousChats }: ICh
             const date = getDataCategory(item.date);
             if (index === 0 || getDataCategory(chats[index - 1].date) !== date) {
               return (
-                <>
+                <div key={item.id}>
                   <Typography.Text type="secondary" style={{ fontSize: "12px" }}>
                     {date}
                   </Typography.Text>
@@ -142,7 +141,7 @@ const ChatList = ({ chats, handleSelectChat, handleDelete, anonymousChats }: ICh
                     onClick={handleSelectChat}
                     onDelete={handleDelete}
                   />
-                </>
+                </div>
               );
             } else {
               return (

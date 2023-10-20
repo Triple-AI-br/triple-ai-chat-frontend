@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const ChatBarContainer = styled.div`
   width: 100%;
-  padding: 10px;
+  padding: 10px 20px;
   background-color: #fff;
   height: 60px;
   position: sticky;
