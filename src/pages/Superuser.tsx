@@ -43,7 +43,6 @@ const SuperuserPage = () => {
         messages: ["Customer successfully changed"],
         severity: "success",
       }),
-      }),
     );
   };
 
