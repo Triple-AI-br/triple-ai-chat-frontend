@@ -1,6 +1,8 @@
 {
   "translation": {
     "global": {
+      "similarity": "Similitud",
+      "more": "Más",
       "login": "Iniciar sesión",
       "logout": "Cerrar sesión",
       "confirm": "Confirmar",
@@ -12,6 +14,8 @@
       "public": "Público",
       "loading": "Cargando",
       "submit": "Enviar",
+      "search": "Buscar",
+      "searchNoResult": "Tu búsqueda no arrojó resultados",
       "you": "Tú",
       "noUsers": "No hay usuarios",
       "collapse": "Retraer",
@@ -45,6 +49,9 @@
       "failureToLogin": "¡Failed al Iniciar sesión!"
     },
     "pages": {
+      "search": {
+        "searchDocuments": "Busca tus documentos"
+      },
       "login": {
         "password": "contraseña",
         "remember": "Recuérdame",
@@ -81,6 +88,16 @@
           },
           "partners": {
             "title": "Nuestros Socios"
+          },
+          "examples": {
+            "canYouHelpWith": "¡Hola! 👋 puedes ayudarme con...",
+            "prompts": [
+              "¿Crear una plantilla de correo electrónico de ventas para la captación de nuevos clientes?",
+              "¿Elaborar una descripción de trabajo para un Científico de Datos Senior?",
+              "¿Investigar y presentar las 5 tendencias emergentes más prometedoras en el sector de IA generativa?",
+              "Resumir en viñetas los puntos clave sobre mi empresa. Responderme en inglés.",
+              "¿Redactar un texto para una publicación en Instagram dirigida a la captación de nuevos colaboradores talentosos?"
+            ]
           },
           "cardsSection": {
             "first": {
@@ -198,6 +215,9 @@
         "likes": "{{likes}} me gusta",
         "plural": "",
         "components": {
+          "floatButton": {
+            "tooltip": "Crear nuevo prompt"
+          },
           "tabMenu": {
             "latest": "Últimos prompts",
             "top": "Más Gustados",
@@ -237,21 +257,30 @@
         "selectAChat": "Por favor, selecciona una conversación en el panel izquierdo",
         "yourConversations": "Tus conversaciones",
         "components": {
-            "newChatBtn": "Nueva",
-            "inputPlaceHolder": "Escribe aquí...",
-            "projectChats": "Conversaciones del proyecto",
-            "anonymousChat": "Conversaciones anónimas",
-              "projectSettings": "Configuración del proyecto",
-              "prompts": {
-                "somePrompts": "Algunos prompts de tu equipo"
-              },            
-            "notifications": {
-                "deleteConfirmation": "¿Estás seguro de que quieres borrar esta conversación?",
-                "failureRequestAnonymousChats": "Fallo en la solicitud de conversaciones anónimas",
-                "failureRequestChats": "Fallo en la solicitud de conversaciones",
-                "waitForAIReponseToQuitChat": "Por favor, espera la respuesta de la IA antes de navegar entre conversaciones",
-                "waitForAIResponseToSend": "Por favor, espera la respuesta de la IA antes de enviar otro mensaje"
-            }
+          "newChatBtn": "Nueva",
+          "inputPlaceHolder": "Escribe aquí...",
+          "projectChats": "Conversaciones del proyecto",
+          "anonymousChat": "Conversaciones anónimas",
+          "projectSettings": "Configuración del proyecto",
+          "prompts": {
+            "somePrompts": "Algunos prompts de tu equipo"
+          },
+          "timestamp": {
+            "today": "Hoy",
+            "yesterday": "Ayer",
+            "sevenDaysAgo": "Últimos 7 días",
+            "thirtyDaysAgo": "Últimos 30 días",
+            "lastMonth": "Mes pasado",
+            "monthBeforeLast": "Mes antepasado",
+            "moreThanSixtyDaysAgo": "Más de 60 días atrás"
+          },
+          "notifications": {
+            "deleteConfirmation": "¿Estás seguro de que quieres borrar esta conversación?",
+            "failureRequestAnonymousChats": "Fallo en la solicitud de conversaciones anónimas",
+            "failureRequestChats": "Fallo en la solicitud de conversaciones",
+            "waitForAIReponseToQuitChat": "Por favor, espera la respuesta de la IA antes de navegar entre conversaciones",
+            "waitForAIResponseToSend": "Por favor, espera la respuesta de la IA antes de enviar otro mensaje"
+          }
         }
       }
     },

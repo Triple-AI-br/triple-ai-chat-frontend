@@ -7,6 +7,10 @@ const getAdminRoute = (): string => "/admin";
 const getResetPasswordRoute = (): string => "/reset-password";
 const getSuperuserRoute = (): string => "/superuser";
 const getPromptsRoute = (): string => "/prompts";
+const getSearchRoute = (id?: number): string => {
+  if (id) return `/projects/${id}/search`;
+  return "/projects/:id/search";
+};
 const getChatRoute = (id?: number): string => {
   if (id) return `/projects/${id}/chat`;
   return "/projects/:id/chat";
@@ -28,4 +32,5 @@ export const routesManager = {
   getAcceptInvitationRoute,
   getAdminRoute,
   getResetPasswordRoute,
+  getSearchRoute,
 };

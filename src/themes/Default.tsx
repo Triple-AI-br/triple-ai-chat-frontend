@@ -12,7 +12,7 @@ const config: ThemeConfig = {
 
 const DefaultTheme = createTheme({
   typography: {
-    fontFamily: "'Inter', sans-serif",
+    fontFamily: "'Poppins', 'Inter', sans-serif",
   },
 });
 

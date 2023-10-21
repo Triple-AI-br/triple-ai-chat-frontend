@@ -1,6 +1,8 @@
 {
   "translation": {
     "global": {
+      "similarity": "Similaridade",
+      "more": "Mais",
       "login": "Entrar",
       "logout": "Sair",
       "confirm": "Confirmar",
@@ -12,6 +14,8 @@
       "public": "Público",
       "loading": "Carregando",
       "submit": "Enviar",
+      "search": "Pesquisar",
+      "searchNoResult": "Sua busca não retornou resultados",
       "you": "Você",
       "noUsers": "Sem usuários",
       "collapse": "Retrair",
@@ -45,6 +49,9 @@
       "failureToLogin": "Falha ao entrar!"
     },
     "pages": {
+      "search": {
+        "searchDocuments": "Pesquise seus documentos"
+      },
       "login": {
         "password": "senha",
         "remember": "Mantenha-me logado",
@@ -81,6 +88,16 @@
           },
           "partners": {
             "title": "Nossos parceiros"
+          },
+          "examples": {
+            "canYouHelpWith": "Olá! 👋 você pode me ajudar a...",
+            "prompts": [
+              "Criar um modelo de email de vendas para captação de novos clientes?",
+              "Criar uma descrição de vaga para um Ciêntista de Dados Senior?",
+              "Pesquisar e apresentar as 5 tendências emergentes mais promissoras no setor de IA generativa?",
+              "Resumir em bullet points os principais pontos sobre a minha empresa? Me responda em inglês",
+              "Criar um texto para uma postagem no Instagram voltado à captação de novos colaboradores talentosos?"
+            ]
           },
           "cardsSection": {
             "first": {
@@ -138,7 +155,7 @@
           "projectsCounter": "Projetos da empresa: {{using}}/{{limit}}",
           "deleteConfirmationMessage": "Tem certeza que deseja deletar o projeto {{project}}",
           "collapse": {
-            "your":"Seus projetos",
+            "your": "Seus projetos",
             "shared": "Projetos compartilhados com você"
           },
           "createEditModal": {
@@ -198,6 +215,9 @@
         "likes": "{{likes}} curtida",
         "plural": "s",
         "components": {
+          "floatButton": {
+            "tooltip": "Criar novo prompt"
+          },
           "tabMenu": {
             "latest": "Últimos prompts",
             "top": "Mais Curtidos",
@@ -244,6 +264,15 @@
           "projectSettings": "Configurações do Projeto",
           "prompts": {
             "somePrompts": "Alguns prompts da sua equipe"
+          },
+          "timestamp": {
+            "today": "Hoje",
+            "yesterday": "Ontem",
+            "sevenDaysAgo": "Últimos 7 dias",
+            "thirtyDaysAgo": "Últimos 30 dias",
+            "lastMonth": "Mês passado",
+            "monthBeforeLast": "Mês retrasado",
+            "moreThanSixtyDaysAgo": "Mais de 60 dias"
           },
           "notifications": {
             "deleteConfirmation": "Tem certeza que deseja apagar esta conversa?",

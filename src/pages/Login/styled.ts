@@ -18,16 +18,68 @@ const animate = keyframes`
 `;
 
 export const LoginPageBackground = styled.main`
-  background: url("/loggin_background.png");
-  background-repeat: no-repeat;
-  background-size: cover;
+  /* #3c93ff */
+  background: linear-gradient(
+    -45deg,
+    rgba(60, 147, 255, 1) 0%,
+    rgba(9, 9, 121, 1) 50%,
+    rgba(0, 212, 255, 1) 100%
+  );
   width: 100vw;
-  height: 100vh;
+  height: 100svh;
   overflow: hidden;
   padding: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+export const BaseCircle = styled.div`
+  position: fixed;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.2);
+`;
+
+export const CircleOne = styled(BaseCircle)`
+  top: 100px;
+  left: 10px;
+  width: 100px;
+  height: 100px;
+`;
+
+export const CircleTwo = styled(BaseCircle)`
+  bottom: -100px;
+  left: -50px;
+  width: 500px;
+  height: 500px;
+`;
+
+export const CircleThree = styled(BaseCircle)`
+  bottom: -400px;
+  left: 200px;
+  width: 900px;
+  height: 900px;
+`;
+
+export const CircleFour = styled(BaseCircle)`
+  top: -100px;
+  right: -50px;
+  width: 300px;
+  height: 300px;
+`;
+
+export const CircleFive = styled(BaseCircle)`
+  top: 500px;
+  right: 50px;
+  width: 100px;
+  height: 100px;
+`;
+
+export const CircleSix = styled(BaseCircle)`
+  bottom: 80px;
+  right: 50px;
+  width: 200px;
+  height: 200px;
 `;
 
 export const Content = styled.section`

@@ -2,6 +2,12 @@ import { useTranslation } from "react-i18next";
 import {
   ActionButton,
   ArrowLeftOutlinedStyled,
+  CircleFive,
+  CircleFour,
+  CircleOne,
+  CircleSix,
+  CircleThree,
+  CircleTwo,
   Circles,
   Content,
   LeftCallToAction,
@@ -9,7 +15,6 @@ import {
   LoginPageBackground,
 } from "./styled";
 import { LoginForm } from "../../components/Login/Form";
-import { CustomSnackbar } from "../../components/shared";
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { actionDisplayNotification } from "../../redux/notificationSlice";
@@ -36,7 +41,12 @@ const LoginPage: React.FC = () => {
 
   return (
     <LoginPageBackground>
-      <CustomSnackbar />
+      <CircleOne />
+      <CircleTwo />
+      <CircleThree />
+      <CircleFour />
+      <CircleFive />
+      <CircleSix />
       <Content>
         <LeftVisualContainer>
           <ArrowLeftOutlinedStyled onClick={() => navigate(routesManager.getLandingRoute())} />
@@ -57,7 +67,7 @@ const LoginPage: React.FC = () => {
             <span>{t("pages.login.components.leftContent.contactUs")}</span>
             <ActionButton
               text={t("pages.landing.components.actionBtn")}
-              url="https://calendly.com/eduardo-tripleai/30min"
+              url="https://calendly.com/eduardotripleai/30min"
               rootElement={document.getElementById("root") as HTMLElement}
             ></ActionButton>
           </LeftCallToAction>

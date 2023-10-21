@@ -1,5 +1,12 @@
 import { useNavigate } from "react-router-dom";
-import { ActionButton, ActionContainer, HeaderContainer, LogoImg, NavElements } from "./styled";
+import {
+  ActionButton,
+  ActionContainer,
+  ButtonContainer,
+  HeaderContainer,
+  LogoImg,
+  NavElements,
+} from "./styled";
 import MenuIcon from "@mui/icons-material/Menu";
 import { routesManager } from "../../../routes/routesManager";
 import { Button } from "antd";
@@ -36,15 +43,24 @@ const LandingHeader = () => {
           <a href="#landing-footer">{t("pages.landing.components.header.navLinks.contacts")}</a>
         </li>
       </NavElements>
-      <ActionContainer style={{ display: "flex", gap: 10, alignItems: "center" }}>
-        <ActionButton
-          text={t("pages.landing.components.actionBtn")}
-          url="https://calendly.com/eduardo-tripleai/30min"
-          rootElement={document.getElementById("root") as HTMLElement}
-        ></ActionButton>
-        <Button type="link" onClick={() => navigate(routesManager.getProjectsRoute())}>
-          {t("pages.landing.components.header.loginBtn")}
-        </Button>
+      <ActionContainer
+        style={{
+          display: "flex",
+          gap: "40px",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <ButtonContainer>
+          <ActionButton
+            text={t("pages.landing.components.actionBtn")}
+            url="https://calendly.com/eduardotripleai/30min"
+            rootElement={document.getElementById("root") as HTMLElement}
+          ></ActionButton>
+          <Button type="link" onClick={() => navigate(routesManager.getProjectsRoute())}>
+            {t("pages.landing.components.header.loginBtn")}
+          </Button>
+        </ButtonContainer>
         <LanguageSelector />
         <MenuIcon onClick={showDrawer} />
       </ActionContainer>

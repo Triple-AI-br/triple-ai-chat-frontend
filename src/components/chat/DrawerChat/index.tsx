@@ -48,9 +48,9 @@ const DrawerChat: React.FC<DrawerChatProps> = ({
       style={{
         position: isDesktop ? "sticky" : "fixed",
         zIndex: 1001,
-        left: "0px",
+        left: collapsed ? "-100%" : "0px",
         top: "0px",
-        height: "100vh",
+        height: "100%",
         backgroundColor: "#FFF",
       }}
       trigger={null}
@@ -58,10 +58,10 @@ const DrawerChat: React.FC<DrawerChatProps> = ({
       collapsed={collapsed}
       onCollapse={() => setCollapsed((prev) => !prev)}
       width={isDesktop ? 300 : "85%"}
-      collapsedWidth={0}
+      collapsedWidth={isDesktop ? 300 : "85%"}
     >
       <LeftTopBar customerData={customerData} />
-      <div style={{ padding: collapsed ? 0 : "12px", height: "calc(100vh - 85px)" }}>
+      <div style={{ padding: collapsed ? 0 : "12px", height: "calc(100svh - 85px)" }}>
         <Button
           onClick={handleNewChat}
           size="large"
