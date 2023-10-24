@@ -1,5 +1,6 @@
 import { fetchEventSource } from "@microsoft/fetch-event-source";
 import { api } from "./api";
+import { getAccessTokenFromStorage } from "../utils/getTokenFromStorage";
 
 interface ITimestamped {
   id: number;
@@ -87,6 +88,7 @@ const sendMessageStream = ({
   sessionId: number;
   projectId: number;
 }): Promise<void> => {
+  const accessToken = getAccessTokenFromStorage();
   const url = `${api.defaults.baseURL}/projects/${projectId}/chats/${sessionId}/stream`;
   // View package documentation: https://www.npmjs.com/package/@microsoft/fetch-event-source
   return new Promise<void>((resolve, reject) => {
@@ -116,7 +118,7 @@ const sendMessageStream = ({
       },
       method: "POST",
       headers: {
-        Authorization: api.defaults.headers.Authorization as string,
+        Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json", // This is required for the server to parse the body
       },
       body: JSON.stringify({

@@ -26,7 +26,7 @@ type FormValues = {
   description: string;
   is_public: boolean;
   system_tone: string;
-  internal_knowledge_only: boolean;
+  enable_external_knowledge: boolean;
 };
 
 const ProjectModal = ({
@@ -66,7 +66,7 @@ const ProjectModal = ({
         description: e.description,
         is_public: !!e.is_public,
         system_tone: e.system_tone || "",
-        internal_knowledge_only: !e.internal_knowledge_only,
+        internal_knowledge_only: !e.enable_external_knowledge,
       };
       if (isEditing) {
         if (!projectToEdit) return;
@@ -167,10 +167,18 @@ const ProjectModal = ({
         ref={formRef}
         onFinish={handleOk}
         disabled={!isOwner}
-        initialValues={{
-          ...projectToEdit,
-          internal_knowledge_only: !projectToEdit?.internal_knowledge_only,
-        }}
+        initialValues={
+          projectToEdit
+            ? {
+                ...projectToEdit,
+                enable_external_knowledge: !projectToEdit.internal_knowledge_only,
+              }
+            : {
+                system_tone: defaultBasePrompt,
+                enable_external_knowledge: false,
+                is_public: true,
+              }
+        }
         autoComplete="off"
         layout="vertical"
         style={{ marginTop: "20px" }}
@@ -204,15 +212,10 @@ const ProjectModal = ({
           name="system_tone"
           tooltip={t("pages.projects.components.createEditModal.tooltip.basePrompt")}
         >
-          <TextArea
-            defaultValue={defaultBasePrompt}
-            autoSize={{ minRows: 3, maxRows: 6 }}
-            showCount
-            maxLength={800}
-          />
+          <TextArea autoSize={{ minRows: 3, maxRows: 6 }} showCount maxLength={800} />
         </Form.Item>
-        <Form.Item name="internal_knowledge_only" valuePropName="checked">
-          <Checkbox defaultChecked={true} style={{ display: "flex", alignItems: "center" }}>
+        <Form.Item name="enable_external_knowledge" valuePropName="checked">
+          <Checkbox style={{ display: "flex", alignItems: "center" }}>
             {t("pages.projects.components.createEditModal.externalKnowledge")}
             <Tooltip
               title={t("pages.projects.components.createEditModal.tooltip.externalKnowledge")}
