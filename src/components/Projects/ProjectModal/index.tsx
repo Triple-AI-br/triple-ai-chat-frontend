@@ -167,10 +167,18 @@ const ProjectModal = ({
         ref={formRef}
         onFinish={handleOk}
         disabled={!isOwner}
-        initialValues={{
-          ...projectToEdit,
-          internal_knowledge_only: !projectToEdit?.internal_knowledge_only,
-        }}
+        initialValues={
+          projectToEdit
+            ? {
+                ...projectToEdit,
+                internal_knowledge_only: !projectToEdit.internal_knowledge_only,
+              }
+            : {
+                system_tone: defaultBasePrompt,
+                internal_knowledge_only: false,
+                is_public: true,
+              }
+        }
         autoComplete="off"
         layout="vertical"
         style={{ marginTop: "20px" }}
@@ -204,15 +212,10 @@ const ProjectModal = ({
           name="system_tone"
           tooltip={t("pages.projects.components.createEditModal.tooltip.basePrompt")}
         >
-          <TextArea
-            defaultValue={defaultBasePrompt}
-            autoSize={{ minRows: 3, maxRows: 6 }}
-            showCount
-            maxLength={800}
-          />
+          <TextArea autoSize={{ minRows: 3, maxRows: 6 }} showCount maxLength={800} />
         </Form.Item>
         <Form.Item name="internal_knowledge_only" valuePropName="checked">
-          <Checkbox defaultChecked={true} style={{ display: "flex", alignItems: "center" }}>
+          <Checkbox style={{ display: "flex", alignItems: "center" }}>
             {t("pages.projects.components.createEditModal.externalKnowledge")}
             <Tooltip
               title={t("pages.projects.components.createEditModal.tooltip.externalKnowledge")}
