@@ -26,7 +26,7 @@ type FormValues = {
   description: string;
   is_public: boolean;
   system_tone: string;
-  able_external_knowledge: boolean;
+  enable_external_knowledge: boolean;
 };
 
 const ProjectModal = ({
@@ -66,7 +66,7 @@ const ProjectModal = ({
         description: e.description,
         is_public: !!e.is_public,
         system_tone: e.system_tone || "",
-        internal_knowledge_only: !e.able_external_knowledge,
+        internal_knowledge_only: !e.enable_external_knowledge,
       };
       if (isEditing) {
         if (!projectToEdit) return;
@@ -171,11 +171,11 @@ const ProjectModal = ({
           projectToEdit
             ? {
                 ...projectToEdit,
-                able_external_knowledge: !projectToEdit.internal_knowledge_only,
+                enable_external_knowledge: !projectToEdit.internal_knowledge_only,
               }
             : {
                 system_tone: defaultBasePrompt,
-                able_external_knowledge: false,
+                enable_external_knowledge: false,
                 is_public: true,
               }
         }
@@ -214,7 +214,7 @@ const ProjectModal = ({
         >
           <TextArea autoSize={{ minRows: 3, maxRows: 6 }} showCount maxLength={800} />
         </Form.Item>
-        <Form.Item name="able_external_knowledge" valuePropName="checked">
+        <Form.Item name="enable_external_knowledge" valuePropName="checked">
           <Checkbox style={{ display: "flex", alignItems: "center" }}>
             {t("pages.projects.components.createEditModal.externalKnowledge")}
             <Tooltip
