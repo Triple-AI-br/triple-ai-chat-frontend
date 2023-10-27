@@ -1,6 +1,6 @@
 import { Button, Dropdown, MenuProps, message } from "antd";
 import { Base } from "../../layouts/Base";
-import { ContractContainer } from "./styled";
+import { AnalysisContainer, ContractContainer } from "./styled";
 import {
   CopyOutlined,
   FlagOutlined,
@@ -10,24 +10,26 @@ import {
 import { useEffect, useState } from "react";
 import { useAppSelector } from "../../redux/hooks";
 import { selectContract } from "../../redux/contractSlice";
+import { ContractTool } from "../../components/Contracts/ContractTool";
+
+type AnalysisList = {
+  selected: string;
+  response: string;
+};
 
 const ContractAnalysis: React.FC = () => {
   const contract = useAppSelector(selectContract);
   const [selectedText, setSelectedText] = useState<string>();
+  const [analysis, setAnalysis] = useState<AnalysisList[]>([]);
+  const [loadingAnalysis, setLoadingAnalysis] = useState<boolean>(false);
 
-  function highlightRange(range: Range | null) {
-    if (!range) return;
-    const newNode = document.createElement("span");
-    newNode.setAttribute("style", "background-color: yellow; display: inline;");
-    newNode.appendChild(range.extractContents());
-    range.insertNode(newNode);
-  }
-
-  const appendBotResponse = (selection: Selection | null) => {
-    if (!selection) return;
-    const range = selection.getRangeAt(0);
-    highlightRange(range);
-    range.createContextualFragment("asijdioajdiajsd");
+  const appendBotResponse = () => {
+    if (!selectedText) return;
+    setLoadingAnalysis(true);
+    setTimeout(() => {
+      setAnalysis((prev) => [...prev, { selected: selectedText, response: "Lorem Ipsum" }]);
+    }, 3000);
+    setLoadingAnalysis(false);
   };
 
   const handleMouseUp = () => {
@@ -37,22 +39,6 @@ const ContractAnalysis: React.FC = () => {
   };
 
   const items: MenuProps["items"] = [
-    {
-      label: (
-        <div
-          style={{
-            display: "block",
-            width: "100%",
-            overflowX: "hidden",
-            overflowY: "auto",
-            maxHeight: "100px",
-          }}
-        >
-          <p style={{}}>{window.getSelection()?.toString()}</p>
-        </div>
-      ),
-      key: "1",
-    },
     {
       label: (
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -66,15 +52,12 @@ const ContractAnalysis: React.FC = () => {
           >
             Copy
           </Button>
-          <Button
-            onClick={() => appendBotResponse(window.getSelection())}
-            icon={<MessageOutlined />}
-          >
+          <Button onClick={() => appendBotResponse()} icon={<MessageOutlined />}>
             Analysis
           </Button>
         </div>
       ),
-      key: "2",
+      key: "1",
     },
     {
       label: (
@@ -82,7 +65,7 @@ const ContractAnalysis: React.FC = () => {
           Flags (Coming soon)
         </Button>
       ),
-      key: "3",
+      key: "2",
       disabled: true,
     },
   ];
@@ -98,7 +81,7 @@ const ContractAnalysis: React.FC = () => {
 
   return (
     <Base title="Contract Analysis">
-      <div>
+      <AnalysisContainer>
         <ContractContainer>
           <Dropdown menu={{ items }} trigger={["contextMenu"]} overlayStyle={{ maxWidth: "320px" }}>
             <div
@@ -109,8 +92,8 @@ const ContractAnalysis: React.FC = () => {
             ></div>
           </Dropdown>
         </ContractContainer>
-        <div className="right_content"></div>
-      </div>
+        <ContractTool analysis={analysis} loadingAnalysis={loadingAnalysis} />
+      </AnalysisContainer>
     </Base>
   );
 };
