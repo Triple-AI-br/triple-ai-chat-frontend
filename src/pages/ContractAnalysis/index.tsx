@@ -1,4 +1,4 @@
-import { Button, Dropdown, MenuProps } from "antd";
+import { Button, Dropdown, MenuProps, message } from "antd";
 import { Base } from "../../layouts/Base";
 import { ContractContainer } from "./styled";
 import {
@@ -8,15 +8,32 @@ import {
   QuestionCircleOutlined,
 } from "@ant-design/icons";
 import { useEffect, useState } from "react";
+import { useAppSelector } from "../../redux/hooks";
+import { selectContract } from "../../redux/contractSlice";
 
 const ContractAnalysis: React.FC = () => {
+  const contract = useAppSelector(selectContract);
   const [selectedText, setSelectedText] = useState<string>();
+
+  function highlightRange(range: Range | null) {
+    if (!range) return;
+    const newNode = document.createElement("span");
+    newNode.setAttribute("style", "background-color: yellow; display: inline;");
+    newNode.appendChild(range.extractContents());
+    range.insertNode(newNode);
+  }
+
+  const appendBotResponse = (selection: Selection | null) => {
+    if (!selection) return;
+    const range = selection.getRangeAt(0);
+    highlightRange(range);
+    range.createContextualFragment("asijdioajdiajsd");
+  };
 
   const handleMouseUp = () => {
     const selected = window.getSelection()?.toString();
     if (!selected) return;
-    const wordsCount = selected?.split(" ");
-    setSelectedText(wordsCount.slice(0, 1_000).join(" "));
+    setSelectedText(selected);
   };
 
   const items: MenuProps["items"] = [
@@ -42,11 +59,17 @@ const ContractAnalysis: React.FC = () => {
           <Button icon={<QuestionCircleOutlined />}>Ask</Button>
           <Button
             icon={<CopyOutlined />}
-            onClick={() => navigator.clipboard.writeText(selectedText || "")}
+            onClick={() => {
+              navigator.clipboard.writeText(selectedText || "");
+              message.success("Copied to clipboard");
+            }}
           >
             Copy
           </Button>
-          <Button onClick={alert} icon={<MessageOutlined />}>
+          <Button
+            onClick={() => appendBotResponse(window.getSelection())}
+            icon={<MessageOutlined />}
+          >
             Analysis
           </Button>
         </div>
@@ -56,7 +79,7 @@ const ContractAnalysis: React.FC = () => {
     {
       label: (
         <Button icon={<FlagOutlined />} disabled>
-          Flags (Coming son)
+          Flags (Coming soon)
         </Button>
       ),
       key: "3",
@@ -65,8 +88,13 @@ const ContractAnalysis: React.FC = () => {
   ];
 
   useEffect(() => {
-    console.log(selectedText);
-  }, [selectedText]);
+    const container = document.querySelector("#contract_container") as HTMLElement;
+    if (contract.htmlContent) {
+      container.innerHTML = contract.htmlContent;
+    } else {
+      container.innerHTML = "Please select a contract";
+    }
+  }, [contract]);
 
   return (
     <Base title="Contract Analysis">
@@ -74,39 +102,11 @@ const ContractAnalysis: React.FC = () => {
         <ContractContainer>
           <Dropdown menu={{ items }} trigger={["contextMenu"]} overlayStyle={{ maxWidth: "320px" }}>
             <div
+              id="contract_container"
               onMouseUp={handleMouseUp}
               onDoubleClick={handleMouseUp}
               style={{ display: "relative" }}
-            >
-              <h1>title</h1>
-              <br />
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore porro quis
-                voluptate, iste at aut maxime dolorem ipsam quibusdam labore architecto eligendi quo
-                mollitia fugit recusandae minus eos ea temporibus.
-              </p>
-              <br />
-
-              <ul>
-                <li>
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit. Earum repudiandae sit
-                  porro velit nulla quibusdam omnis quas facilis possimus corrupti! Dignissimos
-                  error voluptatibus aliquid amet corrupti, porro ipsum placeat dolorum.
-                </li>
-                <li>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo itaque provident
-                  magnam deleniti praesentium nisi, a laborum esse sed, ducimus ipsum assumenda
-                  blanditiis quam alias, suscipit sint perspiciatis nam officiis?
-                </li>
-              </ul>
-              <br />
-
-              <span>
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Accusantium itaque quos
-                quidem excepturi maxime eveniet rem ipsum! Ipsa nisi maiores ab, corrupti architecto
-                rem suscipit officiis accusamus atque qui. Natus.
-              </span>
-            </div>
+            ></div>
           </Dropdown>
         </ContractContainer>
         <div className="right_content"></div>
