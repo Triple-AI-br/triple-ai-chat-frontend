@@ -205,7 +205,7 @@ const Base = ({ children, title }: IBaseProps) => {
           </Tooltip>
         )}
       </Sider>
-      <Layout style={{ overflowY: "scroll" }}>
+      <Layout>
         <Header
           style={{
             paddingLeft: 20,

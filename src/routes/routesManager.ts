@@ -20,7 +20,10 @@ const getSourcesRoute = (id?: string | number): string => {
   return "/projects/:id/sources";
 };
 const getContractsRoute = (): string => "/contracts";
-const getContractAnalysisRoute = (id?: string | number): string => `/contracts/${id}/route`;
+const getContractAnalysisRoute = (id?: string | number): string => {
+  if (id) return `/contracts/analysis/${id}`;
+  return "/contracts/analysis/:id";
+};
 
 export const routesManager = {
   getSuperuserRoute,

@@ -1,19 +1,23 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Form, Select, UploadProps, message } from "antd";
 import { Base } from "../../layouts/Base";
 import Dragger from "antd/es/upload/Dragger";
 import { InboxOutlined } from "@ant-design/icons";
 import { UploadContainer } from "./styled";
 import { contractCategories, represent } from "./constansts";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { routesManager } from "../../routes/routesManager";
 
 const ContractPage: React.FC = () => {
+  const navigate = useNavigate();
   const [file, setFile] = useState<Blob>();
+
   const filterOption = (input: string, option?: { label: string; value: string }) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
   const props: UploadProps = {
     name: "file",
-    // action: "https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188",
     beforeUpload(file) {
       return new Promise((resolve, reject) => {
         if (file.size > 2_000_000) {
@@ -25,20 +29,26 @@ const ContractPage: React.FC = () => {
         }
       });
     },
-    customRequest(info) {
-      setFile(info.file as Blob);
-      return { success: true };
+    customRequest({ file, onSuccess, onError }) {
+      try {
+        setFile(file as Blob);
+        if (onSuccess) onSuccess("sucess");
+      } catch (error) {
+        if (onError) onError(error as ProgressEvent<EventTarget>);
+      }
     },
   };
-
-  useEffect(() => {
-    console.log(file);
-  }, [file]);
 
   return (
     <Base title="Contracts">
       <UploadContainer>
-        <Form layout="vertical" onFinish={(values) => console.log(values)}>
+        <Form
+          layout="vertical"
+          onFinish={(values) => {
+            console.log(values, file);
+            navigate(routesManager.getContractAnalysisRoute(1));
+          }}
+        >
           <Form.Item
             name="contract_file"
             valuePropName="fileList"
