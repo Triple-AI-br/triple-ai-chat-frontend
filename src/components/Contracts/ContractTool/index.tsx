@@ -1,19 +1,32 @@
-import { FlagOutlined, QuestionCircleOutlined } from "@ant-design/icons";
-import { Collapse, CollapseProps, Menu, MenuProps, Typography } from "antd";
-import { useState } from "react";
+import { FlagOutlined, MessageOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import { Collapse, CollapseProps, Menu, MenuProps, Space, Typography } from "antd";
+import { useEffect, useRef, useState } from "react";
 import { MenuContainer, ToolContent } from "./styled";
-import AutoAwesomeOutlinedIcon from "@mui/icons-material/AutoAwesomeOutlined";
+import Search from "antd/es/input/Search";
+import { AnalysisList, QuestionList } from "../../../pages/ContractAnalysis";
 
 type ContractToolProps = {
-  analysis: {
-    selected: string;
-    response: string;
-  }[];
+  analysis: AnalysisList[];
   loadingAnalysis: boolean;
+
+  questions: QuestionList[];
+  loadingQuestion: boolean;
+  selectedText?: string;
+  appendBotAskReponse: (e: string) => void;
 };
 
-const ContractTool: React.FC<ContractToolProps> = ({ analysis, loadingAnalysis }) => {
+const ContractTool: React.FC<ContractToolProps> = ({
+  analysis,
+  loadingAnalysis,
+  questions,
+  loadingQuestion,
+  selectedText,
+  appendBotAskReponse,
+}) => {
   const [current, setCurrent] = useState("analysis");
+
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const loading = loadingAnalysis || loadingQuestion;
 
   const analysisItems: CollapseProps["items"] = analysis.map((item, index) => {
     return {
@@ -27,8 +40,7 @@ const ContractTool: React.FC<ContractToolProps> = ({ analysis, loadingAnalysis }
     {
       label: "Analysis",
       key: "analysis",
-      icon: <AutoAwesomeOutlinedIcon />,
-      style: { transition: "ease-in-out 2s" },
+      icon: <MessageOutlined />,
     },
     {
       label: "Ask",
@@ -44,19 +56,88 @@ const ContractTool: React.FC<ContractToolProps> = ({ analysis, loadingAnalysis }
   ];
 
   const onClick: MenuProps["onClick"] = (e) => {
-    console.log("click ", e);
     setCurrent(e.key);
   };
+
+  const renderContent = () => {
+    switch (current) {
+      case "analysis":
+        if (analysisItems.length) {
+          return (
+            <Collapse
+              accordion
+              items={analysisItems}
+              defaultActiveKey={[analysisItems.length ? String(analysisItems.length - 1) : "1"]}
+            />
+          );
+        } else {
+          return null;
+        }
+      case "ask":
+        return (
+          <>
+            <Search
+              size="large"
+              autoFocus={true}
+              disabled={!selectedText}
+              placeholder="Ask something to AI..."
+              onSearch={appendBotAskReponse}
+              allowClear
+              enterButton
+              style={{ marginBottom: "40px" }}
+            />
+            <Space direction="vertical" style={{ width: "100%" }}>
+              {!!questions.length &&
+                questions.map((question, index) => {
+                  return (
+                    <Collapse
+                      key={index}
+                      items={[
+                        {
+                          key: "1",
+                          label: question.question,
+                          children: (
+                            <>
+                              <Space direction="vertical">
+                                <Typography.Text italic type="secondary">
+                                  {`"${question.selected}"`}
+                                </Typography.Text>
+                                <Typography.Text>{question.response}</Typography.Text>
+                              </Space>
+                            </>
+                          ),
+                        },
+                      ]}
+                    />
+                  );
+                })}
+            </Space>
+          </>
+        );
+      default:
+        return;
+    }
+  };
+
+  // Scrolls to bottom every time loadingAnalysis is modified
+  useEffect(() => {
+    setCurrent("analysis");
+    bottomRef.current?.scrollIntoView({ behavior: "smooth", inline: "end" });
+  }, [loadingAnalysis]);
+
+  // Scrolls to bottom every time loadingAnalysis is modified
+  useEffect(() => {
+    setCurrent("ask");
+    bottomRef.current?.scrollIntoView({ behavior: "smooth", inline: "end" });
+  }, [loadingQuestion]);
 
   return (
     <MenuContainer>
       <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items} />
       <ToolContent>
-        {current === "analysis" ? (
-          <Collapse accordion items={analysisItems} defaultActiveKey={["1"]} />
-        ) : null}
+        {renderContent()}
         {/* TODO: Colocar animação de carregar nova analise */}
-        {loadingAnalysis ? "Loading..." : null}
+        <div ref={bottomRef}>{loading ? "Loading..." : null}</div>
       </ToolContent>
     </MenuContainer>
   );
