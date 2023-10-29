@@ -11,6 +11,7 @@ import { routesManager } from "../../routes/routesManager";
 import { contractsServices } from "../../services";
 import { useAppDispatch } from "../../redux/hooks";
 import { actionAddContract } from "../../redux/contractSlice";
+import { useTranslation } from "react-i18next";
 
 type FieldType = {
   contract_category: string;
@@ -20,7 +21,11 @@ type FieldType = {
 const ContractPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const [file, setFile] = useState<string>();
+
+  // 5MB
+  const maxFileSize = 5_000_000;
 
   const filterOption = (input: string, option?: { label: string; value: string }) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
@@ -29,7 +34,7 @@ const ContractPage: React.FC = () => {
     name: "file",
     beforeUpload(file) {
       return new Promise((resolve, reject) => {
-        if (file.size > 5_000_000) {
+        if (file.size > maxFileSize) {
           reject("File size exceeded");
           message.error("File size exceeded");
         } else {
@@ -61,11 +66,11 @@ const ContractPage: React.FC = () => {
         representPart: formValues.represent_part,
       }),
     );
-    navigate(routesManager.getContractAnalysisRoute(1));
+    navigate(routesManager.getContractAnalysisRoute());
   };
 
   return (
-    <Base title="Contracts">
+    <Base title={t("pages.contracts.title")}>
       <UploadContainer>
         <Form layout="vertical" onFinish={handleSubmit}>
           <Form.Item
@@ -73,19 +78,26 @@ const ContractPage: React.FC = () => {
             valuePropName="fileList"
             getValueFromEvent={(event) => event?.fileList}
             rules={[
-              { required: true, message: "Please upload a contract" },
+              {
+                required: true,
+                message: t("pages.contracts.components.warning.pleaseUploadContract"),
+              },
               {
                 validator(_, fileList) {
                   return new Promise((resolve, reject) => {
                     // Limitação de tamanho do contrato em bytes (5MB)
-                    if (fileList && fileList.length && fileList[0].size > 5_000_000) {
-                      reject("File size exceeded");
+                    if (fileList && fileList.length && fileList[0].size > maxFileSize) {
+                      reject(
+                        t("pages.contracts.components.warning.sizeExceeded", {
+                          size: maxFileSize / 1_000_000,
+                        }),
+                      );
                     } else if (
                       fileList &&
                       fileList.length &&
                       !fileList[0].type.includes("wordprocessingml")
                     ) {
-                      reject("File msut be a DOCX");
+                      reject(t("pages.contracts.components.warning.mustBeFormat"));
                     } else {
                       resolve("sucess");
                     }
@@ -98,19 +110,26 @@ const ContractPage: React.FC = () => {
               <p className="ant-upload-drag-icon">
                 <InboxOutlined />
               </p>
-              <p className="ant-upload-text">Click or drag file to this area to upload</p>
-              <p className="ant-upload-hint">Support for a single or bulk upload.</p>
+              <p className="ant-upload-text">{t("pages.contracts.components.upload.label")}</p>
+              <p className="ant-upload-hint">
+                {t("pages.contracts.components.upload.placeholder")}
+              </p>
             </Dragger>
           </Form.Item>
           <Form.Item
             name="contract_category"
-            label="Contract category"
-            rules={[{ required: true, message: "Please select a contract category" }]}
+            label={t("pages.contracts.components.contractCategory.label")}
+            rules={[
+              {
+                required: true,
+                message: t("pages.contracts.components.warning.pleaseSelectCategory"),
+              },
+            ]}
           >
             <Select
               options={contractCategories}
               showSearch
-              placeholder="Select a contract category"
+              placeholder={t("pages.contracts.components.contractCategory.placeholder")}
               optionFilterProp="children"
               filterOption={filterOption}
               allowClear
@@ -118,14 +137,22 @@ const ContractPage: React.FC = () => {
           </Form.Item>
           <Form.Item
             name="represent_part"
-            label="Part you represent"
-            rules={[{ required: true, message: "Please select which part you represent" }]}
+            label={t("pages.contracts.components.representPart.label")}
+            rules={[
+              {
+                required: true,
+                message: t("pages.contracts.components.warning.pleaseSelectPartYouRepresent"),
+              },
+            ]}
           >
-            <Select options={represent} placeholder="What part are you representing?" />
+            <Select
+              options={represent}
+              placeholder={t("pages.contracts.components.representPart.placeholder")}
+            />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">
-              Submit
+              {t("global.submit")}
             </Button>
           </Form.Item>
         </Form>
