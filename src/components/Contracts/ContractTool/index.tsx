@@ -22,6 +22,7 @@ type ContractToolProps = {
   loadingQuestion: boolean;
   selectedText?: string;
   appendBotAskReponse: (e: string) => void;
+  appendBotRiskAnalysis: () => void;
 
   ref2: React.RefObject<HTMLDivElement>;
 };
@@ -34,6 +35,7 @@ const ContractTool: React.FC<ContractToolProps> = ({
   selectedText,
   ref2,
   appendBotAskReponse,
+  appendBotRiskAnalysis,
 }) => {
   const { t } = useTranslation();
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -49,7 +51,7 @@ const ContractTool: React.FC<ContractToolProps> = ({
           ellipsis={{
             rows: 2,
             expandable: false,
-            suffix: item.selected.split(" ").reverse().slice(0, 3).reverse().join(" "),
+            suffix: item.selected.split(" ").slice(-6).join(" "),
           }}
         >
           {item.selected}
@@ -102,6 +104,7 @@ const ContractTool: React.FC<ContractToolProps> = ({
                 loading={loadingAnalysis}
                 icon={<PlusOutlined />}
                 disabled={loadingAnalysis || !selectedText}
+                onClick={appendBotRiskAnalysis}
               >
                 {t("pages.contractAnalysis.components.menuTool.genRiskAnalysisBtn")}
               </Button>

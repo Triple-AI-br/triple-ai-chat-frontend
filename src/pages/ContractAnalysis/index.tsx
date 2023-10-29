@@ -28,6 +28,7 @@ import { actionDisplayNotification } from "../../redux/notificationSlice";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { routesManager } from "../../routes/routesManager";
+import { useWindowSize } from "../../utils/useWindowSize";
 
 export type AnalysisList = {
   selected: string;
@@ -39,10 +40,12 @@ export type QuestionList = {
   question: string;
   response: string;
 };
+const DESKTOP_WIDTH = 1000;
 
 const ContractAnalysis: React.FC = () => {
   const contract = useAppSelector(selectContract);
   const dispatch = useAppDispatch();
+  const { width } = useWindowSize();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const ref1 = useRef<HTMLDivElement>(null);
@@ -60,6 +63,7 @@ const ContractAnalysis: React.FC = () => {
   const [questions, setQuestions] = useState<QuestionList[]>([]);
   const [loadingQuestion, setLoadingQuestion] = useState<boolean>(false);
 
+  const isDesktop = width >= DESKTOP_WIDTH;
   const loadingResponse = loadingAnalysis || loadingQuestion;
 
   const steps: TourProps["steps"] = [
@@ -243,19 +247,22 @@ const ContractAnalysis: React.FC = () => {
   return (
     <Base title="Contract Analysis">
       <FloatButton.BackTop shape="square" />
-      <Tour
-        open={openTutorial}
-        onClose={() => {
-          setOpenTutorial(false);
-          localStorage.setItem("contract_tutorial", "checked");
-        }}
-        steps={steps}
-        indicatorsRender={(current, total) => (
-          <span>
-            {current + 1} / {total}
-          </span>
-        )}
-      />
+      {isDesktop ? (
+        <Tour
+          open={openTutorial}
+          onClose={() => {
+            setOpenTutorial(false);
+            localStorage.setItem("contract_tutorial", "checked");
+          }}
+          scrollIntoViewOptions={{ block: "start", behavior: "smooth" }}
+          steps={steps}
+          indicatorsRender={(current, total) => (
+            <span>
+              {current + 1} / {total}
+            </span>
+          )}
+        />
+      ) : null}
       <AnalysisContainer>
         <ContractContainer>
           <SelectedTextContainer>
@@ -308,6 +315,7 @@ const ContractAnalysis: React.FC = () => {
           loadingQuestion={loadingQuestion}
           questions={questions}
           appendBotAskReponse={appendBotAskReponse}
+          appendBotRiskAnalysis={appendBotAnalysisResponse}
         />
       </AnalysisContainer>
     </Base>
