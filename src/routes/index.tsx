@@ -14,6 +14,8 @@ import {
   SearchPage,
 } from "../pages";
 import { PrivateRoute, PublicRoute } from "../components/shared";
+import { ContractPage } from "../pages/Contracts";
+import { ContractAnalysis } from "../pages/ContractAnalysis";
 
 const AppRoutes = () => {
   return (
@@ -53,6 +55,11 @@ const AppRoutes = () => {
               <Route path={routesManager.getPromptsRoute()} element={<PromptsPage />} />
               <Route path={routesManager.getSuperuserRoute()} element={<SuperuserPage />} />
               <Route path={routesManager.getSearchRoute()} element={<SearchPage />} />
+              <Route path={routesManager.getContractsRoute()} element={<ContractPage />} />
+              <Route
+                path={routesManager.getContractAnalysisRoute()}
+                element={<ContractAnalysis />}
+              />
             </Routes>
           </PrivateRoute>
         }

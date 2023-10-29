@@ -282,6 +282,83 @@
             "waitForAIResponseToSend": "Por favor espere pela resposta da IA antes de enviar outra mensagem"
           }
         }
+      },
+      "contracts": {
+        "tab": "contratos",
+        "title": "Enviar um contrato",
+        "categories": [
+          { "label": "NDA (Acordo de Confidencialidade)", "value": "NDA" },
+          { "label": "Contrato de Empréstimo", "value": "Contrato de Empréstimo" },
+          { "label": "Contrato de Investimento", "value": "Contrato de Investimento" },
+          { "label": "Contrato de Financiamento", "value": "Contrato de Financiamento" },
+          { "label": "Contrato de Serviço", "value": "Contrato de Serviço" },
+          { "label": "Contrato de Compra e Venda", "value": "Contrato de Compra e Venda" },
+          { "label": "Contrato de Doação", "value": "Contrato de Doação" },
+          { "label": "Contrato de Locação de Imóvel", "value": "Contrato de Locação de Imóvel" },
+          { "label": "Outros", "value": "Outros" }
+        ],
+        "represents": [
+          { "label": "Parte Contratante", "value": "Parte Contratante" },
+          { "label": "Parte Contratada", "value": "Parte Contratada" },
+          { "label": "Consumidor", "value": "Consumidor" },
+          { "label": "Fornecedor", "value": "Fornecedor" },
+          { "label": "Locador", "value": "Locador" },
+          { "label": "Locatário", "value": "Locatário" },
+          { "label": "Outros", "value": "Outros" }
+        ],
+        "components": {
+          "upload": {
+            "label": "Clique ou arraste para esta área para enviar um contrato",
+            "placeholder": "suporte para um único arquivo .docx"
+          },
+          "contractCategory": {
+            "label": "Categoria do contrato",
+            "placeholder": "Selecione uma categoria de contrato"
+          },
+          "representPart": {
+            "label": "Parte que você representa",
+            "placeholder": "Qual parte você está representando?"
+          },
+          "warning": {
+            "pleaseUploadContract": "Por favor, envie um contrato",
+            "sizeExceeded": "Tamanho do arquivo excedido ({{size}}MB)",
+            "mustBeFormat": "Deve ser um arquivo .docx",
+            "pleaseSelectCategory": "Por favor, selecione uma categoria de contrato",
+            "pleaseSelectPartYouRepresent": "Por favor, selecione qual parte você representa"
+          }
+        }
+      },
+      "contractAnalysis": {
+        "selectedSection": "Trecho selecionado:",
+        "tooltip": "Análises e respostas serão feitas com base no texto selecionado",
+        "actions": {
+          "askAI": "Perguntar à IA",
+          "riskAnalysis": "Análise de Risco",
+          "copy": "Copiar",
+          "flags": "Marcadores (em breve)"
+        },
+        "components": {
+          "tutorial": {
+            "nextBtn": "Próximo",
+            "previousBtn": "Anterior",
+            "firstStep": {
+              "title": "Aqui está o seu contrato.",
+              "description": "Selecione a parte do texto na qual você deseja realizar uma análise de risco ou fazer perguntas e clique com o botão direito para abrir o menu de ações."
+            },
+            "secondStep": {
+              "title": "Este é o menu de ferramentas.",
+              "description": "Aqui você pode realizar ações com o texto selecionado e ver os resultados gerados pela IA."
+            }
+          },
+          "menuTool": {
+            "genRiskAnalysisBtn": "Gerar análise de risco",
+            "askSomethingPlaceholder": "Pergunte algo à IA"
+          },
+          "warning": {
+            "selectASection": "Selecione um trecho para realizar ações com a IA",
+            "copiedToClipboard": "Copiado para área de transferência"
+          }
+        }
       }
     },
     "privacyPolicy": {

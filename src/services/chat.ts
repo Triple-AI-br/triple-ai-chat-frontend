@@ -85,11 +85,14 @@ const sendMessageStream = ({
 }: {
   prompt: string;
   callback(_: IMessageStream): void;
-  sessionId: number;
-  projectId: number;
+  sessionId?: number;
+  projectId?: number;
 }): Promise<void> => {
   const accessToken = getAccessTokenFromStorage();
-  const url = `${api.defaults.baseURL}/projects/${projectId}/chats/${sessionId}/stream`;
+  let url = `${api.defaults.baseURL}/contracts/query/stream`;
+  if (sessionId && projectId) {
+    url = `${api.defaults.baseURL}/projects/${projectId}/chats/${sessionId}/stream`;
+  }
   // View package documentation: https://www.npmjs.com/package/@microsoft/fetch-event-source
   return new Promise<void>((resolve, reject) => {
     const ctrl = new AbortController();
