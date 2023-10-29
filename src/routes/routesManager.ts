@@ -19,6 +19,8 @@ const getSourcesRoute = (id?: string | number): string => {
   if (id) return `/projects/${id}/sources`;
   return "/projects/:id/sources";
 };
+const getContractsRoute = (): string => "/contracts";
+const getContractAnalysisRoute = (): string => "/contracts/analysis";
 
 export const routesManager = {
   getSuperuserRoute,
@@ -33,4 +35,6 @@ export const routesManager = {
   getAdminRoute,
   getResetPasswordRoute,
   getSearchRoute,
+  getContractsRoute,
+  getContractAnalysisRoute,
 };
