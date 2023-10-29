@@ -294,8 +294,7 @@
           { "label": "Contrato de Servicio", "value": "Contrato de Servicio" },
           { "label": "Contrato de Compra y Venta", "value": "Contrato de Compra y Venta" },
           { "label": "Contrato de Donación", "value": "Contrato de Donación" },
-          { "label": "Contrato de Arrendamiento de Propiedad", "value": "Contrato de Arrendamiento de Propiedad" },
-          { "label": "Otros", "value": "Otros" }
+          { "label": "Contrato de Arrendamiento de Propiedad", "value": "Contrato de Arrendamiento de Propiedad" }
         ],
         "represents": [
           { "label": "Parte Contratante", "value": "Parte Contratante" },
@@ -304,7 +303,8 @@
           { "label": "Proveedor", "value": "Proveedor" },
           { "label": "Arrendador", "value": "Arrendador" },
           { "label": "Arrendatario", "value": "Arrendatario" },
-          { "label": "Otros", "value": "Otros" }
+          { "label": "Parte Reveladora", "value": "Parte Reveladora" },
+          { "label": "Parte Receptora", "value": "Parte Receptora" }
         ],
         "components": {
           "upload": {

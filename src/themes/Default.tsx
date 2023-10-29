@@ -5,7 +5,6 @@ const config: ThemeConfig = {
   token: {
     colorPrimary: "#1890ff",
     colorText: "#3e4352",
-    colorTextSecondary: "red",
     fontFamily: "Poppins",
   },
 };

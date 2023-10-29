@@ -4,15 +4,19 @@ import {
   MessageOutlined,
   PlusOutlined,
   QuestionCircleOutlined,
+  TagOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import { Button, Collapse, CollapseProps, Menu, MenuProps, Space, Tooltip, Typography } from "antd";
 import { useEffect, useRef, useState } from "react";
-import { MenuContainer, ToolContent } from "./styled";
+import { FileNameContainer, MenuContainer, ToolContent } from "./styled";
 import Search from "antd/es/input/Search";
 import { AnalysisList, QuestionList } from "../../../pages/ContractAnalysis";
 import Paragraph from "antd/es/typography/Paragraph";
 import ReactMarkdown from "react-markdown";
 import { useTranslation } from "react-i18next";
+import { useAppSelector } from "../../../redux/hooks";
+import { selectContract } from "../../../redux/contractSlice";
 
 type ContractToolProps = {
   analysis: AnalysisList[];
@@ -37,6 +41,7 @@ const ContractTool: React.FC<ContractToolProps> = ({
   appendBotAskReponse,
   appendBotRiskAnalysis,
 }) => {
+  const contract = useAppSelector(selectContract);
   const { t } = useTranslation();
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -195,6 +200,22 @@ const ContractTool: React.FC<ContractToolProps> = ({
 
   return (
     <MenuContainer ref={ref2}>
+      <FileNameContainer>
+        <Paragraph
+          ellipsis={{ rows: 1, expandable: false }}
+          style={{ fontSize: "16px", fontWeight: 600, lineHeight: "", margin: 0, width: "100%" }}
+        >
+          {contract.fileName}
+        </Paragraph>
+        <Typography.Text>
+          <TagOutlined style={{ marginRight: "5px" }} />
+          {contract.category}
+        </Typography.Text>
+        <Typography.Text type="secondary">
+          <UserOutlined style={{ marginRight: "5px" }} />
+          {contract.representPart}
+        </Typography.Text>
+      </FileNameContainer>
       <Menu
         onClick={(e) => setCurrent(e.key)}
         selectedKeys={[current]}

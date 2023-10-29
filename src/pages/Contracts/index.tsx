@@ -12,6 +12,7 @@ import { contractsServices } from "../../services";
 import { useAppDispatch } from "../../redux/hooks";
 import { actionAddContract } from "../../redux/contractSlice";
 import { useTranslation } from "react-i18next";
+import { RcFile } from "antd/es/upload";
 
 type FieldType = {
   contract_category: string;
@@ -22,7 +23,7 @@ const ContractPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const [file, setFile] = useState<string>();
+  const [fileConverted, setFileConverted] = useState<{ fileName: string; htmlContent: string }>();
 
   // 5MB
   const maxFileSize = 5_000_000;
@@ -44,11 +45,15 @@ const ContractPage: React.FC = () => {
     },
     customRequest({ file, onSuccess, onError }) {
       try {
+        const uploadedFile = file as RcFile;
         const formdata = new FormData();
         formdata.append("file", file as Blob, "Contrato.docx");
+        console.log(file);
         contractsServices
           .convertContractToHTML(formdata)
-          .then((res) => setFile(res.html_content))
+          .then((res) =>
+            setFileConverted({ htmlContent: res.html_content, fileName: uploadedFile.name }),
+          )
           .catch(() => message.error("File could not be converted to HTML"));
         if (onSuccess) onSuccess("sucess");
       } catch (error) {
@@ -58,10 +63,11 @@ const ContractPage: React.FC = () => {
   };
 
   const handleSubmit = (formValues: FieldType) => {
-    if (!file) return;
+    if (!fileConverted) return;
     dispatch(
       actionAddContract({
-        htmlContent: file,
+        htmlContent: fileConverted.htmlContent,
+        fileName: fileConverted.fileName,
         category: formValues.contract_category,
         representPart: formValues.represent_part,
       }),

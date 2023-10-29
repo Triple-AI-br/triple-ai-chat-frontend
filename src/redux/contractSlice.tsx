@@ -5,6 +5,7 @@ interface IContractState {
   htmlContent?: string;
   category?: string;
   representPart?: string;
+  fileName?: string;
 }
 
 const initialState: IContractState = {};
@@ -18,6 +19,7 @@ const contractSlice = createSlice({
       state.category = contract.category;
       state.representPart = contract.representPart;
       state.htmlContent = contract.htmlContent;
+      state.fileName = contract.fileName;
     },
     removeContract(state) {
       state.category = undefined;
