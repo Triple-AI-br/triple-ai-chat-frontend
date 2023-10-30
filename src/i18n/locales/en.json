@@ -294,8 +294,7 @@
         { "label": "Service Agreement", "value": "Service Agreement" },
         { "label": "Sale and Purchase Agreement", "value": "Sale and Purchase Agreement" },
         { "label": "Donation Agreement", "value": "Donation Agreement" },
-        { "label": "Property Lease Agreement", "value": "Property Lease Agreement" },
-        { "label": "Others", "value": "Others" }
+        { "label": "Property Lease Agreement", "value": "Property Lease Agreement" }
         ],
         "represents": [
           { "label": "Contracting Party", "value": "Contracting Party" },
@@ -304,7 +303,8 @@
           { "label": "Supplier", "value": "Supplier" },
           { "label": "Lessor", "value": "Lessor" },
           { "label": "Lessee", "value": "Lessee" },
-          { "label": "Others", "value": "Others" }
+          { "label": "Disclosing Party", "value": "Disclosing Party" },
+          { "label": "Receiving Party", "value": "Receiving Party" }
           ],
         "components": {
           "upload": {

@@ -10,6 +10,7 @@ export const AnalysisContainer = styled.div`
   @media (min-width: 1000px) {
     flex-direction: row;
     align-items: flex-start;
+    justify-content: space-between;
   }
 `;
 
@@ -19,9 +20,9 @@ export const ContractContainer = styled.div`
   height: 500px;
   flex-direction: column;
   @media (min-width: 1000px) {
-    width: 50%;
+    width: 40%;
+    flex: 1;
     height: 90svh;
-    padding: 0 32px;
     position: sticky;
     top: 0;
   }

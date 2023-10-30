@@ -3,6 +3,7 @@ import {
   Dropdown,
   FloatButton,
   MenuProps,
+  Space,
   Tooltip,
   Tour,
   TourProps,
@@ -16,6 +17,8 @@ import {
   FlagOutlined,
   MessageOutlined,
   QuestionCircleOutlined,
+  TagOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
@@ -66,6 +69,8 @@ const ContractAnalysis: React.FC = () => {
   const isDesktop = width >= DESKTOP_WIDTH;
   const loadingResponse = loadingAnalysis || loadingQuestion;
 
+  const analysisPrompt = `Você é advogado que defende os interesses da parte: ${contract.representPart}. Analise o trecho abaixo extraído de um contrato de: ${contract.category}.Identifique possíveis riscos para a parte: ${contract.representPart}. Caso a redação precisar ser modificada, faça essa sugestão e aponte qual a nova redação. Só sugira alterações se for estritamente necessário. Responda com o mínimo de palavras possível!\n\n${selectedText}`;
+
   const steps: TourProps["steps"] = [
     {
       title: t("pages.contractAnalysis.components.tutorial.firstStep.title"),
@@ -94,13 +99,6 @@ const ContractAnalysis: React.FC = () => {
     if (!selectedText) return;
     setAnalysis((prev) => [...prev, { selected: selectedText, response: "|" }]);
     try {
-      const analysisPrompt = `Você é advogado que defende os interesses da ${
-        contract.representPart
-      }. Analise o trecho abaixo extraído de um contrato${
-        contract.category !== "none" ? ` ${contract.category}` : null
-      }, identifique possíveis riscos${
-        contract.representPart !== "none" ? ` para a parte ${contract.representPart}` : null
-      } e, caso a redação precisar ser modificada, faça essa sugestão e aponte qual a nova redação. Só sugira alterações se for estritamente necessário. Responda com o mínimo de palavras possível!\n\n${selectedText}`;
       await chatService.sendMessageStream({
         prompt: analysisPrompt,
         callback(data) {
@@ -133,13 +131,10 @@ const ContractAnalysis: React.FC = () => {
     setLoadingQuestion(true);
     setQuestions((prev) => [...prev, { selected: selectedText, question: e, response: "|" }]);
     try {
-      const questionPrompt = `Você é advogado${
-        contract.representPart !== "none"
-          ? ` que defende os interesses da parte ${contract.representPart}`
-          : null
-      }. Analise o trecho abaixo extraído de um contrato${
-        contract.category !== "none" ? ` ${contract.category}` : null
-      } e responda a pergunta em seguida do trecho. Só sugira alterações se for estritamente necessário.\n\n${selectedText}. \n\n${e}`;
+      const questionPrompt = `Você é advogado que defende os interesses da parte: ${contract.representPart}. Considerando o trecho abaixo, delimitado por ---, extraído de um contrato de: ${contract.category}, responda a pergunta delimitada por ###:
+      \n\n###${e}###
+      \n\n---${selectedText}---`;
+
       await chatService.sendMessageStream({
         prompt: questionPrompt,
         callback(data) {
@@ -265,6 +260,24 @@ const ContractAnalysis: React.FC = () => {
       ) : null}
       <AnalysisContainer>
         <ContractContainer>
+          {!isDesktop ? (
+            <Space direction="vertical" style={{ width: "100%", gap: 0 }}>
+              <Paragraph
+                ellipsis={{ rows: 1, expandable: false }}
+                style={{ fontSize: "16px", fontWeight: 600, lineHeight: "", margin: 0 }}
+              >
+                {contract.fileName}
+              </Paragraph>
+              <Typography.Text>
+                <TagOutlined style={{ marginRight: "5px" }} />
+                {contract.category}
+              </Typography.Text>
+              <Typography.Text type="secondary">
+                <UserOutlined style={{ marginRight: "5px" }} />
+                {contract.representPart}
+              </Typography.Text>
+            </Space>
+          ) : null}
           <SelectedTextContainer>
             <Typography.Title
               level={5}

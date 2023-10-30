@@ -288,23 +288,23 @@
         "title": "Enviar um contrato",
         "categories": [
           { "label": "NDA (Acordo de Confidencialidade)", "value": "NDA" },
-          { "label": "Contrato de Empréstimo", "value": "Contrato de Empréstimo" },
-          { "label": "Contrato de Investimento", "value": "Contrato de Investimento" },
-          { "label": "Contrato de Financiamento", "value": "Contrato de Financiamento" },
-          { "label": "Contrato de Serviço", "value": "Contrato de Serviço" },
-          { "label": "Contrato de Compra e Venda", "value": "Contrato de Compra e Venda" },
-          { "label": "Contrato de Doação", "value": "Contrato de Doação" },
-          { "label": "Contrato de Locação de Imóvel", "value": "Contrato de Locação de Imóvel" },
-          { "label": "Outros", "value": "Outros" }
+          { "label": "Contrato de Empréstimo", "value": "Empréstimo" },
+          { "label": "Contrato de Investimento", "value": "Investimento" },
+          { "label": "Contrato de Financiamento", "value": "Financiamento" },
+          { "label": "Contrato de Serviço", "value": "Serviço" },
+          { "label": "Contrato de Compra e Venda", "value": "Compra e Venda" },
+          { "label": "Contrato de Doação", "value": "Doação" },
+          { "label": "Contrato de Locação de Imóvel", "value": "Locação de Imóvel" }
         ],
         "represents": [
-          { "label": "Parte Contratante", "value": "Parte Contratante" },
-          { "label": "Parte Contratada", "value": "Parte Contratada" },
+          { "label": "Parte Contratante", "value": "Contratante" },
+          { "label": "Parte Contratada", "value": "Contratada" },
           { "label": "Consumidor", "value": "Consumidor" },
           { "label": "Fornecedor", "value": "Fornecedor" },
           { "label": "Locador", "value": "Locador" },
           { "label": "Locatário", "value": "Locatário" },
-          { "label": "Outros", "value": "Outros" }
+          { "label": "Parte divulgadora", "value": "Divulgadora" },
+          { "label": "Parte receptora", "value": "Rececptora" }
         ],
         "components": {
           "upload": {
