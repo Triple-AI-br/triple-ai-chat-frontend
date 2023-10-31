@@ -304,7 +304,8 @@
           { "label": "Locador", "value": "Locador" },
           { "label": "Locatário", "value": "Locatário" },
           { "label": "Parte divulgadora", "value": "Divulgadora" },
-          { "label": "Parte receptora", "value": "Rececptora" }
+          { "label": "Parte receptora", "value": "Receptora" },
+          { "label": "Inquilino", "value": "Inquilino" }
         ],
         "components": {
           "upload": {
@@ -356,7 +357,11 @@
           },
           "warning": {
             "selectASection": "Selecione um trecho para realizar ações com a IA",
-            "copiedToClipboard": "Copiado para área de transferência"
+            "copiedToClipboard": "Copiado para área de transferência",
+            "deleteAnalysis": "Deletar essa análise",
+            "areYouSureToDeleteAnalysis": "Tem certeza que deseja deletar esta análise?",
+            "deleteQuestion": "Deletar essa pergunta",
+            "areYouSureToDeleteQuestion": "Tem certeza que deseja deletar esta pergunta?"
           }
         }
       }

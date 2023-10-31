@@ -304,7 +304,8 @@
           { "label": "Lessor", "value": "Lessor" },
           { "label": "Lessee", "value": "Lessee" },
           { "label": "Disclosing Party", "value": "Disclosing Party" },
-          { "label": "Receiving Party", "value": "Receiving Party" }
+          { "label": "Receiving Party", "value": "Receiving Party" },
+          { "label": "Tenant", "value": "Tenant" }
           ],
         "components": {
           "upload": {
@@ -356,7 +357,11 @@
           },
           "warning": {
             "selectASection": "Select a section to perform actions with AI",
-            "copiedToClipboard": "Copied to clipboard"
+            "copiedToClipboard": "Copied to clipboard",
+            "deleteAnalysis": "Delete this analysis",
+            "areYouSureToDeleteAnalysis": "Are you sure you want to delete this analysis?",
+            "deleteQuestion": "Delete this question",
+            "areYouSureToDeleteQuestion": "Are you sure you want to delete this question?"
           }
         }
       }

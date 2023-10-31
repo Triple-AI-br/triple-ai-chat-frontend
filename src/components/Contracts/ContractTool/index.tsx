@@ -1,4 +1,5 @@
 import {
+  DeleteOutlined,
   FlagOutlined,
   LoadingOutlined,
   MessageOutlined,
@@ -7,7 +8,17 @@ import {
   TagOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Button, Collapse, CollapseProps, Menu, MenuProps, Space, Tooltip, Typography } from "antd";
+import {
+  Button,
+  Collapse,
+  CollapseProps,
+  Menu,
+  MenuProps,
+  Popconfirm,
+  Space,
+  Tooltip,
+  Typography,
+} from "antd";
 import { useEffect, useRef, useState } from "react";
 import { FileNameContainer, MenuContainer, ToolContent } from "./styled";
 import Search from "antd/es/input/Search";
@@ -15,19 +26,22 @@ import { AnalysisList, QuestionList } from "../../../pages/ContractAnalysis";
 import Paragraph from "antd/es/typography/Paragraph";
 import ReactMarkdown from "react-markdown";
 import { useTranslation } from "react-i18next";
-import { useAppSelector } from "../../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { selectContract } from "../../../redux/contractSlice";
+import { actionDisplayNotification } from "../../../redux/notificationSlice";
 
 type ContractToolProps = {
   analysis: AnalysisList[];
   loadingAnalysis: boolean;
+  appendBotRiskAnalysis: () => void;
+  handleDeleteAnalysis: (id: string) => void;
 
   questions: QuestionList[];
   loadingQuestion: boolean;
-  selectedText?: string;
   appendBotAskReponse: (e: string) => void;
-  appendBotRiskAnalysis: () => void;
+  handleDeleteQuestion: (id: string) => void;
 
+  selectedText?: string;
   ref2: React.RefObject<HTMLDivElement>;
 };
 
@@ -40,9 +54,12 @@ const ContractTool: React.FC<ContractToolProps> = ({
   ref2,
   appendBotAskReponse,
   appendBotRiskAnalysis,
+  handleDeleteAnalysis,
+  handleDeleteQuestion,
 }) => {
   const contract = useAppSelector(selectContract);
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const bottomRef = useRef<HTMLDivElement>(null);
 
   const [current, setCurrent] = useState("analysis");
@@ -66,12 +83,40 @@ const ContractTool: React.FC<ContractToolProps> = ({
         <Space direction="vertical" style={{ width: "100%" }}>
           <Typography.Text type="secondary" italic>{`"${item.selected}"`}</Typography.Text>
           <Typography.Text>
-            {" "}
             <ReactMarkdown>{item.response}</ReactMarkdown>
           </Typography.Text>
         </Space>
       ),
-      extra: index === analysis.length - 1 && loadingAnalysis ? <LoadingOutlined /> : null,
+      extra:
+        index === analysis.length - 1 && loadingAnalysis ? (
+          <LoadingOutlined />
+        ) : (
+          <Popconfirm
+            title={t("pages.contractAnalysis.components.warning.deleteAnalysis")}
+            description={t("pages.contractAnalysis.components.warning.areYouSureToDeleteAnalysis")}
+            onConfirm={(e) => {
+              e?.stopPropagation();
+              handleDeleteAnalysis(item.id);
+              dispatch(
+                actionDisplayNotification({
+                  severity: "success",
+                  messages: [t("global.successDeletedMessage")],
+                }),
+              );
+            }}
+            onCancel={(e) => e?.stopPropagation()}
+            okText={t("global.confirm")}
+            cancelText={t("global.cancel")}
+          >
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+              style={{ border: "none", backgroundColor: "transparent" }}
+              icon={<DeleteOutlined />}
+            />
+          </Popconfirm>
+        ),
     };
   });
 
@@ -167,7 +212,37 @@ const ContractTool: React.FC<ContractToolProps> = ({
                           extra:
                             index === questions.length - 1 && loadingQuestion ? (
                               <LoadingOutlined />
-                            ) : null,
+                            ) : (
+                              <Popconfirm
+                                title={t(
+                                  "pages.contractAnalysis.components.warning.deleteQuestion",
+                                )}
+                                description={t(
+                                  "pages.contractAnalysis.components.warning.areYouSureToDeleteQuestion",
+                                )}
+                                onConfirm={(e) => {
+                                  e?.stopPropagation();
+                                  handleDeleteQuestion(question.id);
+                                  dispatch(
+                                    actionDisplayNotification({
+                                      severity: "success",
+                                      messages: [t("global.successDeletedMessage")],
+                                    }),
+                                  );
+                                }}
+                                onCancel={(e) => e?.stopPropagation()}
+                                okText={t("global.confirm")}
+                                cancelText={t("global.cancel")}
+                              >
+                                <Button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                  }}
+                                  style={{ border: "none", backgroundColor: "transparent" }}
+                                  icon={<DeleteOutlined />}
+                                />
+                              </Popconfirm>
+                            ),
                         },
                       ]}
                     />

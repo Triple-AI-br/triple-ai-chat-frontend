@@ -12,6 +12,7 @@ import {
 } from "antd";
 import { Base } from "../../layouts/Base";
 import { AnalysisContainer, ContractContainer, Page, SelectedTextContainer } from "./styled";
+import { v4 as uuidv4 } from "uuid";
 import {
   CopyOutlined,
   FlagOutlined,
@@ -34,11 +35,13 @@ import { routesManager } from "../../routes/routesManager";
 import { useWindowSize } from "../../utils/useWindowSize";
 
 export type AnalysisList = {
+  id: string;
   selected: string;
   response: string;
 };
 
 export type QuestionList = {
+  id: string;
   selected: string;
   question: string;
   response: string;
@@ -97,7 +100,7 @@ const ContractAnalysis: React.FC = () => {
 
   const appendBotAnalysisResponse = async () => {
     if (!selectedText) return;
-    setAnalysis((prev) => [...prev, { selected: selectedText, response: "|" }]);
+    setAnalysis((prev) => [...prev, { selected: selectedText, response: "|", id: uuidv4() }]);
     try {
       await chatService.sendMessageStream({
         prompt: analysisPrompt,
@@ -129,7 +132,10 @@ const ContractAnalysis: React.FC = () => {
   const appendBotAskReponse = async (e: string) => {
     if (!selectedText || !e) return;
     setLoadingQuestion(true);
-    setQuestions((prev) => [...prev, { selected: selectedText, question: e, response: "|" }]);
+    setQuestions((prev) => [
+      ...prev,
+      { selected: selectedText, question: e, response: "|", id: uuidv4() },
+    ]);
     try {
       const questionPrompt = `Você é advogado que defende os interesses da parte: ${contract.representPart}. Considerando o trecho abaixo, delimitado por ---, extraído de um contrato de: ${contract.category}, responda a pergunta delimitada por ###:
       \n\n###${e}###
@@ -230,6 +236,14 @@ const ContractAnalysis: React.FC = () => {
     },
   ];
 
+  const handleDeleteAnalysis = (id: string) => {
+    setAnalysis((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  const handleDeleteQuestion = (id: string) => {
+    setQuestions((prev) => prev.filter((item) => item.id !== id));
+  };
+
   useEffect(() => {
     const container = document.querySelector("#contract_container") as HTMLElement;
     if (contract.htmlContent) {
@@ -329,6 +343,8 @@ const ContractAnalysis: React.FC = () => {
           questions={questions}
           appendBotAskReponse={appendBotAskReponse}
           appendBotRiskAnalysis={appendBotAnalysisResponse}
+          handleDeleteAnalysis={handleDeleteAnalysis}
+          handleDeleteQuestion={handleDeleteQuestion}
         />
       </AnalysisContainer>
     </Base>
