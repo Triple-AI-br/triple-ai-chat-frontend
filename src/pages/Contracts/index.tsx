@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Form, Select, UploadProps, message } from "antd";
+import { Button, Form, FormInstance, Select, UploadProps, message } from "antd";
 import { Base } from "../../layouts/Base";
 import Dragger from "antd/es/upload/Dragger";
 import { InboxOutlined } from "@ant-design/icons";
 import { UploadContainer } from "./styled";
 import { contractCategories, represent } from "./constansts";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { routesManager } from "../../routes/routesManager";
 import { contractsServices } from "../../services";
@@ -23,6 +23,7 @@ const ContractPage: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
+  const form = useRef<FormInstance>(null);
   const [fileConverted, setFileConverted] = useState<{ fileName: string; htmlContent: string }>();
 
   // 5MB
@@ -48,7 +49,6 @@ const ContractPage: React.FC = () => {
         const uploadedFile = file as RcFile;
         const formdata = new FormData();
         formdata.append("file", file as Blob, "Contrato.docx");
-        console.log(file);
         contractsServices
           .convertContractToHTML(formdata)
           .then((res) =>
@@ -78,7 +78,21 @@ const ContractPage: React.FC = () => {
   return (
     <Base title={t("pages.contracts.title")}>
       <UploadContainer>
-        <Form layout="vertical" onFinish={handleSubmit}>
+        <Form
+          ref={form}
+          layout="vertical"
+          onFinish={handleSubmit}
+          onValuesChange={(values) => {
+            if (form.current) {
+              if (values.contract_category?.length) {
+                form.current.setFieldValue("contract_category", [values.contract_category.pop()]);
+              }
+              if (values.represent_part?.length) {
+                form.current.setFieldValue("represent_part", [values.represent_part.pop()]);
+              }
+            }
+          }}
+        >
           <Form.Item
             name="contract_file"
             valuePropName="fileList"
@@ -133,6 +147,7 @@ const ContractPage: React.FC = () => {
             ]}
           >
             <Select
+              mode="tags"
               options={contractCategories}
               showSearch
               placeholder={t("pages.contracts.components.contractCategory.placeholder")}
@@ -152,6 +167,11 @@ const ContractPage: React.FC = () => {
             ]}
           >
             <Select
+              mode="tags"
+              filterOption={filterOption}
+              showSearch
+              optionFilterProp="children"
+              allowClear
               options={represent}
               placeholder={t("pages.contracts.components.representPart.placeholder")}
             />
