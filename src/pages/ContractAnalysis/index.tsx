@@ -3,6 +3,7 @@ import {
   Dropdown,
   FloatButton,
   MenuProps,
+  Skeleton,
   Space,
   Tooltip,
   Tour,
@@ -22,57 +23,46 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { useEffect, useRef, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { selectContract } from "../../redux/contractSlice";
+import { useAppDispatch } from "../../redux/hooks";
 import { ContractTool } from "../../components/Contracts/ContractTool";
 import Search from "antd/es/input/Search";
-import { chatService } from "../../services";
+import { IContract, contractsServices } from "../../services";
 import Paragraph from "antd/es/typography/Paragraph";
 import { actionDisplayNotification } from "../../redux/notificationSlice";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { routesManager } from "../../routes/routesManager";
 import { useWindowSize } from "../../utils/useWindowSize";
+import { MenuContainer } from "../../components/Contracts/ContractTool/styled";
 
-export type AnalysisList = {
-  id: string;
-  selected: string;
-  response: string;
-};
-
-export type QuestionList = {
-  id: string;
-  selected: string;
-  question: string;
-  response: string;
-};
 const DESKTOP_WIDTH = 1000;
 
-const ContractAnalysis: React.FC = () => {
-  const contract = useAppSelector(selectContract);
+const ContractAnalysisPage = () => {
   const dispatch = useAppDispatch();
   const { width } = useWindowSize();
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
   const ref1 = useRef<HTMLDivElement>(null);
   const ref2 = useRef<HTMLDivElement>(null);
+  const firstRender = useRef(false);
 
+  const [contract, setContract] = useState<IContract>();
+  const [loading, setLoading] = useState<boolean>(true);
   const [openTutorial, setOpenTutorial] = useState<boolean>(
     !localStorage.getItem("contract_tutorial"),
   );
   const [selectedText, setSelectedText] = useState<string>();
   // analysis state
-  const [analysis, setAnalysis] = useState<AnalysisList[]>([]);
   const [loadingAnalysis, setLoadingAnalysis] = useState<boolean>(false);
   // Ask state
   const [askSomething, setAskSomething] = useState<boolean>(false);
-  const [questions, setQuestions] = useState<QuestionList[]>([]);
   const [loadingQuestion, setLoadingQuestion] = useState<boolean>(false);
 
   const isDesktop = width >= DESKTOP_WIDTH;
   const loadingResponse = loadingAnalysis || loadingQuestion;
 
-  const analysisPrompt = `Você é advogado que defende os interesses da parte: ${contract.representPart}. Analise o trecho abaixo extraído de um contrato de: ${contract.category}.Identifique possíveis riscos para a parte: ${contract.representPart}. Caso a redação precisar ser modificada, faça essa sugestão e aponte qual a nova redação. Só sugira alterações se for estritamente necessário. Responda com o mínimo de palavras possível!\n\n${selectedText}`;
+  const analysisPrompt = `Você é advogado que defende os interesses da parte: ${contract?.represented_party}. Analise o trecho abaixo extraído de um contrato de: ${contract?.contract_type}.Identifique possíveis riscos para a parte: ${contract?.represented_party}. Caso a redação precisar ser modificada, faça essa sugestão e aponte qual a nova redação. Só sugira alterações se for estritamente necessário. Responda com o mínimo de palavras possível!\n\n${selectedText}`;
 
   const steps: TourProps["steps"] = [
     {
@@ -99,28 +89,44 @@ const ContractAnalysis: React.FC = () => {
   ];
 
   const appendBotAnalysisResponse = async () => {
-    if (!selectedText) return;
-    setAnalysis((prev) => [...prev, { selected: selectedText, response: "|", id: uuidv4() }]);
+    if (!selectedText || !contract) return;
+    setContract((prev) => {
+      if (!prev) return;
+      return {
+        ...prev,
+        risk_analysis: [
+          ...prev.risk_analysis,
+          { selected: selectedText, response: "|", id: uuidv4() },
+        ],
+      };
+    });
     try {
-      await chatService.sendMessageStream({
+      await contractsServices.sendMessageStreamContract({
         prompt: analysisPrompt,
         callback(data) {
           setLoadingAnalysis(true);
-          setAnalysis((prev) => {
-            const lastAnalysis = prev[prev.length - 1];
+          setContract((prev) => {
+            if (!prev) return;
+            const lastAnalysis = prev.risk_analysis[prev.risk_analysis.length - 1];
             if (data.finish_reason) {
               lastAnalysis["response"] = lastAnalysis.response.slice(0, -1);
               setLoadingAnalysis(false);
-              return [...prev];
+              return { ...prev, risk_analysis: [...(prev.risk_analysis || [])] };
             } else {
               lastAnalysis["response"] = lastAnalysis.response.slice(0, -1) + data.delta + "|";
-              return [...prev];
+              return { ...prev, risk_analysis: [...(prev.risk_analysis || [])] };
             }
           });
         },
       });
     } catch (err) {
-      setAnalysis((prev) => prev.slice(0, -1));
+      setContract((prev) => {
+        if (!prev) return;
+        return {
+          ...prev,
+          risk_analysis: prev.risk_analysis.slice(0, -1),
+        };
+      });
       dispatch(
         actionDisplayNotification({
           messages: [(err as { message: string }).message],
@@ -130,36 +136,50 @@ const ContractAnalysis: React.FC = () => {
   };
 
   const appendBotAskReponse = async (e: string) => {
-    if (!selectedText || !e) return;
+    if (!selectedText || !e || !contract) return;
     setLoadingQuestion(true);
-    setQuestions((prev) => [
-      ...prev,
-      { selected: selectedText, question: e, response: "|", id: uuidv4() },
-    ]);
+    setAskSomething(false);
+    setContract((prev) => {
+      if (!prev) return;
+      return {
+        ...prev,
+        questions: [
+          ...prev.questions,
+          { selected: selectedText, question: e, response: "|", id: uuidv4() },
+        ],
+      };
+    });
     try {
-      const questionPrompt = `Você é advogado que defende os interesses da parte: ${contract.representPart}. Considerando o trecho abaixo, delimitado por ---, extraído de um contrato de: ${contract.category}, responda a pergunta delimitada por ###:
+      const questionPrompt = `Você é advogado que defende os interesses da parte: ${contract?.represented_party}. Considerando o trecho abaixo, delimitado por ---, extraído de um contrato de: ${contract?.contract_type}, responda a pergunta delimitada por ###:
       \n\n###${e}###
       \n\n---${selectedText}---`;
 
-      await chatService.sendMessageStream({
+      await contractsServices.sendMessageStreamContract({
         prompt: questionPrompt,
         callback(data) {
           setLoadingQuestion(true);
-          setQuestions((prev) => {
-            const lastQuestion = prev[prev.length - 1];
+          setContract((prev) => {
+            if (!prev) return;
+            const lastQuestion = prev.questions[prev.questions.length - 1];
             if (data.finish_reason) {
               lastQuestion.response = lastQuestion.response.slice(0, -1);
               setLoadingQuestion(false);
-              return [...prev];
+              return { ...prev, questions: [...(prev.questions || [])] };
             } else {
               lastQuestion.response = lastQuestion.response.slice(0, -1) + data.delta + "|";
-              return [...prev];
+              return { ...prev, questions: [...(prev.questions || [])] };
             }
           });
         },
       });
     } catch (err) {
-      setQuestions((prev) => prev.slice(0, -1));
+      setContract((prev) => {
+        if (!prev) return;
+        return {
+          ...prev,
+          risk_analysis: prev.questions.slice(0, -1),
+        };
+      });
       dispatch(
         actionDisplayNotification({
           messages: [(err as { message: string }).message],
@@ -180,7 +200,7 @@ const ContractAnalysis: React.FC = () => {
     {
       label: askSomething ? (
         <Search
-          autoFocus={askSomething}
+          autoFocus
           placeholder={t("pages.contractAnalysis.components.menuTool.askSomethingPlaceholder")}
           onSearch={appendBotAskReponse}
           allowClear
@@ -237,26 +257,111 @@ const ContractAnalysis: React.FC = () => {
   ];
 
   const handleDeleteAnalysis = (id: string) => {
-    setAnalysis((prev) => prev.filter((item) => item.id !== id));
+    setContract((prev) => {
+      if (!prev) return;
+      return {
+        ...prev,
+        risk_analysis: prev.risk_analysis.filter((item) => item.id !== id),
+      };
+    });
   };
 
   const handleDeleteQuestion = (id: string) => {
-    setQuestions((prev) => prev.filter((item) => item.id !== id));
+    setContract((prev) => {
+      if (!prev) return;
+      return {
+        ...prev,
+        questions: prev.questions.filter((item) => item.id !== id),
+      };
+    });
+  };
+
+  const setContractToState = async () => {
+    try {
+      setLoading(true);
+      if (!id) {
+        navigate(routesManager.getContractsRoute());
+        return;
+      }
+      const fetchContract = await contractsServices.getContract(id);
+      setContract(fetchContract);
+    } catch (er) {
+      dispatch(
+        actionDisplayNotification({
+          severity: "warning",
+          messages: [t("global.failureRequestMessage")],
+        }),
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
+    setContractToState();
+  }, []);
+
+  useEffect(() => {
+    if (!contract || loading) return;
     const container = document.querySelector("#contract_container") as HTMLElement;
-    if (contract.htmlContent) {
-      container.innerHTML = contract.htmlContent;
-    } else {
-      navigate(routesManager.getContractsRoute());
+    if (contract.html_content && container) {
+      container.innerHTML = contract.html_content;
     }
+    // Ao primeiro render do contrato não será feita alterações.
+    if (!firstRender.current) {
+      firstRender.current = true;
+      return;
+    }
+    const contractUpdates: Partial<Omit<IContract, "id">> = {
+      risk_analysis: contract.risk_analysis,
+      questions: contract.questions,
+    };
+    contractsServices.updateContract(contract.id, contractUpdates);
   }, [contract]);
+
+  if (loading || !contract) {
+    return (
+      <Base title="Contract Analysis">
+        <AnalysisContainer>
+          <ContractContainer>
+            <Space direction="vertical" style={{ width: "100%", gap: 0, marginBottom: "30px" }}>
+              <Skeleton
+                active
+                loading={!isDesktop}
+                paragraph={{ rows: 2, width: ["30%", "40%"] }}
+              />
+              <Skeleton active paragraph={{ rows: 1, width: ["70%"] }} />
+            </Space>
+            <Page>
+              <Skeleton active paragraph={{ rows: 25 }} />
+            </Page>
+          </ContractContainer>
+          <MenuContainer>
+            <Space direction="vertical" style={{ width: "100%", gap: 0, marginBottom: "30px" }}>
+              <Skeleton active loading={isDesktop} paragraph={{ rows: 1, width: ["70%"] }} />
+            </Space>
+            <Space
+              direction="horizontal"
+              style={{ width: "100%", overflow: "hidden", marginBottom: "30px" }}
+            >
+              <Skeleton.Input active size="large" />
+              <Skeleton.Input active size="large" />
+              <Skeleton.Input active size="large" />
+            </Space>
+            <Skeleton.Button active size="large" block />
+            <Space direction="vertical" style={{ width: "100%", margin: "30px 0" }}>
+              <Skeleton active paragraph={{ rows: 5 }} />
+            </Space>
+          </MenuContainer>
+        </AnalysisContainer>
+      </Base>
+    );
+  }
 
   return (
     <Base title="Contract Analysis">
       <FloatButton.BackTop shape="square" />
-      {isDesktop ? (
+      {isDesktop && !loading ? (
         <Tour
           open={openTutorial}
           onClose={() => {
@@ -280,15 +385,15 @@ const ContractAnalysis: React.FC = () => {
                 ellipsis={{ rows: 1, expandable: false }}
                 style={{ fontSize: "16px", fontWeight: 600, lineHeight: "", margin: 0 }}
               >
-                {contract.fileName}
+                {contract?.title}
               </Paragraph>
               <Typography.Text>
                 <TagOutlined style={{ marginRight: "5px" }} />
-                {contract.category}
+                {contract?.contract_type}
               </Typography.Text>
               <Typography.Text type="secondary">
                 <UserOutlined style={{ marginRight: "5px" }} />
-                {contract.representPart}
+                {contract?.represented_party}
               </Typography.Text>
             </Space>
           ) : null}
@@ -308,7 +413,10 @@ const ContractAnalysis: React.FC = () => {
                 ellipsis={{
                   rows: 1,
                   expandable: false,
-                  suffix: selectedText.split(" ").reverse().slice(0, 3).reverse().join(" "),
+                  suffix:
+                    selectedText.split(" ").length > 15
+                      ? selectedText.split(" ").slice(-3).join(" ")
+                      : undefined,
                 }}
               >
                 {selectedText}
@@ -324,10 +432,13 @@ const ContractAnalysis: React.FC = () => {
               menu={{ items }}
               trigger={["contextMenu"]}
               open={!!selectedText && (askSomething || undefined)}
+              autoFocus
+              align={{}}
             >
               <div
                 id="contract_container"
                 onMouseUp={handleMouseUp}
+                onFocus={() => setSelectedText("")}
                 onDoubleClick={handleMouseUp}
                 style={{ display: "relative" }}
               ></div>
@@ -336,11 +447,10 @@ const ContractAnalysis: React.FC = () => {
         </ContractContainer>
         <ContractTool
           ref2={ref2}
-          analysis={analysis}
           selectedText={selectedText}
           loadingAnalysis={loadingAnalysis}
           loadingQuestion={loadingQuestion}
-          questions={questions}
+          contract={contract}
           appendBotAskReponse={appendBotAskReponse}
           appendBotRiskAnalysis={appendBotAnalysisResponse}
           handleDeleteAnalysis={handleDeleteAnalysis}
@@ -351,4 +461,4 @@ const ContractAnalysis: React.FC = () => {
   );
 };
 
-export { ContractAnalysis };
+export { ContractAnalysisPage };

@@ -1,4 +1,4 @@
-import i18n from "../../i18n";
+import i18n from "../../../i18n";
 
 export const contractCategories = i18n.t("pages.contracts.categories", { returnObjects: true }) as {
   label: string;
