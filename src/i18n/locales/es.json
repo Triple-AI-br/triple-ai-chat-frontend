@@ -287,6 +287,7 @@
         "tab": "contratos",
         "title": "Subir un contrato",
         "newContract": "Nuevo Contrato",
+        "editContract": "Editar Contrato",
         "categories": [
           { "label": "NDA (Acuerdo de No Divulgación)", "value": "NDA" },
           { "label": "Contrato de Préstamo", "value": "Contrato de Préstamo" },

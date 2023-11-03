@@ -287,6 +287,7 @@
         "tab": "contratos",
         "title": "Enviar um contrato",
         "newContract": "Novo contrato",
+        "editContract": "Editar contrato",
         "categories": [
           { "label": "NDA (Acordo de Confidencialidade)", "value": "NDA" },
           { "label": "Contrato de Empréstimo", "value": "Empréstimo" },

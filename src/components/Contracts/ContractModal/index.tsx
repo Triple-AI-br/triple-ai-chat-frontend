@@ -128,7 +128,7 @@ const ContractModal: React.FC<ContractModal> = ({
 
   return (
     <Modal
-      title="New contract"
+      title={isEditing ? t("pages.contracts.editContract") : t("pages.contracts.newContract")}
       open={open}
       onCancel={handleClose}
       destroyOnClose={true}
