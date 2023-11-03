@@ -286,6 +286,7 @@
       "contracts": {
         "tab": "contratos",
         "title": "Subir un contrato",
+        "newContract": "Nuevo Contrato",
         "categories": [
           { "label": "NDA (Acuerdo de No Divulgación)", "value": "NDA" },
           { "label": "Contrato de Préstamo", "value": "Contrato de Préstamo" },
@@ -320,12 +321,18 @@
             "label": "Parte que representas",
             "placeholder": "¿Qué parte estás representando?"
           },
+          "card": {
+            "totalAnalysis": "Análisis Total",
+            "totalQuestions": "Preguntas Totales"
+          },
           "warning": {
             "pleaseUploadContract": "Por favor, sube un contrato",
             "sizeExceeded": "Tamaño del archivo excedido ({{size}}MB)",
             "mustBeFormat": "Debe ser un archivo .docx",
             "pleaseSelectCategory": "Por favor, selecciona una categoría de contrato",
-            "pleaseSelectPartYouRepresent": "Por favor, selecciona qué parte representas"
+            "pleaseSelectPartYouRepresent": "Por favor, selecciona qué parte representas",
+            "areYouSureToDeleteContract": "¿Está seguro de que desea eliminar el contrato:\n \"{{contract_name}}\"?",
+            "youDontHaveContract": "Aún no tienes contratos. ¡Carga uno usando el botón de arriba!"
           }
         }
       },

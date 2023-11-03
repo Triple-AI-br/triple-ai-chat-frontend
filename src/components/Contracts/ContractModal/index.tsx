@@ -6,15 +6,17 @@ import { routesManager } from "../../../routes/routesManager";
 import { useAppDispatch } from "../../../redux/hooks";
 import { useTranslation } from "react-i18next";
 import { useRef, useState } from "react";
-import { contractsServices } from "../../../services";
+import { IContract, contractsServices } from "../../../services";
 import { RcFile } from "antd/es/upload";
 import { contractCategories, represent } from "./constansts";
 import { actionDisplayNotification } from "../../../redux/notificationSlice";
 
 type ContractModal = {
   open: boolean;
-  handleClose: () => void;
+  handleCancel: () => void;
   handleSubmit?: () => void;
+  contractToEdit?: IContract;
+  fetchContracts: () => Promise<void>;
 };
 
 type FieldType = {
@@ -22,7 +24,12 @@ type FieldType = {
   represent_part: string[];
 };
 
-const ContractModal: React.FC<ContractModal> = ({ open, handleClose }) => {
+const ContractModal: React.FC<ContractModal> = ({
+  open,
+  handleCancel,
+  contractToEdit,
+  fetchContracts,
+}) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
@@ -31,6 +38,8 @@ const ContractModal: React.FC<ContractModal> = ({ open, handleClose }) => {
 
   // 5MB
   const maxFileSize = 5_000_000;
+
+  const isEditing = !!contractToEdit;
 
   const filterOption = (input: string, option?: { label: string; value: string }) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
@@ -58,28 +67,62 @@ const ContractModal: React.FC<ContractModal> = ({ open, handleClose }) => {
     },
   };
 
+  const handleClose = () => {
+    form.current?.resetFields();
+    if (handleCancel) {
+      handleCancel();
+    }
+  };
+
   const handleSubmit = async (formValues: FieldType) => {
-    if (!file) return;
+    if (!file && !isEditing) return;
     try {
-      const formdata = new FormData();
-      formdata.append("file", file, file.name);
-      formdata.append(
-        "contract",
-        JSON.stringify({
-          represented_party: formValues.represent_part[0],
+      if (isEditing) {
+        const newContractInfo = {
           contract_type: formValues.contract_category[0],
-        }),
-      );
-      const createdContract = await contractsServices.postContract(formdata);
-      const { id } = createdContract;
-      navigate(routesManager.getContractAnalysisRoute(id));
+          represented_party: formValues.represent_part[0],
+        };
+
+        await contractsServices.updateContract(contractToEdit.id, newContractInfo);
+        dispatch(
+          actionDisplayNotification({
+            severity: "success",
+            messages: [t("global.successUpdateMessage")],
+          }),
+        );
+      } else if (file) {
+        const formdata = new FormData();
+        formdata.append("file", file, file.name);
+        formdata.append(
+          "contract",
+          JSON.stringify({
+            represented_party: formValues.represent_part[0],
+            contract_type: formValues.contract_category[0],
+          }),
+        );
+        const createdContract = await contractsServices.postContract(formdata);
+        const { id } = createdContract;
+        navigate(routesManager.getContractAnalysisRoute(id));
+      }
     } catch (er) {
-      dispatch(
-        actionDisplayNotification({
-          severity: "warning",
-          messages: [t("global.failureUploadMessage")],
-        }),
-      );
+      if (isEditing) {
+        dispatch(
+          actionDisplayNotification({
+            severity: "warning",
+            messages: [t("global.failureUpdateMessage")],
+          }),
+        );
+      } else {
+        dispatch(
+          actionDisplayNotification({
+            severity: "warning",
+            messages: [t("global.failureUploadMessage")],
+          }),
+        );
+      }
+    } finally {
+      handleClose();
+      fetchContracts();
     }
   };
 
@@ -87,6 +130,9 @@ const ContractModal: React.FC<ContractModal> = ({ open, handleClose }) => {
     <Modal
       title="New contract"
       open={open}
+      onCancel={handleClose}
+      destroyOnClose={true}
+      afterClose={handleClose}
       footer={[
         <Button key="cancel" onClick={() => handleClose()}>
           {t("global.cancel")}
@@ -99,8 +145,17 @@ const ContractModal: React.FC<ContractModal> = ({ open, handleClose }) => {
       <Form
         id="contract_form"
         ref={form}
+        preserve={false}
         layout="vertical"
         onFinish={handleSubmit}
+        initialValues={
+          isEditing
+            ? {
+                contract_category: contractToEdit.contract_type,
+                represent_part: contractToEdit.represented_party,
+              }
+            : {}
+        }
         onValuesChange={(values) => {
           if (form.current) {
             if (values.contract_category?.length) {
@@ -116,36 +171,57 @@ const ContractModal: React.FC<ContractModal> = ({ open, handleClose }) => {
           name="contract_file"
           valuePropName="fileList"
           getValueFromEvent={(event) => event?.fileList}
-          rules={[
-            {
-              required: true,
-              message: t("pages.contracts.components.warning.pleaseUploadContract"),
-            },
-            {
-              validator(_, fileList) {
-                return new Promise((resolve, reject) => {
-                  // Limitação de tamanho do contrato em bytes (5MB)
-                  if (fileList && fileList.length && fileList[0].size > maxFileSize) {
-                    reject(
-                      t("pages.contracts.components.warning.sizeExceeded", {
-                        size: maxFileSize / 1_000_000,
-                      }),
-                    );
-                  } else if (
-                    fileList &&
-                    fileList.length &&
-                    !fileList[0].type.includes("wordprocessingml")
-                  ) {
-                    reject(t("pages.contracts.components.warning.mustBeFormat"));
-                  } else {
-                    resolve("sucess");
-                  }
-                });
-              },
-            },
-          ]}
+          rules={
+            isEditing
+              ? undefined
+              : [
+                  {
+                    required: true,
+                    message: t("pages.contracts.components.warning.pleaseUploadContract"),
+                  },
+                  {
+                    validator(_, fileList) {
+                      return new Promise((resolve, reject) => {
+                        // Limitação de tamanho do contrato em bytes (5MB)
+                        if (fileList && fileList.length && fileList[0].size > maxFileSize) {
+                          reject(
+                            t("pages.contracts.components.warning.sizeExceeded", {
+                              size: maxFileSize / 1_000_000,
+                            }),
+                          );
+                        } else if (
+                          fileList &&
+                          fileList.length &&
+                          !fileList[0].type.includes("wordprocessingml")
+                        ) {
+                          reject(t("pages.contracts.components.warning.mustBeFormat"));
+                        } else {
+                          resolve("sucess");
+                        }
+                      });
+                    },
+                  },
+                ]
+          }
         >
-          <Dragger multiple={false} maxCount={1} {...props}>
+          <Dragger
+            defaultFileList={
+              isEditing
+                ? [
+                    {
+                      name: contractToEdit.title,
+                      uid: String(contractToEdit.id),
+                      status: "done",
+                      response: { status: "success" },
+                    },
+                  ]
+                : []
+            }
+            disabled={isEditing}
+            multiple={false}
+            maxCount={1}
+            {...props}
+          >
             <p className="ant-upload-drag-icon">
               <InboxOutlined />
             </p>

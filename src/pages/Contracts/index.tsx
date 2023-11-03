@@ -1,33 +1,74 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Card, Tooltip, Typography } from "antd";
+import { Button, Card, Skeleton, Typography } from "antd";
 import { Base } from "../../layouts/Base";
-import { TabContainer, ContractsContainer, TitleContainer } from "./styled";
+import { TabContainer, ContractsContainer } from "./styled";
 import { useTranslation } from "react-i18next";
 import { ContractModal } from "../../components/Contracts/ContractModal";
 import { useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import { IContract, contractsServices } from "../../services";
-import { routesManager } from "../../routes/routesManager";
-import { useNavigate } from "react-router-dom";
+import { ContractCard } from "../../components/Contracts/ContractCard";
+import { useAppDispatch } from "../../redux/hooks";
+import { actionDisplayNotification } from "../../redux/notificationSlice";
 
 const ContractPage: React.FC = () => {
-  const navigate = useNavigate();
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+
   const [openContractModal, setOpenContractModal] = useState(false);
   const [contracts, setContracts] = useState<IContract[]>();
+  const [contractToEdit, setContractToEdit] = useState<IContract>();
+  const [loading, setLoading] = useState(true);
 
   const setContractListToState = async () => {
-    const fetchContracts = await contractsServices.listContracts(30, 0);
-    setContracts(fetchContracts);
+    try {
+      setLoading(true);
+      const fetchContracts = await contractsServices.listContracts(30, 0);
+      setContracts(fetchContracts);
+    } catch (err) {
+      dispatch(
+        actionDisplayNotification({
+          severity: "warning",
+          messages: [t("global.failureRequestMessage")],
+        }),
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     setContractListToState();
   }, []);
 
+  if (loading) {
+    return (
+      <Base title={t("pages.contracts.title")}>
+        <>
+          <TabContainer>
+            <Skeleton.Button active size="large" style={{ width: "200px" }} />
+          </TabContainer>
+          <ContractsContainer>
+            {Array.from(Array(10)).map((_, index) => (
+              <Card key={index} loading={true} />
+            ))}
+          </ContractsContainer>
+        </>
+      </Base>
+    );
+  }
+
   return (
     <Base title={t("pages.contracts.title")}>
-      <ContractModal open={openContractModal} handleClose={() => setOpenContractModal(false)} />
+      <ContractModal
+        open={openContractModal || !!contractToEdit}
+        handleCancel={() => {
+          setOpenContractModal(false);
+          setContractToEdit(undefined);
+        }}
+        fetchContracts={setContractListToState}
+        contractToEdit={contractToEdit}
+      />
       <>
         <TabContainer>
           <Button
@@ -35,27 +76,23 @@ const ContractPage: React.FC = () => {
             icon={<PlusOutlined />}
             onClick={() => setOpenContractModal((prev) => !prev)}
           >
-            Novo contrato
+            {t("pages.contracts.newContract")}
           </Button>
         </TabContainer>
+        {!contracts?.length ? (
+          <Typography.Text>
+            {t("pages.contracts.components.warning.youDontHaveContract")}
+          </Typography.Text>
+        ) : null}
         <ContractsContainer>
           {contracts?.length
             ? contracts.map((contract) => (
-                <Card
+                <ContractCard
                   key={contract.id}
-                  style={{ overflow: "hidden", cursor: "pointer" }}
-                  onClick={() => navigate(routesManager.getContractAnalysisRoute(contract.id))}
-                  title={
-                    <TitleContainer>
-                      <Tooltip title={contract.title}>
-                        <Typography.Paragraph ellipsis={{ rows: 1 }} style={{ width: "100%" }}>
-                          {contract.title}
-                        </Typography.Paragraph>
-                      </Tooltip>
-                    </TitleContainer>
-                  }
-                  type="inner"
-                ></Card>
+                  fetchContracts={setContractListToState}
+                  contract={contract}
+                  setContractToEdit={setContractToEdit}
+                ></ContractCard>
               ))
             : null}
         </ContractsContainer>
