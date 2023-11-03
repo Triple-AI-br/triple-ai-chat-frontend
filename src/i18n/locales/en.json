@@ -286,6 +286,8 @@
       "contracts":{
         "tab": "contracts",
         "title": "Upload a contract",
+        "newContract": "New Contract",
+        "editContract": "Edit contract",
         "categories": [
         { "label": "NDA (Non-Disclosure Agreement)", "value": "NDA" },
         { "label": "Loan Agreement", "value": "Loan Agreement" },
@@ -320,12 +322,18 @@
             "label": "Part you represent",
             "placeholder": "What part are you representing?"
           },
+          "card": {
+            "totalAnalysis": "Total analysis",
+            "totalQuestions": "Total questions"
+          },
           "warning": {
             "pleaseUploadContract": "Please upload a contract",
             "sizeExceeded": "File size exceeded ({{size}}MB)",
             "mustBeFormat": "Must be a .docx file",
             "pleaseSelectCategory": "Please select a contract category",
-            "pleaseSelectPartYouRepresent": "Please select which part you represent"
+            "pleaseSelectPartYouRepresent": "Please select which part you represent",
+            "areYouSureToDeleteContract": "Are you sure you want to delete the contract:\n \"{{contract_name}}\"?",
+            "youDontHaveContract": "You don't have contracts yet. Upload one using the button above!"
           }
         }
       },

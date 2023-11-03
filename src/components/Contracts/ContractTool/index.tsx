@@ -22,42 +22,38 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { FileNameContainer, MenuContainer, ToolContent } from "./styled";
 import Search from "antd/es/input/Search";
-import { AnalysisList, QuestionList } from "../../../pages/ContractAnalysis";
 import Paragraph from "antd/es/typography/Paragraph";
 import ReactMarkdown from "react-markdown";
 import { useTranslation } from "react-i18next";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { selectContract } from "../../../redux/contractSlice";
+import { useAppDispatch } from "../../../redux/hooks";
 import { actionDisplayNotification } from "../../../redux/notificationSlice";
+import { IContract } from "../../../services";
 
 type ContractToolProps = {
-  analysis: AnalysisList[];
   loadingAnalysis: boolean;
   appendBotRiskAnalysis: () => void;
   handleDeleteAnalysis: (id: string) => void;
 
-  questions: QuestionList[];
   loadingQuestion: boolean;
   appendBotAskReponse: (e: string) => void;
   handleDeleteQuestion: (id: string) => void;
 
   selectedText?: string;
   ref2: React.RefObject<HTMLDivElement>;
+  contract: IContract;
 };
 
 const ContractTool: React.FC<ContractToolProps> = ({
-  analysis,
   loadingAnalysis,
-  questions,
   loadingQuestion,
   selectedText,
   ref2,
+  contract,
   appendBotAskReponse,
   appendBotRiskAnalysis,
   handleDeleteAnalysis,
   handleDeleteQuestion,
 }) => {
-  const contract = useAppSelector(selectContract);
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -65,7 +61,7 @@ const ContractTool: React.FC<ContractToolProps> = ({
   const [current, setCurrent] = useState("analysis");
   const [selectedAnalysis, setSelectedAnalysis] = useState("1");
 
-  const analysisItems: CollapseProps["items"] = analysis.map((item, index) => {
+  const analysisItems: CollapseProps["items"] = contract.risk_analysis.map((item, index) => {
     return {
       key: index,
       label: (
@@ -88,7 +84,7 @@ const ContractTool: React.FC<ContractToolProps> = ({
         </Space>
       ),
       extra:
-        index === analysis.length - 1 && loadingAnalysis ? (
+        index === contract.risk_analysis.length - 1 && loadingAnalysis ? (
           <LoadingOutlined />
         ) : (
           <Popconfirm
@@ -187,12 +183,12 @@ const ContractTool: React.FC<ContractToolProps> = ({
               style={{ marginBottom: "40px" }}
             />
             <Space direction="vertical" style={{ width: "100%" }}>
-              {!!questions.length &&
-                questions.map((question, index) => {
+              {!!contract.questions.length &&
+                contract.questions.map((question, index) => {
                   return (
                     <Collapse
                       key={index}
-                      defaultActiveKey={index === questions.length - 1 ? "1" : undefined}
+                      defaultActiveKey={index === contract.questions.length - 1 ? "1" : undefined}
                       items={[
                         {
                           key: "1",
@@ -210,7 +206,7 @@ const ContractTool: React.FC<ContractToolProps> = ({
                             </>
                           ),
                           extra:
-                            index === questions.length - 1 && loadingQuestion ? (
+                            index === contract.questions.length - 1 && loadingQuestion ? (
                               <LoadingOutlined />
                             ) : (
                               <Popconfirm
@@ -280,15 +276,15 @@ const ContractTool: React.FC<ContractToolProps> = ({
           ellipsis={{ rows: 1, expandable: false }}
           style={{ fontSize: "16px", fontWeight: 600, lineHeight: "", margin: 0, width: "100%" }}
         >
-          {contract.fileName}
+          {contract?.title}
         </Paragraph>
         <Typography.Text>
           <TagOutlined style={{ marginRight: "5px" }} />
-          {contract.category}
+          {contract?.contract_type}
         </Typography.Text>
         <Typography.Text type="secondary">
           <UserOutlined style={{ marginRight: "5px" }} />
-          {contract.representPart}
+          {contract?.represented_party}
         </Typography.Text>
       </FileNameContainer>
       <Menu

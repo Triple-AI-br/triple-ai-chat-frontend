@@ -1,13 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { notificationSliceReducer } from "./notificationSlice";
 import { authSliceReducer } from "./authenticationSlice";
-import { contractSliceReducer } from "./contractSlice";
 
 const store = configureStore({
   reducer: {
     notification: notificationSliceReducer,
     auth: authSliceReducer,
-    contract: contractSliceReducer,
   },
 });
 
