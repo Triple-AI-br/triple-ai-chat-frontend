@@ -1,188 +1,102 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Form, FormInstance, Select, UploadProps, message } from "antd";
+import { Button, Card, Skeleton, Typography } from "antd";
 import { Base } from "../../layouts/Base";
-import Dragger from "antd/es/upload/Dragger";
-import { InboxOutlined } from "@ant-design/icons";
-import { UploadContainer } from "./styled";
-import { contractCategories, represent } from "./constansts";
-import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { routesManager } from "../../routes/routesManager";
-import { contractsServices } from "../../services";
-import { useAppDispatch } from "../../redux/hooks";
-import { actionAddContract } from "../../redux/contractSlice";
+import { TabContainer, ContractsContainer } from "./styled";
 import { useTranslation } from "react-i18next";
-import { RcFile } from "antd/es/upload";
-
-type FieldType = {
-  contract_category: string;
-  represent_part: string;
-};
+import { ContractModal } from "../../components/Contracts/ContractModal";
+import { useEffect, useState } from "react";
+import { PlusOutlined } from "@ant-design/icons";
+import { IContract, contractsServices } from "../../services";
+import { ContractCard } from "../../components/Contracts/ContractCard";
+import { useAppDispatch } from "../../redux/hooks";
+import { actionDisplayNotification } from "../../redux/notificationSlice";
 
 const ContractPage: React.FC = () => {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const form = useRef<FormInstance>(null);
-  const [fileConverted, setFileConverted] = useState<{ fileName: string; htmlContent: string }>();
+  const dispatch = useAppDispatch();
 
-  // 5MB
-  const maxFileSize = 5_000_000;
+  const [openContractModal, setOpenContractModal] = useState(false);
+  const [contracts, setContracts] = useState<IContract[]>();
+  const [contractToEdit, setContractToEdit] = useState<IContract>();
+  const [loading, setLoading] = useState(true);
 
-  const filterOption = (input: string, option?: { label: string; value: string }) =>
-    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
-
-  const props: UploadProps = {
-    name: "file",
-    beforeUpload(file) {
-      return new Promise((resolve, reject) => {
-        if (file.size > maxFileSize) {
-          reject("File size exceeded");
-          message.error("File size exceeded");
-        } else {
-          resolve("sucess");
-        }
-      });
-    },
-    customRequest({ file, onSuccess, onError }) {
-      try {
-        const uploadedFile = file as RcFile;
-        const formdata = new FormData();
-        formdata.append("file", file as Blob, "Contrato.docx");
-        contractsServices
-          .convertContractToHTML(formdata)
-          .then((res) =>
-            setFileConverted({ htmlContent: res.html_content, fileName: uploadedFile.name }),
-          )
-          .catch(() => message.error("File could not be converted to HTML"));
-        if (onSuccess) onSuccess("sucess");
-      } catch (error) {
-        if (onError) onError(error as ProgressEvent<EventTarget>);
-      }
-    },
+  const setContractListToState = async () => {
+    try {
+      setLoading(true);
+      const fetchContracts = await contractsServices.listContracts(30, 0);
+      setContracts(fetchContracts);
+    } catch (err) {
+      dispatch(
+        actionDisplayNotification({
+          severity: "warning",
+          messages: [t("global.failureRequestMessage")],
+        }),
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleSubmit = (formValues: FieldType) => {
-    if (!fileConverted) return;
-    dispatch(
-      actionAddContract({
-        htmlContent: fileConverted.htmlContent,
-        fileName: fileConverted.fileName,
-        category: formValues.contract_category,
-        representPart: formValues.represent_part,
-      }),
+  useEffect(() => {
+    setContractListToState();
+  }, []);
+
+  if (loading) {
+    return (
+      <Base title={t("pages.contracts.title")}>
+        <>
+          <TabContainer>
+            <Skeleton.Button active size="large" style={{ width: "200px" }} />
+          </TabContainer>
+          <ContractsContainer>
+            {Array.from(Array(10)).map((_, index) => (
+              <Card key={index} loading={true} />
+            ))}
+          </ContractsContainer>
+        </>
+      </Base>
     );
-    navigate(routesManager.getContractAnalysisRoute());
-  };
+  }
 
   return (
     <Base title={t("pages.contracts.title")}>
-      <UploadContainer>
-        <Form
-          ref={form}
-          layout="vertical"
-          onFinish={handleSubmit}
-          onValuesChange={(values) => {
-            if (form.current) {
-              if (values.contract_category?.length) {
-                form.current.setFieldValue("contract_category", [values.contract_category.pop()]);
-              }
-              if (values.represent_part?.length) {
-                form.current.setFieldValue("represent_part", [values.represent_part.pop()]);
-              }
-            }
-          }}
-        >
-          <Form.Item
-            name="contract_file"
-            valuePropName="fileList"
-            getValueFromEvent={(event) => event?.fileList}
-            rules={[
-              {
-                required: true,
-                message: t("pages.contracts.components.warning.pleaseUploadContract"),
-              },
-              {
-                validator(_, fileList) {
-                  return new Promise((resolve, reject) => {
-                    // Limitação de tamanho do contrato em bytes (5MB)
-                    if (fileList && fileList.length && fileList[0].size > maxFileSize) {
-                      reject(
-                        t("pages.contracts.components.warning.sizeExceeded", {
-                          size: maxFileSize / 1_000_000,
-                        }),
-                      );
-                    } else if (
-                      fileList &&
-                      fileList.length &&
-                      !fileList[0].type.includes("wordprocessingml")
-                    ) {
-                      reject(t("pages.contracts.components.warning.mustBeFormat"));
-                    } else {
-                      resolve("sucess");
-                    }
-                  });
-                },
-              },
-            ]}
+      <ContractModal
+        open={openContractModal || !!contractToEdit}
+        handleCancel={() => {
+          setOpenContractModal(false);
+          setContractToEdit(undefined);
+        }}
+        fetchContracts={setContractListToState}
+        contractToEdit={contractToEdit}
+      />
+      <>
+        <TabContainer>
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={() => setOpenContractModal((prev) => !prev)}
           >
-            <Dragger multiple={false} maxCount={1} {...props}>
-              <p className="ant-upload-drag-icon">
-                <InboxOutlined />
-              </p>
-              <p className="ant-upload-text">{t("pages.contracts.components.upload.label")}</p>
-              <p className="ant-upload-hint">
-                {t("pages.contracts.components.upload.placeholder")}
-              </p>
-            </Dragger>
-          </Form.Item>
-          <Form.Item
-            name="contract_category"
-            label={t("pages.contracts.components.contractCategory.label")}
-            rules={[
-              {
-                required: true,
-                message: t("pages.contracts.components.warning.pleaseSelectCategory"),
-              },
-            ]}
-          >
-            <Select
-              mode="tags"
-              options={contractCategories}
-              showSearch
-              placeholder={t("pages.contracts.components.contractCategory.placeholder")}
-              optionFilterProp="children"
-              filterOption={filterOption}
-              allowClear
-            />
-          </Form.Item>
-          <Form.Item
-            name="represent_part"
-            label={t("pages.contracts.components.representPart.label")}
-            rules={[
-              {
-                required: true,
-                message: t("pages.contracts.components.warning.pleaseSelectPartYouRepresent"),
-              },
-            ]}
-          >
-            <Select
-              mode="tags"
-              filterOption={filterOption}
-              showSearch
-              optionFilterProp="children"
-              allowClear
-              options={represent}
-              placeholder={t("pages.contracts.components.representPart.placeholder")}
-            />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              {t("global.submit")}
-            </Button>
-          </Form.Item>
-        </Form>
-      </UploadContainer>
+            {t("pages.contracts.newContract")}
+          </Button>
+        </TabContainer>
+        {!contracts?.length ? (
+          <Typography.Text>
+            {t("pages.contracts.components.warning.youDontHaveContract")}
+          </Typography.Text>
+        ) : null}
+        <ContractsContainer>
+          {contracts?.length
+            ? contracts.map((contract) => (
+                <ContractCard
+                  key={contract.id}
+                  fetchContracts={setContractListToState}
+                  contract={contract}
+                  setContractToEdit={setContractToEdit}
+                ></ContractCard>
+              ))
+            : null}
+        </ContractsContainer>
+      </>
     </Base>
   );
 };

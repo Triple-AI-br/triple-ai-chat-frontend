@@ -8,6 +8,7 @@ export const AnalysisContainer = styled.div`
   gap: 20px;
   position: relative;
   @media (min-width: 1000px) {
+    gap: 40px;
     flex-direction: row;
     align-items: flex-start;
     justify-content: space-between;
@@ -35,6 +36,14 @@ export const Page = styled.div`
   padding: 16px;
   overflow-y: auto;
   overflow-x: hidden;
+  ::-moz-selection {
+    /* Code for Firefox */
+    background: yellow;
+  }
+
+  ::selection {
+    background: yellow;
+  }
   @media (min-width: 1000px) {
     padding: 16px 32px;
   }

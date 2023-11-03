@@ -8,11 +8,11 @@ interface ITimestamped {
   updated_at: string;
 }
 
-interface IMessageStream {
+export type IMessageStream = {
   delta: string;
   finish_reason: string | null;
   references?: string[];
-}
+};
 
 export interface IConversation extends ITimestamped {
   session_id: string;
@@ -85,14 +85,11 @@ const sendMessageStream = ({
 }: {
   prompt: string;
   callback(_: IMessageStream): void;
-  sessionId?: number;
-  projectId?: number;
+  sessionId: number;
+  projectId: number;
 }): Promise<void> => {
   const accessToken = getAccessTokenFromStorage();
-  let url = `${api.defaults.baseURL}/contracts/query/stream`;
-  if (sessionId && projectId) {
-    url = `${api.defaults.baseURL}/projects/${projectId}/chats/${sessionId}/stream`;
-  }
+  const url = `${api.defaults.baseURL}/projects/${projectId}/chats/${sessionId}/stream`;
   // View package documentation: https://www.npmjs.com/package/@microsoft/fetch-event-source
   return new Promise<void>((resolve, reject) => {
     const ctrl = new AbortController();
