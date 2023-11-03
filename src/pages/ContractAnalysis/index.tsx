@@ -35,6 +35,12 @@ import { routesManager } from "../../routes/routesManager";
 import { useWindowSize } from "../../utils/useWindowSize";
 import { MenuContainer } from "../../components/Contracts/ContractTool/styled";
 
+export type AnalysisList = {
+  id: string;
+  selected: string;
+  response: string;
+};
+
 const DESKTOP_WIDTH = 1000;
 
 const ContractAnalysisPage = () => {
