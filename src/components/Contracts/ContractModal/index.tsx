@@ -93,7 +93,7 @@ const ContractModal: React.FC<ContractModal> = ({
           }),
         );
       } else if (file) {
-        const html = await docxToHtml({ file: file as Blob });
+        const html: string = await docxToHtml({ file: file as Blob });
 
         const contractForm = {
           title: file.name,
@@ -270,6 +270,7 @@ const ContractModal: React.FC<ContractModal> = ({
             options={represent}
             placeholder={t("pages.contracts.components.representPart.placeholder")}
           />
+        </Form.Item>
         <Form.Item
           name="represent_part"
           label={t("pages.contracts.components.representPart.label")}

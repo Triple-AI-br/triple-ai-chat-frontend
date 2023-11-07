@@ -33,9 +33,6 @@ type PostContractProps = {
   contract_type: string;
   represented_party: string;
   html_content: string;
-  risk_analysis: AnalysisList[];
-  questions: QuestionList[];
-  customer_id: string;
 };
 
 const postContract = async (contractInfo: PostContractProps): Promise<IContract> => {
