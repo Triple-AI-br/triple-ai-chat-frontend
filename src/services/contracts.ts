@@ -28,11 +28,16 @@ export type IContract = {
   customer_id: string;
 };
 
-const postContract = async (contractInfo: FormData): Promise<IContract> => {
+type PostContractProps = {
+  title: string;
+  contract_type: string;
+  represented_party: string;
+  html_content: string;
+};
+
+const postContract = async (contractInfo: PostContractProps): Promise<IContract> => {
   const url = "/contracts";
-  const response = await api.post(url, contractInfo, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  const response = await api.post(url, contractInfo);
   return response.data;
 };
 
