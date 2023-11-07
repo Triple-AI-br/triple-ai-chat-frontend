@@ -271,26 +271,6 @@ const ContractModal: React.FC<ContractModal> = ({
             placeholder={t("pages.contracts.components.representPart.placeholder")}
           />
         </Form.Item>
-        <Form.Item
-          name="represent_part"
-          label={t("pages.contracts.components.representPart.label")}
-          rules={[
-            {
-              required: true,
-              message: t("pages.contracts.components.warning.pleaseSelectPartYouRepresent"),
-            },
-          ]}
-        >
-          <Select
-            mode="tags"
-            filterOption={filterOption}
-            showSearch
-            optionFilterProp="children"
-            allowClear
-            options={represent}
-            placeholder={t("pages.contracts.components.representPart.placeholder")}
-          />
-        </Form.Item>
       </Form>
     </Modal>
   );
