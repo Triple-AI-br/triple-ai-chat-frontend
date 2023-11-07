@@ -7,9 +7,10 @@ import { useAppDispatch } from "../../../redux/hooks";
 import { useTranslation } from "react-i18next";
 import { useRef, useState } from "react";
 import { IContract, contractsServices } from "../../../services";
-import { RcFile } from "antd/es/upload";
 import { contractCategories, represent } from "./constansts";
 import { actionDisplayNotification } from "../../../redux/notificationSlice";
+import { useConvertFile } from "../../../utils/useConvertFile";
+import { RcFile } from "antd/es/upload";
 
 type ContractModal = {
   open: boolean;
@@ -32,6 +33,7 @@ const ContractModal: React.FC<ContractModal> = ({
 }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { docxToHtml } = useConvertFile();
   const { t } = useTranslation();
   const form = useRef<FormInstance>(null);
   const [file, setFile] = useState<RcFile>();
@@ -91,16 +93,16 @@ const ContractModal: React.FC<ContractModal> = ({
           }),
         );
       } else if (file) {
-        const formdata = new FormData();
-        formdata.append("file", file, file.name);
-        formdata.append(
-          "contract",
-          JSON.stringify({
-            represented_party: formValues.represent_part[0],
-            contract_type: formValues.contract_category[0],
-          }),
-        );
-        const createdContract = await contractsServices.postContract(formdata);
+        const html: string = await docxToHtml({ file: file as Blob });
+
+        const contractForm = {
+          title: file.name,
+          contract_type: formValues.contract_category[0],
+          represented_party: formValues.represent_part[0],
+          html_content: html,
+        };
+
+        const createdContract = await contractsServices.postContract(contractForm);
         const { id } = createdContract;
         navigate(routesManager.getContractAnalysisRoute(id));
       }
