@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Card, Skeleton, Typography } from "antd";
+import { Button, Card, Modal, Skeleton, Typography } from "antd";
 import { Base } from "../../layouts/Base";
 import { TabContainer, ContractsContainer } from "./styled";
 import { useTranslation } from "react-i18next";
@@ -35,6 +35,36 @@ const ContractPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const warning = (contract: IContract) => {
+    Modal.confirm({
+      title: t("global.confirm"),
+      content: t("pages.contracts.components.warning.areYouSureToDeleteContract", {
+        contract_name: contract.title,
+      }),
+      onOk: async () => {
+        try {
+          await contractsServices.deleteContract(contract.id);
+          setContractListToState();
+          dispatch(
+            actionDisplayNotification({
+              severity: "success",
+              messages: [t("global.successDeletedMessage")],
+            }),
+          );
+        } catch {
+          dispatch(
+            actionDisplayNotification({
+              severity: "warning",
+              messages: [t("global.failureDeleteMessage")],
+            }),
+          );
+        }
+      },
+      cancelText: t("global.cancel"),
+      okText: t("global.delete"),
+    });
   };
 
   useEffect(() => {
@@ -89,6 +119,7 @@ const ContractPage: React.FC = () => {
             ? contracts.map((contract) => (
                 <ContractCard
                   key={contract.id}
+                  handleDeleteContract={(contractInfo) => warning(contractInfo)}
                   fetchContracts={setContractListToState}
                   contract={contract}
                   setContractToEdit={setContractToEdit}
