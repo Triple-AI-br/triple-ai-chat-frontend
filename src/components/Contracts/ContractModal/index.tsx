@@ -37,6 +37,7 @@ const ContractModal: React.FC<ContractModal> = ({
   const { t } = useTranslation();
   const form = useRef<FormInstance>(null);
   const [file, setFile] = useState<RcFile>();
+  const [loadingForm, setLoadingForm] = useState<boolean>(false);
 
   // 5MB
   const maxFileSize = 5_000_000;
@@ -79,6 +80,7 @@ const ContractModal: React.FC<ContractModal> = ({
   const handleSubmit = async (formValues: FieldType) => {
     if (!file && !isEditing) return;
     try {
+      setLoadingForm(true);
       if (isEditing) {
         const newContractInfo = {
           contract_type: formValues.contract_category[0],
@@ -123,6 +125,7 @@ const ContractModal: React.FC<ContractModal> = ({
         );
       }
     } finally {
+      setLoadingForm(false);
       handleClose();
       fetchContracts();
     }
@@ -136,10 +139,16 @@ const ContractModal: React.FC<ContractModal> = ({
       destroyOnClose={true}
       afterClose={handleClose}
       footer={[
-        <Button key="cancel" onClick={() => handleClose()}>
+        <Button loading={loadingForm} key="cancel" onClick={() => handleClose()}>
           {t("global.cancel")}
         </Button>,
-        <Button form="contract_form" key="submit" htmlType="submit" type="primary">
+        <Button
+          loading={loadingForm}
+          form="contract_form"
+          key="submit"
+          htmlType="submit"
+          type="primary"
+        >
           {t("global.submit")}
         </Button>,
       ]}
@@ -153,8 +162,8 @@ const ContractModal: React.FC<ContractModal> = ({
         initialValues={
           isEditing
             ? {
-                contract_category: contractToEdit.contract_type,
-                represent_part: contractToEdit.represented_party,
+                contract_category: [contractToEdit.contract_type],
+                represent_part: [contractToEdit.represented_party],
               }
             : {}
         }
@@ -243,7 +252,9 @@ const ContractModal: React.FC<ContractModal> = ({
         >
           <Select
             mode="tags"
+            loading={loadingForm}
             options={contractCategories}
+            onSelect={() => (document.activeElement as HTMLElement).blur()}
             showSearch
             placeholder={t("pages.contracts.components.contractCategory.placeholder")}
             optionFilterProp="children"
@@ -264,6 +275,8 @@ const ContractModal: React.FC<ContractModal> = ({
           <Select
             mode="tags"
             filterOption={filterOption}
+            loading={loadingForm}
+            onSelect={() => (document.activeElement as HTMLElement).blur()}
             showSearch
             optionFilterProp="children"
             allowClear
