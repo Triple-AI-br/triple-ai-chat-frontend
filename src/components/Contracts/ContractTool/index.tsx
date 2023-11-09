@@ -12,9 +12,12 @@ import {
   Button,
   Collapse,
   CollapseProps,
+  Form,
+  FormInstance,
   Menu,
   MenuProps,
   Popconfirm,
+  Select,
   Space,
   Tooltip,
   Typography,
@@ -27,7 +30,8 @@ import ReactMarkdown from "react-markdown";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch } from "../../../redux/hooks";
 import { actionDisplayNotification } from "../../../redux/notificationSlice";
-import { IContract } from "../../../services";
+import { IContract, contractsServices } from "../../../services";
+import { contractCategories, represent } from "../ContractModal/constansts";
 
 type ContractToolProps = {
   loadingAnalysis: boolean;
@@ -57,9 +61,11 @@ const ContractTool: React.FC<ContractToolProps> = ({
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const bottomRef = useRef<HTMLDivElement>(null);
+  const form = useRef<FormInstance>(null);
 
   const [current, setCurrent] = useState("analysis");
   const [selectedAnalysis, setSelectedAnalysis] = useState("1");
+  const [loadingUpdate, setLoadingUpdate] = useState<boolean>(false);
 
   const analysisItems: CollapseProps["items"] = contract.risk_analysis.map((item, index) => {
     return {
@@ -134,6 +140,9 @@ const ContractTool: React.FC<ContractToolProps> = ({
       icon: <FlagOutlined />,
     },
   ];
+
+  const filterOption = (input: string, option?: { label: string; value: string }) =>
+    (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
   const renderContent = () => {
     switch (current) {
@@ -278,14 +287,90 @@ const ContractTool: React.FC<ContractToolProps> = ({
         >
           {contract?.title}
         </Paragraph>
-        <Typography.Text>
-          <TagOutlined style={{ marginRight: "5px" }} />
-          {contract?.contract_type}
-        </Typography.Text>
-        <Typography.Text type="secondary">
-          <UserOutlined style={{ marginRight: "5px" }} />
-          {contract?.represented_party}
-        </Typography.Text>
+        <Form
+          preserve={false}
+          ref={form}
+          layout="vertical"
+          initialValues={
+            form.current
+              ? {
+                  contract_category: form.current.getFieldValue("contract_category"),
+                  represent_part: form.current.getFieldValue("represent_part"),
+                }
+              : {
+                  contract_category: [contract.contract_type],
+                  represent_part: [contract.represented_party],
+                }
+          }
+          onValuesChange={async (values) => {
+            if (form.current) {
+              try {
+                setLoadingUpdate(true);
+                if (values.contract_category?.length) {
+                  form.current.setFieldValue("contract_category", [values.contract_category.pop()]);
+                } else if (!form.current.getFieldValue("contract_category")?.length) {
+                  form.current.resetFields(["contract_category"]);
+                  return;
+                }
+                if (values.represent_part?.length) {
+                  form.current.setFieldValue("represent_part", [values.represent_part.pop()]);
+                } else if (!form.current.getFieldValue("represent_part")?.length) {
+                  form.current.resetFields(["represent_part"]);
+                  return;
+                }
+                const newContractInfo = {
+                  contract_type: form.current.getFieldValue("contract_category")[0],
+                  represented_party: form.current.getFieldValue("represent_part")[0],
+                };
+
+                await contractsServices.updateContract(contract.id, newContractInfo);
+                dispatch(
+                  actionDisplayNotification({
+                    severity: "success",
+                    messages: [t("global.successUpdateMessage")],
+                  }),
+                );
+              } catch (err) {
+                form.current.resetFields();
+                dispatch(
+                  actionDisplayNotification({
+                    severity: "error",
+                    messages: [t("global.failureUpdateMessage")],
+                  }),
+                );
+              } finally {
+                setLoadingUpdate(false);
+              }
+            }
+          }}
+        >
+          <Form.Item name="contract_category" noStyle>
+            <Select
+              mode="tags"
+              loading={loadingUpdate}
+              bordered={false}
+              options={contractCategories}
+              onSelect={() => (document.activeElement as HTMLElement).blur()}
+              showSearch
+              optionFilterProp="children"
+              filterOption={filterOption}
+              menuItemSelectedIcon={<TagOutlined style={{ marginRight: "5px" }} />}
+            />
+          </Form.Item>
+          <Form.Item name="represent_part" style={{ margin: 0 }}>
+            <Select
+              mode="tags"
+              loading={loadingUpdate}
+              bordered={false}
+              filterOption={filterOption}
+              onSelect={() => (document.activeElement as HTMLElement).blur()}
+              showSearch
+              optionFilterProp="children"
+              menuItemSelectedIcon={<UserOutlined style={{ marginRight: "5px" }} />}
+              options={represent}
+            />
+          </Form.Item>
+        </Form>
       </FileNameContainer>
       <Menu
         onClick={(e) => setCurrent(e.key)}
