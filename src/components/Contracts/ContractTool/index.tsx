@@ -77,7 +77,17 @@ const ContractTool: React.FC<ContractToolProps> = ({
       ),
       children: (
         <Space direction="vertical" style={{ width: "100%" }}>
-          <Typography.Text type="secondary" italic>{`"${item.selected}"`}</Typography.Text>
+          <Paragraph
+            ellipsis={{
+              rows: 2,
+              expandable: true,
+              symbol: "more",
+            }}
+            type="secondary"
+            italic
+          >
+            {`"${item.selected}"`}{" "}
+          </Paragraph>
           <Typography.Text>
             <ReactMarkdown>{item.response}</ReactMarkdown>
           </Typography.Text>
