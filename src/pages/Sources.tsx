@@ -13,6 +13,8 @@ import { Col, Divider, Row } from "antd";
 import { ProjectOwnerManager } from "../components/Projects/ProjectOwnerManager";
 import { useWindowSize } from "../utils/useWindowSize";
 import { useTranslation } from "react-i18next";
+import { EyeOutlined } from "@ant-design/icons";
+import { ShowDocumentModal } from "../components/Sources/showDocumentModal";
 
 const SourcesPage = () => {
   const { t } = useTranslation();
@@ -24,6 +26,7 @@ const SourcesPage = () => {
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [accessToUpload, setAccessToUpload] = useState<boolean>(false);
   const [accessToDelete, setAccessToDelete] = useState<boolean>(false);
+  const [openFile, setOpenFile] = useState<false | string>(false);
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
 
@@ -108,6 +111,12 @@ const SourcesPage = () => {
 
   return (
     <Base title={project ? t("pages.sources.title", { project: project.title }) : "View your Data"}>
+      <ShowDocumentModal
+        open={!!openFile}
+        fileId={openFile}
+        projectId={project?.id}
+        handleClose={() => setOpenFile(false)}
+      />
       {isLoading ? (
         <Box m="auto">
           <CircularProgress sx={{ color: "#999" }} />
@@ -138,6 +147,7 @@ const SourcesPage = () => {
                       <Box
                         display="flex"
                         key={file.file_path}
+                        // onClick={() => sourcesService.getSourceSignedUrl(project?.id, file.id)}
                         sx={{
                           borderTop: "1px solid #dedede",
                           backgroundColor: "white",
@@ -147,7 +157,16 @@ const SourcesPage = () => {
                         alignItems="center"
                       >
                         <Typography color="#656565">{file.file_name}</Typography>
-
+                        <Button
+                          startIcon={<EyeOutlined />}
+                          variant="outlined"
+                          color="primary"
+                          onClick={() => {
+                            setOpenFile(file.file_name);
+                          }}
+                        >
+                          View
+                        </Button>
                         {accessToDelete && (
                           <Button
                             disabled={isDeleting}

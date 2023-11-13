@@ -54,6 +54,7 @@ export interface ISources {
 }
 
 export interface ISource {
+  id: number | string;
   project_id: number;
   file_name: string;
   file_path: string;
@@ -150,6 +151,30 @@ const deleteSource = async ({
   return data;
 };
 
+const getUploadUrl = async ({
+  projectId,
+  sourceIds,
+}: {
+  projectId: number;
+  sourceIds: string[];
+}): Promise<IS3SignedResponse[]> => {
+  const url = `/projects/${projectId}/sources/upload-url?files=${sourceIds}`;
+  const response = await api.get(url);
+  return response.data;
+};
+
+const getSourceSignedUrl = async ({
+  projectId,
+  sourceId,
+}: {
+  projectId: number;
+  sourceId: number;
+}): Promise<string> => {
+  const url = `/projects/${projectId}/sources/${sourceId}/signed-url`;
+  const response = await api.get(url);
+  return response.data;
+};
+
 // const uploadSources = async ({
 //     projectId,
 //     files,
@@ -173,4 +198,6 @@ export const sourcesService = {
   listSources,
   deleteSource,
   uploadSources,
+  getSourceSignedUrl,
+  getUploadUrl,
 };
