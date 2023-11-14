@@ -5,6 +5,8 @@
       "more": "Más",
       "login": "Iniciar sesión",
       "logout": "Cerrar sesión",
+      "close": "Cerrar",
+      "back": "Volver",
       "confirm": "Confirmar",
       "cancel": "Cancelar",
       "delete": "Eliminar",
@@ -204,6 +206,9 @@
             "permissionsTitle": "Permisos",
             "uploadFilesPermissionSwitch": "Cargar Archivos",
             "deleteFilesPermissionSwitch": "Eliminar Archivos"
+          },
+          "warning": {
+            "areYouSureToDelete": "¿Estás seguro de que quieres borrar el archivo:\n{{file}}"
           }
         }
       },

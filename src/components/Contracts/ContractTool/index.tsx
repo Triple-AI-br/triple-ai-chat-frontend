@@ -87,7 +87,7 @@ const ContractTool: React.FC<ContractToolProps> = ({
             ellipsis={{
               rows: 2,
               expandable: true,
-              symbol: "more",
+              symbol: t("global.more"),
             }}
             type="secondary"
             italic

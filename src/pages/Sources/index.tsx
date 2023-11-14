@@ -1,32 +1,36 @@
 import { useEffect, useState } from "react";
-import { IProject, ISource, projectService, sourcesService } from "../services";
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
-import { Delete as DeleteIcon } from "@mui/icons-material";
-import { Base } from "../layouts/Base";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { selectUserData } from "../redux/authenticationSlice";
+import { IProject, ISource, projectService, sourcesService } from "../../services";
+import { Box, CircularProgress, Typography } from "@mui/material";
+import { Base } from "../../layouts/Base";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { selectUserData } from "../../redux/authenticationSlice";
 import { useParams } from "react-router-dom";
-import { actionDisplayNotification } from "../redux/notificationSlice";
-import { Upload } from "../components/Sources";
+import { actionDisplayNotification } from "../../redux/notificationSlice";
+import { Upload } from "../../components/Sources";
 import { v4 as uuidv4 } from "uuid";
-import { Col, Divider, Row } from "antd";
-import { ProjectOwnerManager } from "../components/Projects/ProjectOwnerManager";
-import { useWindowSize } from "../utils/useWindowSize";
+import { Card, Col, Divider, Modal, Row } from "antd";
+import { ProjectOwnerManager } from "../../components/Projects/ProjectOwnerManager";
+import { useWindowSize } from "../../utils/useWindowSize";
 import { useTranslation } from "react-i18next";
-import { EyeOutlined } from "@ant-design/icons";
-import { ShowDocumentModal } from "../components/Sources/showDocumentModal";
+import { DeleteOutlined, EyeOutlined } from "@ant-design/icons";
+import { ShowDocumentModal } from "../../components/Sources/showDocumentModal";
+import { UploadCardContainer } from "./styled";
+import Meta from "antd/es/card/Meta";
+import { useBetterFiles } from "./useBetterFiles";
 
 const SourcesPage = () => {
   const { t } = useTranslation();
   const { width } = useWindowSize();
   const userData = useAppSelector(selectUserData);
+  const { putIconAndExtension } = useBetterFiles();
+
   const [project, setProject] = useState<IProject>();
   const [sourcesList, setSourcesList] = useState<ISource[]>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [accessToUpload, setAccessToUpload] = useState<boolean>(false);
   const [accessToDelete, setAccessToDelete] = useState<boolean>(false);
-  const [openFile, setOpenFile] = useState<false | string>(false);
+  const [openFile, setOpenFile] = useState<false | ISource>(false);
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
 
@@ -61,33 +65,49 @@ const SourcesPage = () => {
     });
   };
 
-  const handleDelete = async (filePath: string) => {
-    if (!confirm("Are you sure you'd like to delete this source?")) return;
-    setIsDeleting(true);
-    const response = await sourcesService.deleteSource({
-      projectId: id as string,
-      sourcePath: filePath,
+  const handleDelete = (filePath: string, fileName: string) => {
+    Modal.confirm({
+      title: t("global.confirm"),
+      content: t("pages.sources.components.warning.areYouSureToDelete", { file: fileName }),
+      onOk: async () => {
+        try {
+          setIsDeleting(true);
+          const response = await sourcesService.deleteSource({
+            projectId: id as string,
+            sourcePath: filePath,
+          });
+          if (response.success) {
+            dispatch(
+              actionDisplayNotification({
+                messages: [t("global.successDeletedMessage")],
+                severity: "success",
+              }),
+            );
+            setSourcesList((prev) => {
+              if (!prev) return;
+              const newSources = prev.filter((file) => file.file_path !== filePath);
+              return [...newSources];
+            });
+          } else {
+            dispatch(
+              actionDisplayNotification({
+                messages: [t("global.failureDeleteMessage")],
+              }),
+            );
+          }
+          setIsDeleting(false);
+        } catch {
+          dispatch(
+            actionDisplayNotification({
+              severity: "warning",
+              messages: [t("global.failureDeleteMessage")],
+            }),
+          );
+        }
+      },
+      cancelText: t("global.cancel"),
+      okText: t("global.delete"),
     });
-    if (response.success) {
-      dispatch(
-        actionDisplayNotification({
-          messages: ["Source deleted successfully"],
-          severity: "success",
-        }),
-      );
-      setSourcesList((prev) => {
-        if (!prev) return;
-        const newSources = prev.filter((file) => file.file_path !== filePath);
-        return [...newSources];
-      });
-    } else {
-      dispatch(
-        actionDisplayNotification({
-          messages: ["Error deleting source"],
-        }),
-      );
-    }
-    setIsDeleting(false);
   };
 
   useEffect(() => {
@@ -113,7 +133,7 @@ const SourcesPage = () => {
     <Base title={project ? t("pages.sources.title", { project: project.title }) : "View your Data"}>
       <ShowDocumentModal
         open={!!openFile}
-        fileId={openFile}
+        file={openFile}
         projectId={project?.id}
         handleClose={() => setOpenFile(false)}
       />
@@ -133,56 +153,39 @@ const SourcesPage = () => {
                   <Typography>{t("pages.sources.noFilesAndNoPermissionMessage")}</Typography>
                 )
               ) : (
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  border="1px solid #aaa"
-                  borderRadius={3}
-                  overflow="scroll"
-                  sx={{ backgroundColor: "white" }}
-                  maxHeight="70vh"
-                >
+                <UploadCardContainer>
                   {sourcesList &&
-                    sourcesList.map((file) => (
-                      <Box
-                        display="flex"
+                    putIconAndExtension(sourcesList).map((file) => (
+                      <Card
                         key={file.file_path}
-                        // onClick={() => sourcesService.getSourceSignedUrl(project?.id, file.id)}
-                        sx={{
-                          borderTop: "1px solid #dedede",
-                          backgroundColor: "white",
-                        }}
-                        p={2}
-                        justifyContent="space-between"
-                        alignItems="center"
-                      >
-                        <Typography color="#656565">{file.file_name}</Typography>
-                        <Button
-                          startIcon={<EyeOutlined />}
-                          variant="outlined"
-                          color="primary"
-                          onClick={() => {
-                            setOpenFile(file.file_name);
-                          }}
-                        >
-                          View
-                        </Button>
-                        {accessToDelete && (
-                          <Button
-                            disabled={isDeleting}
-                            startIcon={<DeleteIcon />}
-                            variant="outlined"
-                            color="error"
-                            onClick={async () => {
-                              await handleDelete(file.file_path);
+                        actions={[
+                          <EyeOutlined
+                            key="view"
+                            onClick={() => {
+                              setOpenFile(file);
                             }}
-                          >
-                            Delete
-                          </Button>
-                        )}
-                      </Box>
+                          />,
+                          ...(accessToDelete
+                            ? [
+                                <DeleteOutlined
+                                  key="delete"
+                                  disabled={isDeleting}
+                                  onClick={async () =>
+                                    await handleDelete(file.file_path, file.file_name)
+                                  }
+                                />,
+                              ]
+                            : []),
+                        ]}
+                      >
+                        <Meta
+                          avatar={file.icon}
+                          title={file.file_name}
+                          description={file.media_type}
+                        />
+                      </Card>
                     ))}
-                </Box>
+                </UploadCardContainer>
               )}
             </Box>
           </Col>
