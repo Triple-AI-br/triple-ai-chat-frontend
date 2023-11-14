@@ -96,9 +96,10 @@ const ContractModal: React.FC<ContractModal> = ({
         );
       } else if (file) {
         const html: string = await docxToHtml({ file: file as Blob });
-
+        const dotLastIndex = file.name.lastIndexOf(".");
+        const finalName = file.name.substring(0, dotLastIndex);
         const contractForm = {
-          title: file.name,
+          title: finalName,
           contract_type: formValues.contract_category[0],
           represented_party: formValues.represent_part[0],
           html_content: html,

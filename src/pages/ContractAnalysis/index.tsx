@@ -16,10 +16,12 @@ import { AnalysisContainer, ContractContainer, Page, SelectedTextContainer } fro
 import { v4 as uuidv4 } from "uuid";
 import {
   CopyOutlined,
+  DownloadOutlined,
   FlagOutlined,
   MessageOutlined,
   QuestionCircleOutlined,
   TagOutlined,
+  UpOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { useEffect, useRef, useState } from "react";
@@ -34,6 +36,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { routesManager } from "../../routes/routesManager";
 import { useWindowSize } from "../../utils/useWindowSize";
 import { MenuContainer } from "../../components/Contracts/ContractTool/styled";
+import { Export2Word } from "../../utils/exportToWord";
 
 export type AnalysisList = {
   id: string;
@@ -196,6 +199,19 @@ const ContractAnalysisPage = () => {
     }
   };
 
+  const handleDownloadContract = () => {
+    try {
+      if (!contract) return;
+      Export2Word("contract_container", contract.title);
+    } catch (err) {
+      dispatch(
+        actionDisplayNotification({
+          messages: [t("global.failureRequestMessage")],
+        }),
+      );
+    }
+  };
+
   const handleMouseUp = () => {
     const selected = window.getSelection()?.toString();
     setAskSomething(false);
@@ -344,7 +360,7 @@ const ContractAnalysisPage = () => {
           </ContractContainer>
           <MenuContainer>
             <Space direction="vertical" style={{ width: "100%", gap: 0, marginBottom: "30px" }}>
-              <Skeleton active loading={isDesktop} paragraph={{ rows: 1, width: ["70%"] }} />
+              <Skeleton active loading={isDesktop} paragraph={{ rows: 2, width: ["70%"] }} />
             </Space>
             <Space
               direction="horizontal"
@@ -366,7 +382,10 @@ const ContractAnalysisPage = () => {
 
   return (
     <Base title="Contract Analysis">
-      <FloatButton.BackTop shape="square" />
+      <FloatButton.Group shape="circle" type="primary">
+        <FloatButton.BackTop type="primary" icon={<UpOutlined />} />
+        <FloatButton type="primary" icon={<DownloadOutlined />} onClick={handleDownloadContract} />
+      </FloatButton.Group>
       {isDesktop && !loading ? (
         <Tour
           open={openTutorial}
