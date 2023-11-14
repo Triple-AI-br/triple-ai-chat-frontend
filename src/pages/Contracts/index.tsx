@@ -20,10 +20,12 @@ const ContractPage: React.FC = () => {
   const [contractToEdit, setContractToEdit] = useState<IContract>();
   const [loading, setLoading] = useState(true);
 
+  const limit = 60;
+
   const setContractListToState = async () => {
     try {
       setLoading(true);
-      const fetchContracts = await contractsServices.listContracts(30, 0);
+      const fetchContracts = await contractsServices.listContracts(limit, 0);
       setContracts(fetchContracts);
     } catch (err) {
       dispatch(
