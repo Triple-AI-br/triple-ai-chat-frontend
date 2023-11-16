@@ -5,6 +5,8 @@
       "more": "More",
       "login": "Login",
       "logout": "Logout",
+      "close": "Close",
+      "back": "Back",
       "confirm": "Confirm",
       "cancel": "Cancel",
       "delete": "Delete",
@@ -204,6 +206,9 @@
             "permissionsTitle": "Permissions",
             "uploadFilesPermissionSwitch": "Upload Files",
             "deleteFilesPermissionSwitch": "Delete Files"
+          }, 
+          "warning": {
+            "areYouSureToDelete": "Are you sure you want to delete the file:\n{{file}}"
           }
         }
       },
