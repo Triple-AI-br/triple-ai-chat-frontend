@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import { ConfigProvider } from "antd";
 import { CustomSnackbar } from "./components/shared";
+import { TermsOfUseTimenowModal } from "./components/shared/TermsOfUseTimenowModal";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <ConfigProvider theme={config}>
           <ThemeProvider theme={DefaultTheme}>
             <CustomSnackbar />
+            <TermsOfUseTimenowModal />
             <AppRoutes />
           </ThemeProvider>
         </ConfigProvider>
