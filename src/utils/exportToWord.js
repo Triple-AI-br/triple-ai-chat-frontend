@@ -1,29 +1,40 @@
-import htmlDocx from "html-docx-js/dist/html-docx";
-
 const Export2Word = (divId, fileName) => {
-  // Obtenha o HTML da div
-  const html = document.getElementById(divId)?.innerHTML;
-  if (!html) return;
-  // Converta o HTML para um array de bytes
-  const byteArray = htmlDocx.asBlob(html);
+  const preHtml =
+    "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
+  const postHtml = "</body></html>";
 
-  // Crie um objeto Blob com o array de bytes
-  const blob = new Blob([byteArray], {
-    type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  const content = document.getElementById(divId).innerHTML;
+
+  const html = preHtml + content + postHtml;
+
+  const blob = new Blob(["\ufeff", html], {
+    type: "application/msword",
   });
 
-  // Crie um link de download
-  const downloadLink = document.createElement("a");
-  downloadLink.href = URL.createObjectURL(blob);
-  downloadLink.download = fileName + ".docx";
+  // Specify link url
+  const url = "data:application/vnd.ms-word;charset=utf-8," + encodeURIComponent(html);
 
-  // Adicione o link ao corpo do documento
+  // Specify file name
+  fileName = fileName ? fileName + ".docx" : "document.docx";
+
+  // Create download link element
+  const downloadLink = document.createElement("a");
+
   document.body.appendChild(downloadLink);
 
-  // Execute o clique no link para iniciar o download
-  downloadLink.click();
+  if (navigator.msSaveOrOpenBlob) {
+    navigator.msSaveOrOpenBlob(blob, fileName);
+  } else {
+    // Create a link to the file
+    downloadLink.href = url;
 
-  // Remova o link do corpo do documento
+    // Setting the file name
+    downloadLink.download = fileName;
+
+    //triggering the function
+    downloadLink.click();
+  }
+
   document.body.removeChild(downloadLink);
 };
 
