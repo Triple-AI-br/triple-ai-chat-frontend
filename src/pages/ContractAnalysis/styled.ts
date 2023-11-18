@@ -34,6 +34,7 @@ export const Page = styled.div`
   border: 1px solid #e1e1e1;
   border-radius: 4px;
   padding: 16px;
+  margin-top: 20px;
   overflow-y: auto;
   overflow-x: hidden;
   ::-moz-selection {
