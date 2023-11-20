@@ -54,6 +54,7 @@ export interface ISources {
 }
 
 export interface ISource {
+  id: number | string;
   project_id: number;
   file_name: string;
   file_path: string;
@@ -150,27 +151,34 @@ const deleteSource = async ({
   return data;
 };
 
-// const uploadSources = async ({
-//     projectId,
-//     files,
-// }: {
-//     files: File[];
-//     projectId: number | string;
-// }): Promise<ISourceUpload> => {
-//     const formData = new FormData();
-//     files.forEach(file => formData.append("files", file, file.name));
-//     const url = `/projects/${projectId}/sources`;
-//     const response = await api.post(url, formData, {
-//         headers: {
-//             "Content-Type": "multipart/form-data",
-//         },
-//     });
-//     const data = response.data;
-//     return data;
-// };
+const getUploadUrl = async ({
+  projectId,
+  sourceId,
+}: {
+  projectId: number;
+  sourceId: number;
+}): Promise<Blob> => {
+  const url = `/projects/${projectId}/sources/${sourceId}`;
+  const response = await api.get(url, { responseType: "blob" });
+  return response.data;
+};
+
+const getSourceSignedUrl = async ({
+  projectId,
+  sourceId,
+}: {
+  projectId: number;
+  sourceId: number | string;
+}): Promise<string> => {
+  const url = `/projects/${projectId}/sources/${sourceId}/signed-url`;
+  const response = await api.get(url);
+  return response.data;
+};
 
 export const sourcesService = {
   listSources,
   deleteSource,
   uploadSources,
+  getSourceSignedUrl,
+  getUploadUrl,
 };

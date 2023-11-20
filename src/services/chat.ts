@@ -8,11 +8,11 @@ interface ITimestamped {
   updated_at: string;
 }
 
-interface IMessageStream {
+export type IMessageStream = {
   delta: string;
   finish_reason: string | null;
   references?: string[];
-}
+};
 
 export interface IConversation extends ITimestamped {
   session_id: string;

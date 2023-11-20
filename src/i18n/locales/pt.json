@@ -5,11 +5,14 @@
       "more": "Mais",
       "login": "Entrar",
       "logout": "Sair",
+      "close": "Fechar",
+      "back": "Voltar",
       "confirm": "Confirmar",
       "cancel": "Cancelar",
       "delete": "Deletar",
       "settings": "Configurações",
       "edit": "Editar",
+      "save": "Salvar",
       "private": "Privado",
       "public": "Público",
       "loading": "Carregando",
@@ -204,6 +207,9 @@
             "permissionsTitle": "Permissões",
             "uploadFilesPermissionSwitch": "Fazer upload de aquivos",
             "deleteFilesPermissionSwitch": "Apagar arquivos"
+          },
+          "warning": {
+            "areYouSureToDelete": "Você tem certeza que deseja deletar o arquivo: \n {{file}}"
           }
         }
       },
@@ -280,6 +286,96 @@
             "failureRequestChats": "Falha na requisição de conversas",
             "waitForAIReponseToQuitChat": "Por favor espere pela resposta da IA antes de navegar entre conversas",
             "waitForAIResponseToSend": "Por favor espere pela resposta da IA antes de enviar outra mensagem"
+          }
+        }
+      },
+      "contracts": {
+        "tab": "contratos",
+        "title": "Enviar um contrato",
+        "newContract": "Novo contrato",
+        "editContract": "Editar contrato",
+        "categories": [
+          { "label": "NDA (Acordo de Confidencialidade)", "value": "NDA" },
+          { "label": "Contrato de Empréstimo", "value": "Empréstimo" },
+          { "label": "Contrato de Investimento", "value": "Investimento" },
+          { "label": "Contrato de Financiamento", "value": "Financiamento" },
+          { "label": "Contrato de Serviço", "value": "Serviço" },
+          { "label": "Contrato de Compra e Venda", "value": "Compra e Venda" },
+          { "label": "Contrato de Doação", "value": "Doação" },
+          { "label": "Contrato de Locação de Imóvel", "value": "Locação de Imóvel" }
+        ],
+        "represents": [
+          { "label": "Parte Contratante", "value": "Contratante" },
+          { "label": "Parte Contratada", "value": "Contratada" },
+          { "label": "Consumidor", "value": "Consumidor" },
+          { "label": "Fornecedor", "value": "Fornecedor" },
+          { "label": "Locador", "value": "Locador" },
+          { "label": "Locatário", "value": "Locatário" },
+          { "label": "Parte divulgadora", "value": "Divulgadora" },
+          { "label": "Parte receptora", "value": "Receptora" },
+          { "label": "Inquilino", "value": "Inquilino" }
+        ],
+        "components": {
+          "upload": {
+            "label": "Clique ou arraste para esta área para enviar um contrato",
+            "placeholder": "suporte para um único arquivo .docx"
+          },
+          "contractCategory": {
+            "label": "Categoria do contrato",
+            "placeholder": "Selecione uma categoria de contrato"
+          },
+          "representPart": {
+            "label": "Parte que você representa",
+            "placeholder": "Qual parte você está representando?"
+          },
+          "card": {
+            "totalAnalysis": "Total de analises",
+            "totalQuestions": "Total de perguntas"
+          },
+          "warning": {
+            "pleaseUploadContract": "Por favor, envie um contrato",
+            "sizeExceeded": "Tamanho do arquivo excedido ({{size}}MB)",
+            "mustBeFormat": "Deve ser um arquivo .docx",
+            "pleaseSelectCategory": "Por favor, selecione uma categoria de contrato",
+            "pleaseSelectPartYouRepresent": "Por favor, selecione qual parte você representa",
+            "areYouSureToDeleteContract": "Tem certeza que deseja deletar o contrato: \n \"{{contract_name}}\"?",
+            "youDontHaveContract": "Você não tem contratos ainda. Faça upload de um no botão à cima!"
+          }
+        }
+      },
+      "contractAnalysis": {
+        "selectedSection": "Trecho selecionado:",
+        "tooltip": "Análises e respostas serão feitas com base no texto selecionado",
+        "actions": {
+          "askAI": "Perguntar à IA",
+          "riskAnalysis": "Análise de Risco",
+          "copy": "Copiar",
+          "flags": "Marcadores (em breve)"
+        },
+        "components": {
+          "tutorial": {
+            "nextBtn": "Próximo",
+            "previousBtn": "Anterior",
+            "firstStep": {
+              "title": "Aqui está o seu contrato.",
+              "description": "Selecione a parte do texto na qual você deseja realizar uma análise de risco ou fazer perguntas e clique com o botão direito para abrir o menu de ações."
+            },
+            "secondStep": {
+              "title": "Este é o menu de ferramentas.",
+              "description": "Aqui você pode realizar ações com o texto selecionado e ver os resultados gerados pela IA."
+            }
+          },
+          "menuTool": {
+            "genRiskAnalysisBtn": "Gerar análise de risco",
+            "askSomethingPlaceholder": "Pergunte algo à IA"
+          },
+          "warning": {
+            "selectASection": "Selecione um trecho para realizar ações com a IA",
+            "copiedToClipboard": "Copiado para área de transferência",
+            "deleteAnalysis": "Deletar essa análise",
+            "areYouSureToDeleteAnalysis": "Tem certeza que deseja deletar esta análise?",
+            "deleteQuestion": "Deletar essa pergunta",
+            "areYouSureToDeleteQuestion": "Tem certeza que deseja deletar esta pergunta?"
           }
         }
       }

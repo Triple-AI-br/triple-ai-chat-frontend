@@ -18,6 +18,7 @@ import {
   LeftOutlined,
   LogoutOutlined,
   HomeOutlined,
+  FileProtectOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import {
@@ -80,6 +81,9 @@ const Base = ({ children, title }: IBaseProps) => {
     case routesManager.getSuperuserRoute():
       initialTab = "4";
       break;
+    case routesManager.getContractsRoute():
+      initialTab = "5";
+      break;
     default:
       initialTab = "0";
   }
@@ -104,12 +108,14 @@ const Base = ({ children, title }: IBaseProps) => {
   const items: MenuItem[] = [
     getItem(t("pages.projects.tab"), "1", routesManager.getProjectsRoute(), <InboxOutlined />),
     getItem(t("pages.prompts.tab"), "2", routesManager.getPromptsRoute(), <SnippetsOutlined />),
+    getItem("Contracts", "5", routesManager.getContractsRoute(), <FileProtectOutlined />),
   ];
   if (isAdminOrSuperUser)
     items.push(getItem("Admin", "3", routesManager.getAdminRoute(), <TeamOutlined />));
 
-  if (isSuperuser)
+  if (isSuperuser) {
     items.push(getItem("Super User", "4", routesManager.getSuperuserRoute(), <UserOutlined />));
+  }
 
   useEffect(() => {
     screenSize.xs ? setCollapsed(true) : setCollapsed(false);
@@ -200,7 +206,7 @@ const Base = ({ children, title }: IBaseProps) => {
           </Tooltip>
         )}
       </Sider>
-      <Layout style={{ overflowY: "scroll" }}>
+      <Layout>
         <Header
           style={{
             paddingLeft: 20,
