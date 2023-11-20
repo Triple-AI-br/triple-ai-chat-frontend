@@ -108,15 +108,13 @@ const Base = ({ children, title }: IBaseProps) => {
   const items: MenuItem[] = [
     getItem(t("pages.projects.tab"), "1", routesManager.getProjectsRoute(), <InboxOutlined />),
     getItem(t("pages.prompts.tab"), "2", routesManager.getPromptsRoute(), <SnippetsOutlined />),
+    getItem("Contracts", "5", routesManager.getContractsRoute(), <FileProtectOutlined />),
   ];
   if (isAdminOrSuperUser)
     items.push(getItem("Admin", "3", routesManager.getAdminRoute(), <TeamOutlined />));
 
   if (isSuperuser) {
     items.push(getItem("Super User", "4", routesManager.getSuperuserRoute(), <UserOutlined />));
-    items.push(
-      getItem("Contracts", "5", routesManager.getContractsRoute(), <FileProtectOutlined />),
-    );
   }
 
   useEffect(() => {

@@ -4,6 +4,8 @@ import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
 import { actionLogout, selectCustomerData } from "../../../redux/authenticationSlice";
 import { useEffect, useState } from "react";
 
+export const TIMENOW_TERM_VERSION = "1.1";
+
 const TermsOfUseTimenowModal: React.FC = () => {
   const customerData = useAppSelector(selectCustomerData);
   const disptach = useAppDispatch();
@@ -15,7 +17,7 @@ const TermsOfUseTimenowModal: React.FC = () => {
   };
 
   const handleAgree = () => {
-    localStorage.setItem("terms_accepted_by_timenow", "true");
+    localStorage.setItem("terms_accepted_by_timenow" + "_v" + TIMENOW_TERM_VERSION, "true");
     setOpen(false);
   };
 
@@ -33,7 +35,7 @@ const TermsOfUseTimenowModal: React.FC = () => {
 
   useEffect(() => {
     if (customerData?.name.toLowerCase() === "timenow") {
-      if (!localStorage.getItem("terms_accepted_by_timenow")) {
+      if (!localStorage.getItem("terms_accepted_by_timenow" + "_v" + TIMENOW_TERM_VERSION)) {
         setOpen(true);
       }
     }
@@ -154,6 +156,42 @@ const TermsOfUseTimenowModal: React.FC = () => {
         provedora de IA, se reserva o direito de realizar atualizações, modificações ou interrupções
         nos serviços de IA a qualquer momento, sem aviso prévio, seja aqueles desenvolvidos por ela
         ou sistemas de terceiros homologados para uso em suas operações.
+      </Typography.Text>
+      <Typography.Title level={4}>Da Proteção de Dados Pessoais e Privacidade</Typography.Title>
+      <Typography.Text>
+        5.1. O tratamento de dados pessoais é regulamentado no Brasil pela lei 13.709/2018,
+        conhecida como Lei Geral de Proteção de Dados Pessoais – LGPD, e possui como objetivo
+        proteger o uso e coleta de dados pessoais da pessoa natural (física).
+      </Typography.Text>
+      <br></br>
+      <br></br>
+      <Typography.Text>
+        5.2. Um dos princípios norteadores da lei é o princípio da transparência, o qual determina
+        que as informações sejam claras, precisas e objetivas ao titular de dados, de modo que o
+        dono dos dados tenha ciência de como seus dados estão sendo tratados.
+      </Typography.Text>
+      <br></br>
+      <br></br>
+      <Typography.Text>
+        5.3. Dessa forma, para seguir as diretivas da lei, o uso dos dados pessoais pela plataforma
+        de IA tem como objetivo divulgar dados de contato, como nomes e seus respectivos cargos e
+        e-mails corporativos de seus colaboradores, para fins de identificação e meio de comunicação
+        acertada dentro da Timenow. Assim, a finalidade dos dados pessoais é para uso interno e
+        profissional da Timenow.
+      </Typography.Text>
+      <br></br>
+      <br></br>
+      <Typography.Text>
+        5.4. Portanto, o tratamento de dados pessoais deve seguir as diretrizes deste termo de uso,
+        devendo ser estritamente voltado às finalidades às quais a coleta de dados se destina,
+        respeitando os critérios de compartilhamento e de segurança das informações.
+      </Typography.Text>
+      <br></br>
+      <br></br>
+      <Typography.Text>
+        5.5. Por fim, a lei prevê pelo sigilo das informações e dos dados que trata, sejam pessoais
+        ou não, além de se manter alinhado com as boas práticas de segurança e trato tecnológico, a
+        fim de garantir um tratamento em conformidade com a lei.
       </Typography.Text>
       <Typography.Title level={4}>Da Rescisão</Typography.Title>
       <Typography.Text>
