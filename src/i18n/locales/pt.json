@@ -44,6 +44,7 @@
       "successCreateMessage": "Criado com sucesso!",
       "successUploadMessage": "Upload com sucesso!",
       "failureUploadMessage": "Falha ao fazer upload!",
+      "failureDownloadMessage": "Falha ao fazer download!",
       "failureDeleteMessage": "Falha ao excluir!",
       "failureUpdateMessage": "Falha ao atualizar!",
       "failureCreateMessage": "Falha ao criar!",

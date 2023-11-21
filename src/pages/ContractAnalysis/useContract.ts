@@ -8,7 +8,7 @@ import { TourProps } from "antd";
 import { v4 as uuidv4 } from "uuid";
 import { actionDisplayNotification } from "../../redux/notificationSlice";
 import { routesManager } from "../../routes/routesManager";
-import { Export2Word } from "../../utils/exportToWord";
+import { saveAs } from "file-saver";
 
 const DESKTOP_WIDTH = 1000;
 
@@ -169,14 +169,28 @@ const useContract = () => {
     }
   };
 
-  const handleDownloadContract = () => {
+  const handleDownloadContract = async () => {
     try {
       if (!contract) return;
-      Export2Word("contract_container", contract.title);
+      contractsServices
+        .downloadContract(contract.id)
+        .then((response) => {
+          const blob = new Blob([response], {
+            type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          });
+          saveAs(blob, "nome_do_arquivo.docx");
+        })
+        .catch(() => {
+          dispatch(
+            actionDisplayNotification({
+              messages: [t("global.failureDownloadMessage")],
+            }),
+          );
+        });
     } catch (err) {
       dispatch(
         actionDisplayNotification({
-          messages: [t("global.failureRequestMessage")],
+          messages: [t("global.failureDownloadMessage")],
         }),
       );
     }
