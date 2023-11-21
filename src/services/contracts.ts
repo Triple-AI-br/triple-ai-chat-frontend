@@ -71,7 +71,6 @@ const updateContract = async (
 const downloadContract = async (contract_id: number): Promise<BlobPart> => {
   const url = `/contracts/${contract_id}/html-to-docx`;
   const response = await api.post(url, {}, { responseType: "blob" });
-  console.log(response.data);
   return response.data;
 };
 

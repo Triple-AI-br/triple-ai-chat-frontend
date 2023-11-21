@@ -178,7 +178,10 @@ const useContract = () => {
           const blob = new Blob([response], {
             type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
           });
-          saveAs(blob, "nome_do_arquivo.docx");
+          saveAs(
+            blob,
+            contract.title.includes(".docx") ? contract.title : contract.title + ".docx",
+          );
         })
         .catch(() => {
           dispatch(
