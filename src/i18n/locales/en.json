@@ -44,6 +44,7 @@
       "successCreateMessage": "Successfully created!",
       "successUploadMessage": "Successfully uploaded!",
       "failureUploadMessage": "Failed to upload!",
+      "failureDownloadMessage": "Failed to download!",
       "failureDeleteMessage": "Failed to delete!",
       "failureUpdateMessage": "Failed to update!",
       "failureCreateMessage": "Failed to create!",
