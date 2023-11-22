@@ -68,6 +68,12 @@ const updateContract = async (
   return response.data;
 };
 
+const downloadContract = async (contract_id: number): Promise<BlobPart> => {
+  const url = `/contracts/${contract_id}/html-to-docx`;
+  const response = await api.post(url, {}, { responseType: "blob" });
+  return response.data;
+};
+
 const sendMessageStreamContract = ({
   prompt,
   callback,
@@ -124,4 +130,5 @@ export const contractsServices = {
   deleteContract,
   updateContract,
   sendMessageStreamContract,
+  downloadContract,
 };

@@ -26,7 +26,6 @@
         "file-saver": "^2.0.5",
         "firebase": "^10.1.0",
         "formik": "^2.4.2",
-        "html-docx-js-typescript": "^0.1.5",
         "i18next": "^23.5.1",
         "mammoth": "^1.6.0",
         "moment": "^2.29.4",
