@@ -9,6 +9,7 @@ import { routesManager } from "../../../routes/routesManager";
 import { authService } from "../../../services";
 import { actionDisplayNotification } from "../../../redux/notificationSlice";
 import { useTranslation } from "react-i18next";
+import { GoogleLogin } from "../GoogleLogin";
 
 type FieldType = {
   email: string;
@@ -159,6 +160,16 @@ const LoginForm: React.FC = () => {
             {forgotPassword ? t("global.submit") : t("global.login")}
           </Button>
         </Form.Item>
+        <div
+          style={{
+            marginTop: 30,
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+          }}
+        >
+          <GoogleLogin />
+        </div>
       </Form>
     </FormContainer>
   );
