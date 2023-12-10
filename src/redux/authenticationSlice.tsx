@@ -159,6 +159,30 @@ const authSlice = createSlice({
         state.userData = null;
         state.customerData = null;
       })
+      .addCase(actionLoginWithGoogle.pending, (state) => {
+        state.status = "loading";
+        state.error = undefined;
+      })
+      .addCase(actionLoginWithGoogle.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        const {
+          authData: { access_token: accessToken },
+          userData,
+          customerData,
+          remember,
+        } = action.payload;
+        setAccessTokenToStorage(accessToken, remember);
+        state.accessToken = accessToken;
+        state.isAuthenticated = true;
+        state.userData = userData;
+        state.customerData = customerData;
+      })
+      .addCase(actionLoginWithGoogle.rejected, (state) => {
+        state.status = "failed";
+        state.isAuthenticated = false;
+        state.userData = null;
+        state.customerData = null;
+      })
       .addCase(actionUpdateCustomerInfo.fulfilled, (state, action) => {
         const { customerData } = action.payload;
         state.customerData = customerData;
@@ -174,6 +198,14 @@ export const actionUpdateAuthenticationStatus = createAsyncThunk("auth/refresh",
   const data = await usersService.getMe();
   return data;
 });
+
+export const actionLoginWithGoogle = createAsyncThunk(
+  "auth/google-login",
+  async (authData: IIncomingTokenCredentials) => {
+    const { customer, user } = await usersService.getMe(authData.access_token);
+    return { authData, customerData: customer, userData: user, remember: true };
+  },
+);
 
 export const actionLogin = createAsyncThunk(
   "auth/login",
