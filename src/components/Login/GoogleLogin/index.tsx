@@ -3,7 +3,7 @@ import { useAppDispatch } from "../../../redux/hooks";
 import { actionDisplayNotification } from "../../../redux/notificationSlice";
 import { authService } from "../../../services";
 import { actionLoginWithGoogle } from "../../../redux/authenticationSlice";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 const GoogleLogin = () => {
   const dispatch = useAppDispatch();
 
@@ -13,16 +13,9 @@ const GoogleLogin = () => {
       dispatch(actionLoginWithGoogle(data));
     } catch (err) {
       const errorMessages = ["Failed to authenticate with Google"];
-      if (axios.isAxiosError(err)) {
-        const axiosError = err as AxiosError;
-        if (
-          axiosError.response &&
-          axiosError.response.data &&
-          (axiosError.response.data as { detail?: string }).detail
-        ) {
-          const errorMsg = (axiosError.response.data as { detail: string }).detail;
-          errorMessages.push(errorMsg);
-        }
+      if (axios.isAxiosError(err) && err.response?.data) {
+        const detail = (err.response.data as { detail?: string }).detail;
+        if (detail) errorMessages.push(detail);
       }
       dispatch(
         actionDisplayNotification({
