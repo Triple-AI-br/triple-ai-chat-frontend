@@ -1,6 +1,18 @@
 # Começando com o Create React App - FrontEnd TripleAI
 
+## Geral:
+
 Este projeto foi inicializado com o [Create React App](https://github.com/facebook/create-react-app).
+
+## Variáveis de ambiente
+
+- Garanta que essas 3 varáveis estejam definidas, segue um exemplo abaixo:
+
+```bash
+REACT_APP_BASE_FRONT_URL="http://localhost:3000"
+REACT_APP_BASE_API_URL="http://localhost:8000"
+REACT_APP_GOOGLE_CLIENT_ID="12346789-some_hash.apps.googleusercontent.com"
+```
 
 ## Scripts Disponíveis
 
