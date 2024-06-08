@@ -54,6 +54,14 @@ const ProjectsItem = ({ project, onClick, onEdit, confirmRemoveProjectModal }: I
             }}
           />
         </Tooltip>,
+        <Tooltip title={t("global.search")} key="search" placement="bottom">
+          <SearchOutlined
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(routesManager.getSearchRoute(id));
+            }}
+          />
+        </Tooltip>,
         ...(isOwner || isSuperUser
           ? [
               <Tooltip title={t("global.delete")} key="delete" placement="bottom">
@@ -61,18 +69,6 @@ const ProjectsItem = ({ project, onClick, onEdit, confirmRemoveProjectModal }: I
                   onClick={(e) => {
                     e.stopPropagation();
                     confirmRemoveProjectModal(id, title);
-                  }}
-                />
-              </Tooltip>,
-            ]
-          : []),
-        ...(isSuperUser
-          ? [
-              <Tooltip title={t("global.search")} key="search" placement="bottom">
-                <SearchOutlined
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    navigate(routesManager.getSearchRoute(id));
                   }}
                 />
               </Tooltip>,
