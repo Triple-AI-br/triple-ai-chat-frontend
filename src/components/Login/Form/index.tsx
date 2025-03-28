@@ -81,7 +81,7 @@ const LoginForm: React.FC = () => {
           justifyContent: "center",
         }}
       >
-        <Logo alt="logo" src="/triple-ai.png" />
+        <Logo alt="logo" src="/logo/Logo-Principal.png" />
         {forgotPassword ? (
           <Form.Item noStyle>
             <Form.Item<FieldType>

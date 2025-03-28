@@ -31,7 +31,7 @@ const LandingHeader = () => {
   return (
     <HeaderContainer>
       <LandingDrawer onClose={onClose} open={open} />
-      <LogoImg src="/triple-ai.png" />
+      <LogoImg src="/logo/Logo-Principal.png" />
       <NavElements>
         <li>
           <a href="#first-section">{t("pages.landing.components.header.navLinks.home")}</a>
