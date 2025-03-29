@@ -17,10 +17,15 @@ const searchSnippets = async ({
   q: string;
   limit: number;
 }): Promise<ISearchResult[]> => {
-  const url = `/projects/${projectId}/search`;
-  const response = await api.get(url, { params: { q, limit } });
-  const data: ISearchResult[] = response.data;
-  return data;
+  try {
+    const url = `/projects/${projectId}/search`;
+    const response = await api.get(url, { params: { q, limit } });
+    const data: ISearchResult[] = response.data.length > 0 ? response.data : [];
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };
 
 export const searchService = {
