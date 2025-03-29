@@ -7,10 +7,13 @@ import { ISearchResult, searchService } from "../../services";
 import { useParams, useSearchParams } from "react-router-dom";
 import { SearchResults } from "../../components/Search";
 import { useTranslation } from "react-i18next";
-
+import { useAppDispatch } from "../../redux/hooks";
+import { actionDisplayNotification } from "../../redux/notificationSlice";
 const SearchPage = () => {
   const { id } = useParams() as { id: string };
   const projectId = parseInt(id);
+
+  const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [results, setResults] = useState<undefined | ISearchResult[]>();
   const [searchParams, setSearchParams] = useSearchParams({ q: "" });
@@ -19,6 +22,8 @@ const SearchPage = () => {
 
   const handleSearch = async (value: string) => {
     if (q === "") setResults(undefined);
+    if (value === "") return;
+    if (value === q) return searchSnippets();
     setSearchParams(
       (prev) => {
         prev.set("q", value);
@@ -28,15 +33,33 @@ const SearchPage = () => {
     );
   };
 
-  useEffect(() => {
-    if (!q) return;
-    (async () => {
+  const searchSnippets = async () => {
+    try {
       setIsLoading(true);
+      if (!q) return;
       const res = await searchService.searchSnippets({ projectId, q, limit: 25 });
+      if (res.length === 0) {
+        setResults([]);
+        return;
+      }
       // Order by descending score
       res.sort((a, b) => (a.score < b.score ? 1 : a.score > b.score ? -1 : 0));
       setResults(res);
+    } catch (error) {
+      dispatch(
+        actionDisplayNotification({
+          messages: [t("global.failureRequestMessage")],
+          severity: "warning",
+        }),
+      );
+    } finally {
       setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      await searchSnippets();
     })();
   }, [q]);
 
