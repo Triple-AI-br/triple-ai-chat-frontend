@@ -157,8 +157,8 @@ const Base = ({ children, title }: IBaseProps) => {
           >
             <Image
               preview={false}
-              width={40}
-              src={`${process.env.REACT_APP_BASE_FRONT_URL}/white-logo.png`}
+              width={30}
+              src={`${process.env.REACT_APP_BASE_FRONT_URL}/logo/Símbolo-Branco.png`}
             />
             <Typography.Title level={5} style={{ color: "#fff", margin: 0 }}>
               {collapsed ? "" : "Triple AI"}
