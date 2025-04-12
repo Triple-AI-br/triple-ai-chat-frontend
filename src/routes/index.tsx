@@ -1,9 +1,8 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { routesManager } from "./routesManager";
 import {
   ChatPage,
   ProjectsPage,
-  LandingPage,
   LoginPage,
   SourcesPage,
   ConfirmEmailPage,
@@ -20,7 +19,6 @@ import { PrivateRoute, PublicRoute } from "../components/shared";
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path={routesManager.getLandingRoute()} element={<LandingPage />} />
 
       <Route path={routesManager.getConfirmEmailRoute()} element={<ConfirmEmailPage />} />
 
@@ -60,6 +58,7 @@ const AppRoutes = () => {
                 path={routesManager.getContractAnalysisRoute()}
                 element={<ContractAnalysisPage />}
               />
+              <Route path="*" element={<Navigate to={routesManager.getProjectsRoute()} replace />} />
             </Routes>
           </PrivateRoute>
         }
