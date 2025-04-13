@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
 import {
   ActionButton,
-  ArrowLeftOutlinedStyled,
   CircleFive,
   CircleFour,
   CircleOne,
@@ -19,13 +18,10 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { actionDisplayNotification } from "../../redux/notificationSlice";
 import { selectError } from "../../redux/authenticationSlice";
-import { useNavigate } from "react-router-dom";
-import { routesManager } from "../../routes/routesManager";
 
 const LoginPage: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const error = useAppSelector(selectError);
 
   useEffect(() => {
@@ -49,7 +45,6 @@ const LoginPage: React.FC = () => {
       <CircleSix />
       <Content>
         <LeftVisualContainer>
-          <ArrowLeftOutlinedStyled onClick={() => navigate(routesManager.getLandingRoute())} />
           <Circles>
             <li></li>
             <li></li>
