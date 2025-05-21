@@ -4,7 +4,12 @@ import { api } from "./api";
 
 export type PermissionsArray = Array<"files:upload" | "files:delete">;
 
-export interface IUserDataResponse {
+export interface IUserListResponse {
+  users: IUserData[];
+  total: number;
+}
+
+export interface IUserData {
   id: number;
   email: string;
   is_superuser: boolean;
@@ -13,7 +18,7 @@ export interface IUserDataResponse {
 }
 
 export interface IUserMe {
-  user: IUserDataResponse;
+  user: IUserData;
   customer: ICustomerData;
 }
 
@@ -34,8 +39,12 @@ const getMe = async (token?: string): Promise<IUserMe> => {
   return data;
 };
 
-const listUsers = async (): Promise<IUserDataResponse[]> => {
-  const url = "/users";
+const listUsers = async (
+  skip: number,
+  limit: number,
+  search?: string,
+): Promise<IUserListResponse> => {
+  const url = `/users?skip=${skip}&limit=${limit}${search ? `&search=${search}` : ""}`;
   const response = await api.get(url);
   return response.data;
 };

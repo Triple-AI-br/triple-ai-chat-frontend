@@ -1,5 +1,5 @@
 export * from "./Chat";
-export * from "./Landing";
+// export * from "./Landing"; // DEPRECATED
 export * from "./Login";
 export * from "./Sources";
 export * from "./Projects";

@@ -1,11 +1,11 @@
-import { FirstSection } from "../../components/Landing";
-import { LandingHeader } from "../../components/Landing/Header";
+import { FirstSection } from "../../components/Landing [DEPRECATED]";
+import { LandingHeader } from "../../components/Landing [DEPRECATED]/Header";
 import { ScrollPage } from "./styled";
-import { CardsSection } from "../../components/Landing/CardsSection";
-import { BenefitsSection } from "../../components/Landing/BenefitsSection";
-import { LandingPageFooter } from "../../components/Landing/Footer";
-import { LandingPartners } from "../../components/Landing/Partners";
-import { ExamplesUsage } from "../../components/Landing/ExamplesUsage";
+import { CardsSection } from "../../components/Landing [DEPRECATED]/CardsSection";
+import { BenefitsSection } from "../../components/Landing [DEPRECATED]/BenefitsSection";
+import { LandingPageFooter } from "../../components/Landing [DEPRECATED]/Footer";
+import { LandingPartners } from "../../components/Landing [DEPRECATED]/Partners";
+import { ExamplesUsage } from "../../components/Landing [DEPRECATED]/ExamplesUsage";
 import "./index.css";
 import { useEffect, useState } from "react";
 

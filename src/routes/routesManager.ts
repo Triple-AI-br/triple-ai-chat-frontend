@@ -1,6 +1,5 @@
 const getProjectsRoute = (): string => "/projects";
-const getLandingRoute = (): string => "/";
-const getLoginRoute = (): string => "/login";
+const getLoginRoute = (): string => "/";
 const getConfirmEmailRoute = (): string => "/confirm-email";
 const getAcceptInvitationRoute = (): string => "/accept-invitation";
 const getAdminRoute = (): string => "/admin";
@@ -31,7 +30,6 @@ export const routesManager = {
   getProjectsRoute,
   getPromptsRoute,
   getChatRoute,
-  getLandingRoute,
   getLoginRoute,
   getSourcesRoute,
   getConfirmEmailRoute,
