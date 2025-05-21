@@ -96,7 +96,7 @@ const LandingPageFooter = () => {
             url="https://calendly.com/eduardotripleai/30min"
             rootElement={document.getElementById("root") as HTMLElement}
           />
-          <LogoImg src="/triple-ai.png" alt="logo" />
+          <LogoImg src="/logo/Logo-Principal.png" alt="logo" />
         </CenterContainer>
       </TopContainer>
       <BottomContainer>

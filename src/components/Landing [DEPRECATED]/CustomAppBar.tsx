@@ -39,7 +39,7 @@ function CustomAppBar() {
         <Toolbar disableGutters>
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <img
-              src={`${process.env.REACT_APP_BASE_FRONT_URL}/triple-ai.png`}
+              src={`${process.env.REACT_APP_BASE_FRONT_URL}/logo/Logo-Branca.png`}
               style={{ maxHeight: "50px" }}
             />
           </Box>
@@ -91,7 +91,7 @@ function CustomAppBar() {
 
           <Box mx="auto" sx={{ display: { xs: "flex", md: "none" } }}>
             <img
-              src={`${process.env.REACT_APP_BASE_FRONT_URL}/triple-ai.png`}
+              src={`${process.env.REACT_APP_BASE_FRONT_URL}/logo/Logo-Branca.png`}
               style={{
                 maxHeight: "50px",
               }}

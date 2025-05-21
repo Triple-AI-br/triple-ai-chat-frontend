@@ -90,7 +90,7 @@ export const SocialMidias = styled.div`
 `;
 
 export const LogoImg = styled.img`
-  height: 45px;
+  height: 25px;
 `;
 
 export const Line = styled.div`
