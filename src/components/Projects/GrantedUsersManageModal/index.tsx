@@ -1,12 +1,13 @@
-import { Button, Form, Switch, Transfer, Typography } from "antd";
+import { Button, Form, Switch, Transfer, Typography, Pagination } from "antd";
 import { IGrantedUsers, IProject, projectService } from "../../../services";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { PermissionsArray, usersService } from "../../../services/users";
 import { useAppDispatch } from "../../../redux/hooks";
-import { StyledModal } from "./styled";
+import { FormContainer, PaginationContainer, StyledModal } from "./styled";
 import { actionDisplayNotification } from "../../../redux/notificationSlice";
 import { TransferDirection } from "antd/es/transfer";
 import { useTranslation } from "react-i18next";
+import { debounce } from "lodash";
 const { Text } = Typography;
 
 type ManageGrantedUsersModalProps = {
@@ -38,6 +39,10 @@ const ManageGrantedUsersModal = ({
   const [filteredUserList, setFilteredUsersList] = useState<TransferItem[]>([]);
   const [targetKeys, setTargetKeys] = useState<string[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const [skip, setSkip] = useState(0);
+  const [limit, setLimit] = useState(10);
+  const [total, setTotal] = useState(0);
+  const [searchValue, setSearchValue] = useState("");
   const [permissions, setPermissions] = useState({
     "files:upload": project.is_public,
     "files:delete": project.is_public,
@@ -53,6 +58,8 @@ const ManageGrantedUsersModal = ({
         ? "files:upload"
         : "files:delete"
       : undefined;
+
+  const debouncedFetchRef = useRef<ReturnType<typeof debounce> | null>(null);
 
   const onConfirm = async () => {
     try {
@@ -143,13 +150,14 @@ const ManageGrantedUsersModal = ({
     setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys]);
   };
 
-  useEffect(() => {
-    (async () => {
+  const fetchUsers = useCallback(
+    async (currentSkip: number, currentLimit: number, search?: string) => {
       try {
-        const users = await usersService.listUsers();
+        const users = await usersService.listUsers(currentSkip, currentLimit, search);
 
         const emailsAlreadyinProject = usersInProject.map((user) => user.email);
-        const filterUsersAlreadyInProject = users.filter(
+        setTotal(users.total);
+        const filterUsersAlreadyInProject = users.users.filter(
           (user) => !emailsAlreadyinProject?.includes(user.email) && user.id !== projectOwner,
         );
         const schema = filterUsersAlreadyInProject.map((user) => ({
@@ -161,13 +169,60 @@ const ManageGrantedUsersModal = ({
       } catch (er) {
         setFilteredUsersList([]);
       }
-    })();
-  }, [usersInProject, open]);
+    },
+    [usersInProject, projectOwner],
+  );
+
+  useEffect(() => {
+    debouncedFetchRef.current = debounce((searchTerm: string) => {
+      setSkip(0);
+      fetchUsers(0, limit, searchTerm);
+    }, 500);
+
+    return () => {
+      if (debouncedFetchRef.current?.cancel) {
+        debouncedFetchRef.current.cancel();
+      }
+    };
+  }, [fetchUsers, limit]);
+
+  const handleSearch = (dir: TransferDirection, value: string) => {
+    if (dir === "left") {
+      setSearchValue(value);
+
+      // Cancela qualquer chamada pendente antes de fazer uma nova
+      if (debouncedFetchRef.current?.cancel) {
+        debouncedFetchRef.current.cancel();
+      }
+
+      if (debouncedFetchRef.current) {
+        debouncedFetchRef.current(value);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (open) {
+      if (!searchValue) {
+        fetchUsers(skip, limit, searchValue);
+      }
+    }
+  }, [fetchUsers, open, skip, limit, searchValue]);
+
+  const handlePageChange = (page: number, pageSize?: number) => {
+    const newSkip = (page - 1) * (pageSize || limit);
+
+    setSkip(newSkip);
+    if (pageSize) setLimit(pageSize);
+  };
 
   const handleClose = () => {
     setFilteredUsersList([]);
     setTargetKeys([]);
     setSelectedKeys([]);
+    setSkip(0);
+    setLimit(10);
+    setSearchValue("");
     setPermissions({
       "files:upload": project.is_public,
       "files:delete": project.is_public,
@@ -201,61 +256,82 @@ const ManageGrantedUsersModal = ({
           t("pages.sources.components.inviteModal.availableUsers"),
           t("pages.sources.components.inviteModal.usersToInvite"),
         ]}
-        listStyle={{ width: "50%", minHeight: "350px" }}
+        listStyle={{ width: "50%", minHeight: "260px" }}
         footer={() => (targetKeys.length >= 50 ? "Max 50 users" : "")}
         targetKeys={targetKeys}
         disabled={usersInProject.length >= 50}
         showSearch
+        onSearch={handleSearch}
         selectedKeys={selectedKeys}
         onChange={onChange}
         onSelectChange={onSelectChange}
         render={(item) => item.title}
       />
-      <h4>{t("pages.sources.components.inviteModal.permissionsTitle")}</h4>
-      <Form autoComplete="off" layout="inline" style={{ marginTop: "20px" }}>
-        <Form.Item
-          name="files:upload"
-          label={t("pages.sources.components.inviteModal.uploadFilesPermissionSwitch")}
-          valuePropName="checked"
-          labelAlign="right"
-          style={{
-            borderRadius: "8px",
-            border: "1px solid rgba(0, 0, 0, 0.2)",
-            padding: "4px 18px",
+      <PaginationContainer>
+        <Pagination
+          total={total}
+          current={Math.floor(skip / limit) + 1}
+          pageSize={limit}
+          onChange={handlePageChange}
+          showSizeChanger
+          pageSizeOptions={["10", "20", "50"]}
+          locale={{
+            items_per_page: "",
+            jump_to: "",
+            jump_to_confirm: "",
+            page: "",
           }}
-        >
-          <Switch
-            checked={permissions["files:upload"]}
-            disabled={disabledSwitch === "files:upload"}
-            defaultChecked={project.is_public}
-            onChange={(value) => handleChangePermission("files:upload", value)}
-          />
-        </Form.Item>
+          size="small"
+        />
+      </PaginationContainer>
 
-        <Form.Item
-          name="files:delete"
-          label={t("pages.sources.components.inviteModal.deleteFilesPermissionSwitch")}
-          valuePropName="checked"
-          labelAlign="right"
-          style={{
-            borderRadius: "8px",
-            border: "1px solid rgba(0, 0, 0, 0.2)",
-            padding: "4px 18px",
-          }}
-        >
-          <Switch
-            checked={permissions["files:delete"]}
-            disabled={disabledSwitch === "files:delete"}
-            defaultChecked={project.is_public}
-            onChange={(value) => handleChangePermission("files:delete", value)}
-          />
-        </Form.Item>
-      </Form>
-      {isPublic && !!disabledSwitch ? (
-        <Text type="warning">
-          {t("pages.sources.components.inviteModal.atLeastOnePermissionMessage")}
-        </Text>
-      ) : undefined}
+      <FormContainer>
+        <h4>{t("pages.sources.components.inviteModal.permissionsTitle")}</h4>
+        <Form autoComplete="off" layout="inline">
+          <Form.Item
+            name="files:upload"
+            label={t("pages.sources.components.inviteModal.uploadFilesPermissionSwitch")}
+            valuePropName="checked"
+            labelAlign="right"
+            style={{
+              borderRadius: "8px",
+              border: "1px solid rgba(0, 0, 0, 0.2)",
+              padding: "4px 18px",
+            }}
+          >
+            <Switch
+              checked={permissions["files:upload"]}
+              disabled={disabledSwitch === "files:upload"}
+              defaultChecked={project.is_public}
+              onChange={(value) => handleChangePermission("files:upload", value)}
+            />
+          </Form.Item>
+
+          <Form.Item
+            name="files:delete"
+            label={t("pages.sources.components.inviteModal.deleteFilesPermissionSwitch")}
+            valuePropName="checked"
+            labelAlign="right"
+            style={{
+              borderRadius: "8px",
+              border: "1px solid rgba(0, 0, 0, 0.2)",
+              padding: "4px 18px",
+            }}
+          >
+            <Switch
+              checked={permissions["files:delete"]}
+              disabled={disabledSwitch === "files:delete"}
+              defaultChecked={project.is_public}
+              onChange={(value) => handleChangePermission("files:delete", value)}
+            />
+          </Form.Item>
+        </Form>
+        {isPublic && !!disabledSwitch ? (
+          <Text type="warning">
+            {t("pages.sources.components.inviteModal.atLeastOnePermissionMessage")}
+          </Text>
+        ) : undefined}
+      </FormContainer>
     </StyledModal>
   );
 };
