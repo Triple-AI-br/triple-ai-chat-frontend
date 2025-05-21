@@ -28,7 +28,7 @@ export const HeaderContainer = styled.section`
 `;
 
 export const LogoImg = styled.img`
-  height: 45px;
+  height: 25px;
 `;
 
 export const NavElements = styled.ul`

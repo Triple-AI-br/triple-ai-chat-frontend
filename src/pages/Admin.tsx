@@ -3,13 +3,16 @@ import "react-multi-email/dist/style.css";
 import { useEffect, useState } from "react";
 import { Box, Divider, Typography } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { IUserDataResponse, usersService } from "../services/users";
+import { IUserData, usersService } from "../services/users";
 import { UserInvite } from "../components/Admin";
 import { useTranslation } from "react-i18next";
 
 const AdminPage = () => {
   const { t } = useTranslation();
-  const [users, setUsers] = useState<IUserDataResponse[]>([]);
+  const [users, setUsers] = useState<IUserData[]>([]);
+  const [total, setTotal] = useState(0);
+  const [skip, setSkip] = useState(0);
+  const [limit, setLimit] = useState(10);
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70, type: "number" },
@@ -36,10 +39,12 @@ const AdminPage = () => {
 
   useEffect(() => {
     (async () => {
-      const data = await usersService.listUsers();
-      setUsers(data);
+      const data = await usersService.listUsers(skip, limit);
+      setUsers(data.users);
+      setTotal(data.total);
+      console.log(total);
     })();
-  }, []);
+  }, [skip, limit]);
 
   return (
     <Base title={t("pages.admin.title")}>
@@ -50,6 +55,14 @@ const AdminPage = () => {
         <DataGrid
           rows={users}
           columns={columns}
+          density="compact"
+          pagination
+          paginationMode="server"
+          rowCount={total}
+          onPaginationModelChange={(newPaginationModel) => {
+            setSkip(newPaginationModel.page * newPaginationModel.pageSize);
+            setLimit(newPaginationModel.pageSize);
+          }}
           initialState={{
             pagination: {
               paginationModel: { page: 0, pageSize: 10 },

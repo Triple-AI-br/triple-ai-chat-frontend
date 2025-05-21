@@ -64,7 +64,7 @@ const ContractTool: React.FC<ContractToolProps> = ({
   const form = useRef<FormInstance>(null);
 
   const [current, setCurrent] = useState("analysis");
-  const [selectedAnalysis, setSelectedAnalysis] = useState("1");
+  const [selectedAnalysis, setSelectedAnalysis] = useState<string | string[]>("1");
   const [loadingUpdate, setLoadingUpdate] = useState<boolean>(false);
 
   const analysisItems: CollapseProps["items"] = contract.risk_analysis.map((item, index) => {
@@ -178,7 +178,7 @@ const ContractTool: React.FC<ContractToolProps> = ({
               <Collapse
                 accordion
                 items={analysisItems}
-                onChange={(key) => setSelectedAnalysis(key as string)}
+                onChange={(key) => setSelectedAnalysis(key)}
                 activeKey={selectedAnalysis}
               />
             ) : null}
@@ -282,11 +282,9 @@ const ContractTool: React.FC<ContractToolProps> = ({
     setCurrent("analysis");
     bottomRef.current?.scrollIntoView({ behavior: "smooth", inline: "end" });
     if (loadingAnalysis) {
-      setSelectedAnalysis((prev) =>
-        analysisItems.length ? String(analysisItems.length - 1) : prev,
-      );
+      setSelectedAnalysis(analysisItems.length ? String(analysisItems.length - 1) : "1");
     }
-  }, [loadingAnalysis]);
+  }, [loadingAnalysis, analysisItems.length]);
 
   return (
     <MenuContainer ref={ref2}>
