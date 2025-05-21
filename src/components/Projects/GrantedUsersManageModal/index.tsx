@@ -8,6 +8,7 @@ import { actionDisplayNotification } from "../../../redux/notificationSlice";
 import { TransferDirection } from "antd/es/transfer";
 import { useTranslation } from "react-i18next";
 import { debounce } from "lodash";
+import { Key } from "react";
 const { Text } = Typography;
 
 type ManageGrantedUsersModalProps = {
@@ -37,8 +38,8 @@ const ManageGrantedUsersModal = ({
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const [filteredUserList, setFilteredUsersList] = useState<TransferItem[]>([]);
-  const [targetKeys, setTargetKeys] = useState<string[]>([]);
-  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const [targetKeys, setTargetKeys] = useState<Key[]>([]);
+  const [selectedKeys, setSelectedKeys] = useState<Key[]>([]);
   const [skip, setSkip] = useState(0);
   const [limit, setLimit] = useState(10);
   const [total, setTotal] = useState(0);
@@ -126,14 +127,15 @@ const ManageGrantedUsersModal = ({
     setPermissions((prev) => ({ ...prev, [permission]: active }));
   };
 
-  const handleAdd = (nextTargetKeys: string[]) => {
+  const handleAdd = (nextTargetKeys: Key[]) => {
     setTargetKeys(nextTargetKeys);
   };
-  const handleDelete = (nextTargetKeys: string[]) => {
+  const handleDelete = (nextTargetKeys: Key[]) => {
     setTargetKeys(nextTargetKeys);
   };
 
-  const onChange = (nextTargetKeys: string[], direction: TransferDirection) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const onChange = (nextTargetKeys: Key[], direction: TransferDirection, _moveKeys: Key[]) => {
     if (direction === "left") {
       handleDelete(nextTargetKeys);
     } else {
@@ -146,7 +148,7 @@ const ManageGrantedUsersModal = ({
     }
   };
 
-  const onSelectChange = (sourceSelectedKeys: string[], targetSelectedKeys: string[]) => {
+  const onSelectChange = (sourceSelectedKeys: Key[], targetSelectedKeys: Key[]) => {
     setSelectedKeys([...sourceSelectedKeys, ...targetSelectedKeys]);
   };
 
